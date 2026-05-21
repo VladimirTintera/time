@@ -13,7 +13,6 @@ internal actual fun formatRelativeTime(
         RelativeUnitStyle.Short, RelativeUnitStyle.Narrow -> DateUtils.FORMAT_ABBREV_RELATIVE
     }
 
-    // DateUtils vyžaduje milisekundy od epochy
     val result = DateUtils.getRelativeTimeSpanString(
         target.toEpochMilliseconds(),
         now.toEpochMilliseconds(),
