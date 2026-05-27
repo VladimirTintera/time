@@ -7,5 +7,17 @@ actual typealias AppLocale = ULocale
 actual val AppLocale.languageCode: String
     get() = this.language
 
-actual fun localeForLangCode(code: String): AppLocale = ULocale(code)
-actual fun getCurrentLocale(): AppLocale = ULocale.getDefault()
+actual val AppLocale.displayName: String
+    get() = this.getDisplayName(this)
+
+actual val AppLocale.languageTag: String
+    get() = this.toLanguageTag()
+
+actual val AppLocale.regionCode: String
+    get() = this.country
+
+actual val currentLocale: AppLocale
+    get() = ULocale.getDefault()
+actual fun availableLocales(): List<AppLocale> = ULocale.getAvailableLocales().toList()
+
+actual fun localeForLanguageTag(tag: String): AppLocale = ULocale(tag)

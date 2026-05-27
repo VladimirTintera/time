@@ -9,10 +9,14 @@ import kotlinx.datetime.DateTimePeriod
  * Example:
  * ```kotlin
  * val period = DateTimePeriod(years = 1, months = 2, hours = 4)
- * val formatted = period.format(DateTimePeriodFormat {
- *     calendar { years = UnitVisibility.Auto }
- *     clock { hours = UnitVisibility.Required }
- * })
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = period.format(
+ *     format = DateTimePeriodFormat {
+ *         calendar { years = UnitVisibility.Auto }
+ *         clock { hours = UnitVisibility.Required }
+ *     },
+ *     locale = myLocale
+ * )
  * // e.g. "1 year, 4 hours"
  * ```
  *
@@ -38,7 +42,8 @@ fun DateTimePeriod.format(
  * Example:
  * ```kotlin
  * val period = DateTimePeriod(months = 2, hours = 4)
- * val formatted = period.format {
+ * val czLocale = localeForLanguageTag("cs-CZ")
+ * val formatted = period.format(locale = czLocale) {
  *     calendar { months = UnitVisibility.Auto }
  *     clock { hours = UnitVisibility.Required }
  * }

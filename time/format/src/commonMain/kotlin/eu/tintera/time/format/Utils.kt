@@ -31,10 +31,11 @@ expect fun getFirstDayOfWeek(): DayOfWeek
  * Example:
  * ```kotlin
  * val month = Month.JANUARY
- * val fullName = month.formatName() // "January"
- * val shortName = month.formatName(format = MonthFormat.Name.Short) // "Jan"
+ * val myLocale = localeForLanguageTag("en-US")
+ * val fullName = month.formatName(myLocale)
+ * val shortName = month.formatName(locale = myLocale, format = MonthFormat.Name.Short)
  * ```
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param format The desired [MonthFormat.Name] style. Defaults to [MonthFormat.Name.Full].
  * @return The formatted month name.
  */
@@ -55,10 +56,11 @@ fun Month.formatName(
  * Example:
  * ```kotlin
  * val day = DayOfWeek.MONDAY
- * val fullName = day.formatName() // "Monday"
- * val shortName = day.formatName(format = WeekDayFormat.ShortName) // "Mon"
+ * val myLocale = localeForLanguageTag("en-US")
+ * val fullName = day.formatName(myLocale)
+ * val shortName = day.formatName(locale = myLocale, format = WeekDayFormat.ShortName)
  * ```
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param format The desired [WeekDayFormat] style. Defaults to [WeekDayFormat.FullName].
  * @return The formatted day of the week name.
  */
@@ -79,6 +81,12 @@ fun DayOfWeek.formatName(
 
 /**
  * Returns the localized decimal separator symbol for the specified locale.
+ *
+ * Example:
+ * ```kotlin
+ * val myLocale = localeForLanguageTag("en-US")
+ * val separator = getDecimalSeparator(myLocale)
+ * ```
  *
  * @param locale The [AppLocale] to use.
  * @return The decimal separator character/string (e.g., "." or ",").

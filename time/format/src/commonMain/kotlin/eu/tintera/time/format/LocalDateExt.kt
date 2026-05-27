@@ -17,12 +17,13 @@ import kotlinx.datetime.*
  *     month = MonthFormat.Name.Full
  *     day = DayFormat.Numeric
  * }
- * val formatted = date.format(format)
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = date.format(format, myLocale)
  * // formatted will be "January 1, 2024" (depending on locale)
  * ```
  *
  * @param format The [DateFormat] configuration to apply.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted date string.
  */
 fun LocalDate.format(
@@ -49,7 +50,8 @@ fun LocalDate.format(
  * Example:
  * ```kotlin
  * val date = LocalDate(2024, 1, 1)
- * val formatted = date.format {
+ * val czLocale = localeForLanguageTag("cs-CZ")
+ * val formatted = date.format(czLocale) {
  *     year = YearFormat.TwoDigits
  *     month = MonthFormat.Digital.Padded
  *     day = DayFormat.Padded
@@ -57,7 +59,7 @@ fun LocalDate.format(
  * // formatted will be "01/01/24" (depending on locale)
  * ```
  *
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param block The DSL block for configuring the [DateFormat].
  * @return The formatted date string.
  */
@@ -75,14 +77,15 @@ fun LocalDate.format(
  * Example:
  * ```kotlin
  * val date = LocalDate(2024, 4, 1)
- * val monthName = date.formatMonthName(MonthFormat.Name.Full)
+ * val myLocale = localeForLanguageTag("en-US")
+ * val monthName = date.formatMonthName(MonthFormat.Name.Full, myLocale)
  * // monthName will be "April"
- * val monthNameAbbr = date.formatMonthName(MonthFormat.Name.Short)
+ * val monthNameAbbr = date.formatMonthName(MonthFormat.Name.Short, myLocale)
  * // monthNameAbbr will be "Apr"
  * ```
  *
  * @param format The desired [MonthFormat.Name] style.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted month name string.
  */
 fun LocalDate.formatMonthName(
@@ -101,14 +104,15 @@ fun LocalDate.formatMonthName(
  * Example:
  * ```kotlin
  * val date = LocalDate(2024, 1, 1) // A Monday
- * val dayName = date.formatWeekDayName()
+ * val myLocale = localeForLanguageTag("en-US")
+ * val dayName = date.formatWeekDayName(locale = myLocale)
  * // dayName will be "Monday"
- * val dayNameAbbr = date.formatWeekDayName(WeekDayFormat.ShortName)
+ * val dayNameAbbr = date.formatWeekDayName(WeekDayFormat.ShortName, myLocale)
  * // dayNameAbbr will be "Mon"
  * ```
  *
  * @param format The desired [WeekDayFormat] style. Defaults to [WeekDayFormat.FullName].
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted weekday name string.
  */
 fun LocalDate.formatWeekDayName(
@@ -134,13 +138,19 @@ fun LocalDate.formatWeekDayName(
  *     month = MonthFormat.Name.Short
  *     day = DayFormat.Numeric
  * }
- * val formatted = start.formatInterval(end, format)
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = start.formatInterval(
+ *     to = end,
+ *     format = format,
+ *     locale = myLocale,
+ *     timeZone = TimeZone.UTC
+ * )
  * // formatted will be "Jan 10 – 20" (depending on locale)
  * ```
  *
  * @param to The end of the date interval.
  * @param format The [DateFormat] to apply to both the start and end of the interval.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param timeZone The time zone to use.
  * @param onSameDate Custom combiner for events on the same day.
  * @param onSameMonth Custom combiner for events in the same month.
@@ -190,7 +200,12 @@ fun LocalDate.formatInterval(
  * ```kotlin
  * val start = LocalDate(2024, 1, 10)
  * val end = LocalDate(2024, 1, 20)
- * val formatted = start.formatInterval(end) {
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = start.formatInterval(
+ *     to = end,
+ *     locale = myLocale,
+ *     timeZone = TimeZone.UTC
+ * ) {
  *     month = MonthFormat.Name.Short
  *     day = DayFormat.Numeric
  * }
@@ -198,7 +213,7 @@ fun LocalDate.formatInterval(
  * ```
  *
  * @param to The end of the date interval.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param timeZone The time zone to use.
  * @param onSameDate Custom combiner for events on the same day.
  * @param onSameMonth Custom combiner for events in the same month.

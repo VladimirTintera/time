@@ -2,6 +2,11 @@ package eu.tintera.time.format
 
 /**
  * Visibility rule for displaying a unit in a formatted string.
+ *
+ * Example:
+ * ```kotlin
+ * val visibility = UnitVisibility.Auto
+ * ```
  */
 enum class UnitVisibility {
     /**

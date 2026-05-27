@@ -17,12 +17,13 @@ import kotlinx.datetime.LocalTime
  *     hour = HourFormat.Digital24h.Padded
  *     minute = MinuteFormat.Padded
  * }
- * val formatted = time.format(format)
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = time.format(format, myLocale)
  * // formatted will be "14:30" (depending on locale)
  * ```
  *
  * @param format The [TimeFormat] configuration to apply.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted time string.
  */
 fun LocalTime.format(
@@ -52,13 +53,14 @@ fun LocalTime.format(
  * Example:
  * ```kotlin
  * val time = LocalTime(14, 30)
- * val formatted = time.format {
+ * val czLocale = localeForLanguageTag("cs-CZ")
+ * val formatted = time.format(czLocale) {
  *     short()
  * }
  * // formatted will be "2:30 PM" or "14:30" depending on locale
  * ```
  *
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param block The DSL block for configuring the [TimeFormat].
  * @return The formatted time string.
  */

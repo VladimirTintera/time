@@ -16,12 +16,13 @@ import kotlin.time.Instant
  *     date { short() }
  *     time { short() }
  * }
- * val formatted = dateTime.format(format)
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = dateTime.format(format, myLocale)
  * // formatted will be "1/1/24, 12:30 PM" (depending on locale)
  * ```
  *
  * @param format The [DateTimeFormat] configuration to apply.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted date-time string.
  */
 fun LocalDateTime.format(
@@ -44,14 +45,15 @@ fun LocalDateTime.format(
  * Example:
  * ```kotlin
  * val dateTime = LocalDateTime(2024, 1, 1, 12, 30)
- * val formatted = dateTime.format {
+ * val czLocale = localeForLanguageTag("cs-CZ")
+ * val formatted = dateTime.format(czLocale) {
  *     date { full() }
  *     time { short() }
  * }
  * // formatted will be "Monday, January 1, 2024, 12:30 PM" (depending on locale)
  * ```
  *
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param block The DSL block for configuring the [DateTimeFormat].
  * @return The formatted date-time string.
  */
@@ -73,9 +75,12 @@ fun LocalDateTime.format(
  * ```kotlin
  * val now = LocalDateTime(2024, 1, 1, 12, 0)
  * val past = LocalDateTime(2024, 1, 1, 11, 0)
+ * val myLocale = localeForLanguageTag("en-US")
  * val formatted = past.formatRelative(
  *     now = now,
- *     format = RelativeDateTimeFormat { hours() }
+ *     timeZone = TimeZone.UTC,
+ *     format = RelativeDateTimeFormat { hours() },
+ *     locale = myLocale
  * )
  * // formatted will be "1 hour ago"
  * ```
@@ -83,7 +88,7 @@ fun LocalDateTime.format(
  * @param now The reference point for calculating the relative time.
  * @param timeZone The time zone to use for the conversion to [Instant].
  * @param format The [RelativeDateTimeFormat] configuration specifying style and thresholds.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted relative time string (e.g., "in 5 minutes", "2 hours ago").
  */
 fun LocalDateTime.formatRelative(
@@ -106,7 +111,12 @@ fun LocalDateTime.formatRelative(
  * ```kotlin
  * val now = LocalDateTime(2024, 1, 1, 12, 0)
  * val past = LocalDateTime(2024, 1, 1, 11, 0)
- * val formatted = past.formatRelative(now = now) {
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = past.formatRelative(
+ *     now = now,
+ *     timeZone = TimeZone.UTC,
+ *     locale = myLocale
+ * ) {
  *     hours()
  * }
  * // formatted will be "1 hour ago"
@@ -114,7 +124,7 @@ fun LocalDateTime.formatRelative(
  *
  * @param now The reference point for calculating the relative time.
  * @param timeZone The time zone to use for the conversion to [Instant].
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param block The DSL block for configuring the [RelativeDateTimeFormat].
  * @return The formatted relative time string (e.g., "in 5 minutes", "2 hours ago").
  */
@@ -141,13 +151,19 @@ fun LocalDateTime.formatRelative(
  * val start = LocalDateTime(2024, 1, 1, 10, 0)
  * val end = LocalDateTime(2024, 1, 1, 12, 0)
  * val format = DateTimeFormat { time { short() } }
- * val formatted = start.formatInterval(end, format)
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = start.formatInterval(
+ *     to = end,
+ *     format = format,
+ *     locale = myLocale,
+ *     timeZone = TimeZone.UTC
+ * )
  * // formatted will be "10:00 AM – 12:00 PM" (depending on locale)
  * ```
  *
  * @param to The end of the time interval.
  * @param format The [DateTimeFormat] to apply to both the start and end of the interval.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param timeZone The time zone to use.
  * @param onSameDate Custom combiner for events on the same day.
  * @param onSameMonth Custom combiner for events in the same month.
@@ -186,14 +202,19 @@ fun LocalDateTime.formatInterval(
  * ```kotlin
  * val start = LocalDateTime(2024, 1, 1, 10, 0)
  * val end = LocalDateTime(2024, 1, 1, 12, 0)
- * val formatted = start.formatInterval(end) {
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = start.formatInterval(
+ *     to = end,
+ *     locale = myLocale,
+ *     timeZone = TimeZone.UTC
+ * ) {
  *     time { short() }
  * }
  * // formatted will be "10:00 AM – 12:00 PM" (depending on locale)
  * ```
  *
  * @param to The end of the time interval.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param timeZone The time zone to use.
  * @param onSameDate Custom combiner for events on the same day.
  * @param onSameMonth Custom combiner for events in the same month.

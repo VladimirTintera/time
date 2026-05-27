@@ -10,10 +10,14 @@ import kotlinx.datetime.DateTimePeriod
  * Example:
  * ```kotlin
  * val period = DatePeriod(years = 1, months = 2, days = 3)
- * val formatted = period.format(DatePeriodFormat {
- *     years = UnitVisibility.Auto
- *     months = UnitVisibility.Required
- * })
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = period.format(
+ *     format = DatePeriodFormat {
+ *         years = UnitVisibility.Auto
+ *         months = UnitVisibility.Required
+ *     },
+ *     locale = myLocale
+ * )
  * // e.g. "1 year, 2 months"
  * ```
  *
@@ -47,14 +51,15 @@ fun DatePeriod.format(
  * Example:
  * ```kotlin
  * val period = DatePeriod(years = 1, months = 0, days = 5)
- * val formatted = period.formatCalendar {
+ * val czLocale = localeForLanguageTag("cs-CZ")
+ * val formatted = period.formatCalendar(locale = czLocale) {
  *     years = UnitVisibility.Auto
  *     days = UnitVisibility.Required
  * }
  * // e.g., "1 year, 5 days"
  * ```
  *
- * @param locale The [AppLocale] to use. Defaults to the current system locale.
+ * @param locale The [AppLocale] to use.
  * @param block The configuration block applied to the [DatePeriodFormatBuilder].
  * @return The formatted period string.
  */

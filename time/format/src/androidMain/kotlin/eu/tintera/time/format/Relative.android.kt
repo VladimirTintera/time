@@ -21,7 +21,7 @@ internal actual fun nativeRelativeTimeFormat(
     val formatter = RelativeDateTimeFormatter.getInstance(locale, null, icuStyle, DisplayContext.CAPITALIZATION_NONE)
 
     if (measurable == null)
-        return formatter.format(RelativeDateTimeFormatter.Direction.THIS, RelativeDateTimeFormatter.AbsoluteUnit.NOW)
+        return formatter.format(RelativeDateTimeFormatter.Direction.PLAIN, RelativeDateTimeFormatter.AbsoluteUnit.NOW)
 
     val direction =
         if (measurable.value < 0) RelativeDateTimeFormatter.Direction.LAST else RelativeDateTimeFormatter.Direction.NEXT

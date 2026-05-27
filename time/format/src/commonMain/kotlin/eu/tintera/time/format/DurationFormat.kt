@@ -7,6 +7,14 @@ import eu.tintera.time.core.TimeDslMarker
  * Configuration for formatting [kotlin.time.Duration] values into localized text.
  *
  * Extends [ClockComponents] to control visibility of time components (hours, minutes, seconds).
+ *
+ * Example:
+ * ```kotlin
+ * val format = DurationFormat {
+ *     width = FormatStyle.Full
+ *     hours = UnitVisibility.Always
+ * }
+ * ```
  */
 interface DurationFormat : ClockComponents {
     /**
@@ -34,6 +42,14 @@ internal data class DurationFormatImpl(
 
 /**
  * Builder for constructing [DurationFormat] configurations using a DSL.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = DurationFormatBuilder().apply {
+ *     width = FormatStyle.Short
+ * }
+ * val format = builder.build()
+ * ```
  */
 @TimeDslMarker
 class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
@@ -56,6 +72,13 @@ class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
     /**
      * Applies a preset configuration for a full/detailed format.
      * Sets style to [FormatStyle.Full] and sets days, hours, and minutes to [UnitVisibility.Auto].
+     *
+     * Example:
+     * ```kotlin
+     * val format = DurationFormat {
+     *     full()
+     * }
+     * ```
      */
     fun full() {
         width = FormatStyle.Full
@@ -69,6 +92,13 @@ class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
     /**
      * Applies a preset configuration for a short format.
      * Sets style to [FormatStyle.Short] and sets days, hours, and minutes to [UnitVisibility.Auto].
+     *
+     * Example:
+     * ```kotlin
+     * val format = DurationFormat {
+     *     short()
+     * }
+     * ```
      */
     fun short() {
         width = FormatStyle.Short
@@ -81,6 +111,12 @@ class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
 
     /**
      * Builds and returns a [DurationFormat] instance based on the builder's state.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = DurationFormatBuilder()
+     * val format = builder.build()
+     * ```
      */
     override fun build(): DurationFormat = DurationFormatImpl(
         style = width,
@@ -92,6 +128,13 @@ class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
 
 /**
  * Creates a [DurationFormat] instance using a DSL configuration block.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DurationFormat {
+ *     hours = UnitVisibility.Always
+ * }
+ * ```
  *
  * @param block The configuration block applied to the [DurationFormatBuilder].
  * @return The configured [DurationFormat].

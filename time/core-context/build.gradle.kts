@@ -55,5 +55,8 @@ kotlin {
         commonMain.dependencies {
             api(projects.time.core)
         }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
     }
 }

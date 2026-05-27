@@ -5,6 +5,14 @@ import eu.tintera.time.core.TimeDslMarker
 /**
  * Configuration that determines the visibility and formatting of clock-based time components
  * (hours, minutes, seconds).
+ *
+ * Example:
+ * ```kotlin
+ * val components = ClockComponents {
+ *     hours = UnitVisibility.Always
+ *     minutes = UnitVisibility.IfNotEmpty
+ * }
+ * ```
  */
 interface ClockComponents {
     /**
@@ -31,6 +39,14 @@ internal data class ClockComponentsImpl(
 
 /**
  * Builder for constructing [ClockComponents] configurations using a DSL style.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = ClockComponentsBuilder().apply {
+ *     hours = UnitVisibility.Always
+ * }
+ * val components = builder.build()
+ * ```
  */
 @TimeDslMarker
 open class ClockComponentsBuilder internal constructor() {
@@ -52,6 +68,14 @@ open class ClockComponentsBuilder internal constructor() {
     /**
      * Copies settings from another [ClockComponents] instance.
      *
+     * Example:
+     * ```kotlin
+     * val source = ClockComponents { hours = UnitVisibility.Always }
+     * val builder = ClockComponentsBuilder().apply {
+      *     from(source)
+      * }
+     * ```
+     *
      * @param clock The source clock components configuration to copy.
      */
     fun from(clock: ClockComponents) {
@@ -62,6 +86,12 @@ open class ClockComponentsBuilder internal constructor() {
 
     /**
      * Builds and returns a [ClockComponents] instance based on the current builder state.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = ClockComponentsBuilder()
+     * val components = builder.build()
+     * ```
      *
      * @return The configured [ClockComponents].
      */
@@ -74,6 +104,13 @@ open class ClockComponentsBuilder internal constructor() {
 
 /**
  * Creates a new [ClockComponents] configuration using a DSL configuration block.
+ *
+ * Example:
+ * ```kotlin
+ * val components = ClockComponents {
+ *     seconds = UnitVisibility.Always
+ * }
+ * ```
  *
  * @param block The configuration block applied to the [ClockComponentsBuilder].
  * @return The configured [ClockComponents] instance.

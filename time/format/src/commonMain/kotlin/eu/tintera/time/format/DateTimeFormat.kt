@@ -8,6 +8,18 @@ import eu.tintera.time.core.TimeDslMarker
  *
  * Combines [DateFormat] and [TimeFormat] to describe formatting options
  * for both date and time components.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DateTimeFormat {
+ *     date {
+ *         year = YearFormat.FourDigits
+ *     }
+ *     time {
+ *         hour = HourFormat.Digital24h.Padded
+ *     }
+ * }
+ * ```
  */
 interface DateTimeFormat : DateFormat, TimeFormat
 
@@ -32,6 +44,14 @@ internal data class DateTimeFormatImpl(
  *
  * This builder provides a structured way to construct a [DateTimeFormat] by
  * independently configuring its date and time components.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = DateTimeFormatBuilder().apply {
+ *     date { year = YearFormat.FourDigits }
+ * }
+ * val format = builder.build()
+ * ```
  */
 @TimeDslMarker
 class DateTimeFormatBuilder internal constructor() {
@@ -40,6 +60,15 @@ class DateTimeFormatBuilder internal constructor() {
 
     /**
      * Configures the date portion of the format using a DSL.
+     *
+     * Example:
+     * ```kotlin
+     * val format = DateTimeFormat {
+      *     date {
+      *         year = YearFormat.FourDigits
+      *     }
+      * }
+     * ```
      *
      * @param block The configuration block for the [DateFormatBuilder].
      */
@@ -50,6 +79,15 @@ class DateTimeFormatBuilder internal constructor() {
     /**
      * Configures the time portion of the format using a DSL.
      *
+     * Example:
+     * ```kotlin
+     * val format = DateTimeFormat {
+      *     time {
+      *         hour = HourFormat.Digital24h.Padded
+      *     }
+      * }
+     * ```
+     *
      * @param block The configuration block for the [TimeFormatBuilder].
      */
     fun time(block: TimeFormatBuilder.() -> Unit) {
@@ -59,11 +97,19 @@ class DateTimeFormatBuilder internal constructor() {
     /**
      * Copies the configuration from an existing [DateTimeFormat].
      *
+     * Example:
+     * ```kotlin
+     * val source = DateTimeFormat { date { year = YearFormat.FourDigits } }
+     * val builder = DateTimeFormatBuilder().apply {
+     *     from(source)
+     * }
+     * ```
+     *
      * @param dateTimeFormat The format to copy from.
      */
     fun from(
         dateTimeFormat: DateTimeFormat
-    ) {
+     ) {
         dateFormat = dateTimeFormat
         timeFormat = dateTimeFormat
     }
@@ -71,8 +117,13 @@ class DateTimeFormatBuilder internal constructor() {
     /**
      * Builds and returns a [DateTimeFormat] instance.
      *
+     * Example:
+     * ```kotlin
+     * val builder = DateTimeFormatBuilder()
+     * val format = builder.build()
+     * ```
+     *
      * @return The configured [DateTimeFormat].
-     * @throws IllegalArgumentException if no date or time components have been configured.
      */
     fun build(): DateTimeFormat {
         val format = DateTimeFormatImpl(
@@ -89,6 +140,15 @@ class DateTimeFormatBuilder internal constructor() {
  *
  * This function provides a convenient way to construct a [DateTimeFormat] instance
  * by applying a configuration block to a [DateTimeFormatBuilder].
+ *
+ * Example:
+ * ```kotlin
+ * val format = DateTimeFormat {
+ *     date {
+ *         year = YearFormat.FourDigits
+ *     }
+ * }
+ * ```
  *
  * @param block The configuration block for the [DateTimeFormatBuilder].
  * @return The newly created [DateTimeFormat].

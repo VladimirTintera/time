@@ -7,6 +7,14 @@ import eu.tintera.time.core.TimeDslMarker
  *
  * This interface defines which components (hour, minute, seconds, milliseconds, am/pm)
  * should be included in the formatted output and their respective styles.
+ *
+ * Example:
+ * ```kotlin
+ * val format = TimeFormat {
+ *     hour = HourFormat.Auto.Numeric
+ *     minute = MinuteFormat.Padded
+ * }
+ * ```
  */
 interface TimeFormat {
     /** The format style for the hour component, or null if omitted. */
@@ -66,6 +74,15 @@ internal fun TimeFormat.toTimeCldrSkeleton(): String = buildString {
  * This builder provides a flexible way to construct a [TimeFormat] by specifying
  * the desired format for each time component. It also includes predefined styles
  * for convenience.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = TimeFormatBuilder().apply {
+ *     hour = HourFormat.Auto.Numeric
+ *     minute = MinuteFormat.Padded
+ * }
+ * val format = builder.build()
+ * ```
  */
 @TimeDslMarker
 class TimeFormatBuilder internal constructor() : TimeFormat {
@@ -87,16 +104,29 @@ class TimeFormatBuilder internal constructor() : TimeFormat {
     /**
      * Builds and returns a [TimeFormat] instance.
      *
+     * Example:
+     * ```kotlin
+     * val builder = TimeFormatBuilder()
+     * val format = builder.build()
+     * ```
+     *
      * @return The configured [TimeFormat].
-     * @throws IllegalArgumentException if no time components have been configured.
      */
-    //"TimeFormat cannot be empty. You must configure at least one time component "
     fun build(): TimeFormat = this
 
     /**
      * Copies the configuration from an existing [TimeFormat].
      *
      * This allows for easily extending or modifying a predefined format.
+     *
+     * Example:
+     * ```kotlin
+     * val existingFormat = TimeFormat { short() }
+     * val format = TimeFormat {
+     *     from(existingFormat)
+      *    second = SecondFormat.Padded
+     * }
+     * ```
      *
      * @param timeFormat The format to copy from.
      */
@@ -112,6 +142,13 @@ class TimeFormatBuilder internal constructor() : TimeFormat {
      * Applies a short time format.
      *
      * This typically includes an automatic hour format and a padded minute.
+     *
+     * Example:
+     * ```kotlin
+     * val format = TimeFormat {
+     *     short()
+     * }
+     * ```
      */
     fun short() {
         hour = HourFormat.Auto.Numeric
@@ -122,6 +159,13 @@ class TimeFormatBuilder internal constructor() : TimeFormat {
      * Applies a full time format.
      *
      * This typically includes an automatic hour format, a padded minute, and seconds.
+     *
+     * Example:
+     * ```kotlin
+     * val format = TimeFormat {
+     *     full()
+     * }
+     * ```
      */
     fun full() {
         hour = HourFormat.Auto.Numeric
@@ -135,6 +179,14 @@ class TimeFormatBuilder internal constructor() : TimeFormat {
  *
  * This function provides a convenient way to construct a [TimeFormat] instance
  * by applying a configuration block to a [TimeFormatBuilder].
+ *
+ * Example:
+ * ```kotlin
+ * val format = TimeFormat {
+ *     hour = HourFormat.Auto.Numeric
+ *     minute = MinuteFormat.Padded
+ * }
+ * ```
  *
  * @param block The configuration block for the [TimeFormatBuilder].
  * @return The newly created [TimeFormat].

@@ -20,13 +20,14 @@ import kotlin.time.Instant
  *     date { long() }
  *     time { short() }
  * }
- * val formatted = instant.format(format, TimeZone.of("America/New_York"))
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = instant.format(format, TimeZone.of("America/New_York"), myLocale)
  * // formatted will be "January 1, 2024 at 7:00 AM" (depending on locale)
  * ```
  *
+ * @param format The [DateTimeFormat] configuration to apply.
  * @param timeZone The time zone to use for formatting.
- * @param locale An optional [AppLocale] to use for formatting.
- * * @param format The [DateTimeFormat] configuration to apply.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted date-time string.
  */
 fun Instant.format(
@@ -49,14 +50,15 @@ fun Instant.format(
  * Example:
  * ```kotlin
  * val instant = Instant.parse("2024-01-01T12:00:00Z")
- * val formatted = instant.format(TimeZone.of("Europe/Prague")) {
+ * val czLocale = localeForLanguageTag("cs-CZ")
+ * val formatted = instant.format(TimeZone.of("Europe/Prague"), czLocale) {
  *     date { full() }
  * }
  * // formatted will be "Monday, January 1, 2024" (depending on locale)
  * ```
  *
  * @param timeZone The time zone to use for formatting.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param block The DSL block for configuring the [DateTimeFormat].
  * @return The formatted date-time string.
  */
@@ -78,8 +80,17 @@ fun Instant.format(
  *
  * Example:
  * ```kotlin
- * val fiveMinutesAgo = Clock.System.now() - 5.minutes
+ * import kotlin.time.Duration.Companion.minutes
+ * import kotlinx.datetime.Clock
+ * import kotlinx.datetime.TimeZone
+ *
+ * val now = Clock.System.now()
+ * val fiveMinutesAgo = now - 5.minutes
+ * val myLocale = localeForLanguageTag("en-US")
  * val formatted = fiveMinutesAgo.formatRelative(
+ *     now = now,
+ *     timeZone = TimeZone.UTC,
+ *     locale = myLocale,
  *     format = RelativeDateTimeFormat { minutes() }
  * )
  * // formatted will be "5 minutes ago"
@@ -88,7 +99,7 @@ fun Instant.format(
  * @param now The reference point for calculating the relative time.
  * @param timeZone The time zone to use for relative calculations.
  * @param format The [RelativeDateTimeFormat] configuration specifying style and thresholds.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted relative time string (e.g., "in 5 minutes", "2 hours ago").
  */
 fun Instant.formatRelative(
@@ -109,8 +120,18 @@ fun Instant.formatRelative(
  *
  * Example:
  * ```kotlin
- * val fiveMinutesAgo = Clock.System.now() - 5.minutes
- * val formatted = fiveMinutesAgo.formatRelative {
+ * import kotlin.time.Duration.Companion.minutes
+ * import kotlinx.datetime.Clock
+ * import kotlinx.datetime.TimeZone
+ *
+ * val now = Clock.System.now()
+ * val fiveMinutesAgo = now - 5.minutes
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = fiveMinutesAgo.formatRelative(
+ *     now = now,
+ *     timeZone = TimeZone.UTC,
+ *     locale = myLocale
+ * ) {
  *     minutes()
  * }
  * // formatted will be "5 minutes ago"
@@ -118,7 +139,7 @@ fun Instant.formatRelative(
  *
  * @param now The reference point for calculating the relative time.
  * @param timeZone The time zone to use for relative calculations.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param block The DSL block for configuring the [RelativeDateTimeFormat].
  * @return The formatted relative time string (e.g., "in 5 minutes", "2 hours ago").
  */
@@ -144,14 +165,20 @@ fun Instant.formatRelative(
  * val start = Instant.parse("2024-01-01T10:00:00Z")
  * val end = Instant.parse("2024-01-01T12:30:00Z")
  * val format = DateTimeFormat { time { short() } }
- * val formatted = start.formatInterval(end, format)
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = start.formatInterval(
+ *     to = end,
+ *     format = format,
+ *     timeZone = TimeZone.UTC,
+ *     locale = myLocale
+ * )
  * // formatted will be "10:00 AM – 12:30 PM" (depending on locale)
  * ```
  *
  * @param to The end of the time interval.
  * @param format The [DateTimeFormat] to apply to both the start and end of the interval.
  * @param timeZone The time zone to use for formatting.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @return The formatted interval string.
  */
 fun Instant.formatInterval(
@@ -177,7 +204,12 @@ fun Instant.formatInterval(
  * ```kotlin
  * val start = Instant.parse("2024-05-20T10:00:00Z")
  * val end = Instant.parse("2024-05-21T12:30:00Z")
- * val formatted = start.formatInterval(end) {
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = start.formatInterval(
+ *     to = end,
+ *     timeZone = TimeZone.UTC,
+ *     locale = myLocale
+ * ) {
  *     date {
  *         month = MonthFormat.Name.Short
  *         day = DayFormat.Numeric
@@ -188,7 +220,7 @@ fun Instant.formatInterval(
  *
  * @param to The end of the time interval.
  * @param timeZone The time zone to use for formatting.
- * @param locale An optional [AppLocale] to use for formatting.
+ * @param locale The [AppLocale] to use for formatting.
  * @param block The DSL block for configuring the [DateTimeFormat].
  * @return The formatted interval string.
  */

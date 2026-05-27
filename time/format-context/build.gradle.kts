@@ -53,7 +53,10 @@ kotlin {
         commonMain.dependencies {
             api(projects.time.format)
             api(projects.time.coreContext)
-            api(projects.localeContext)
+            implementation(projects.locale)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
     }
 }

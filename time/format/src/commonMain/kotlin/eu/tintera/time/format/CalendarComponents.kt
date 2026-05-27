@@ -5,6 +5,14 @@ import eu.tintera.time.core.TimeDslMarker
 /**
  * Configuration that determines the visibility and formatting of calendar-based date components
  * (years, months, days).
+ *
+ * Example:
+ * ```kotlin
+ * val components = CalendarComponents {
+ *     years = UnitVisibility.Always
+ *     months = UnitVisibility.IfNotEmpty
+ * }
+ * ```
  */
 interface CalendarComponents {
     /**
@@ -31,6 +39,14 @@ internal data class CalendarComponentsImpl(
 
 /**
  * Builder for constructing [CalendarComponents] configurations using a DSL style.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = CalendarComponentsBuilder().apply {
+ *     years = UnitVisibility.Always
+ * }
+ * val components = builder.build()
+ * ```
  */
 @TimeDslMarker
 open class CalendarComponentsBuilder internal constructor() {
@@ -53,6 +69,14 @@ open class CalendarComponentsBuilder internal constructor() {
     /**
      * Copies settings from another [CalendarComponents] instance.
      *
+     * Example:
+     * ```kotlin
+     * val source = CalendarComponents { years = UnitVisibility.Always }
+     * val builder = CalendarComponentsBuilder().apply {
+     *     from(source)
+     * }
+     * ```
+     *
      * @param components The source components configuration to copy.
      */
     fun from(components: CalendarComponents) {
@@ -63,6 +87,12 @@ open class CalendarComponentsBuilder internal constructor() {
 
     /**
      * Builds and returns a [CalendarComponents] instance based on the current builder state.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = CalendarComponentsBuilder()
+     * val components = builder.build()
+     * ```
      *
      * @return The configured [CalendarComponents].
      */
@@ -75,6 +105,13 @@ open class CalendarComponentsBuilder internal constructor() {
 
 /**
  * Creates a new [CalendarComponents] configuration using a DSL configuration block.
+ *
+ * Example:
+ * ```kotlin
+ * val components = CalendarComponents {
+ *     days = UnitVisibility.Always
+ * }
+ * ```
  *
  * @param block The configuration block applied to the [CalendarComponentsBuilder].
  * @return The configured [CalendarComponents] instance.

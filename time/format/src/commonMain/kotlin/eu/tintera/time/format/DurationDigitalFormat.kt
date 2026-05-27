@@ -4,6 +4,13 @@ import eu.tintera.time.core.TimeDslMarker
 
 /**
  * Configuration for digital-style duration formatting (e.g., "12:30:15", or "1 d. 12:30:15").
+ *
+ * Example:
+ * ```kotlin
+ * val format = DurationDigitalFormat {
+ *     stopwatch()
+ * }
+ * ```
  */
 interface DurationDigitalFormat {
     /** The style to format the days component, or null if the days component should be omitted. */
@@ -27,6 +34,14 @@ interface DurationDigitalFormat {
 
 /**
  * Builder for constructing [DurationDigitalFormat] instances using a DSL.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = DurationDigitalFormatBuilder().apply {
+ *     stopwatch()
+ * }
+ * val format = builder.build()
+ * ```
  */
 @TimeDslMarker
 class DurationDigitalFormatBuilder internal constructor() : DurationDigitalFormat {
@@ -51,6 +66,13 @@ class DurationDigitalFormatBuilder internal constructor() : DurationDigitalForma
     /**
      * Configures the builder for standard stopwatch formatting.
      * Sets hours, minutes, and seconds to padded formats (e.g., "01:05:09").
+     *
+     * Example:
+     * ```kotlin
+     * val format = DurationDigitalFormat {
+     *     stopwatch()
+     * }
+     * ```
      */
     fun stopwatch() {
         hour = HourFormat.Digital24h.Padded
@@ -60,12 +82,25 @@ class DurationDigitalFormatBuilder internal constructor() : DurationDigitalForma
 
     /**
      * Builds and returns a [DurationDigitalFormat] instance.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = DurationDigitalFormatBuilder()
+     * val format = builder.build()
+     * ```
      */
     fun build(): DurationDigitalFormat = this
 }
 
 /**
  * Creates a [DurationDigitalFormat] instance using a DSL configuration block.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DurationDigitalFormat {
+ *     stopwatch()
+ * }
+ * ```
  *
  * @param block The configuration block applied to the [DurationDigitalFormatBuilder].
  * @return The configured [DurationDigitalFormat].

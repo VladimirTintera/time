@@ -8,6 +8,14 @@ import kotlin.time.Instant
  * Represents a specific time interval with context required for formatting.
  *
  * Encapsulates the start instant, end instant, timezone, and locale.
+ *
+ * Example:
+ * ```kotlin
+ * // Assuming we have an Interval instance (e.g. inside a combiner):
+ * val startInstant = interval.from
+ * val endInstant = interval.to
+ * val zone = interval.timeZone
+ * ```
  */
 class Interval internal constructor(
     /** The start instant of the interval. */
@@ -38,6 +46,13 @@ class Interval internal constructor(
 
 /**
  * Functional interface for combining the start and end of an interval that occurs on the same day.
+ *
+ * Example:
+ * ```kotlin
+ * val combiner = SameDayCombiner { interval, date, startTime, endTime ->
+ *     "On $date from $startTime to $endTime"
+ * }
+ * ```
  */
 fun interface SameDayCombiner {
     /**
@@ -54,6 +69,13 @@ fun interface SameDayCombiner {
 
 /**
  * Functional interface for combining the start and end dates of an interval that spans different dates (but maybe same month/year).
+ *
+ * Example:
+ * ```kotlin
+ * val combiner = DifferentDateCombiner { interval, start, end ->
+ *     "From $start to $end"
+ * }
+ * ```
  */
 fun interface DifferentDateCombiner {
     /**
@@ -69,6 +91,13 @@ fun interface DifferentDateCombiner {
 
 /**
  * Functional interface for combining the start and end date-times of an interval spanning different days with specific times.
+ *
+ * Example:
+ * ```kotlin
+ * val combiner = DifferentDateTimeCombiner { interval, start, end ->
+ *     "From $start to $end"
+ * }
+ * ```
  */
 fun interface DifferentDateTimeCombiner {
     /**
@@ -84,6 +113,11 @@ fun interface DifferentDateTimeCombiner {
 
 /**
  * Returns the default [SameDayCombiner] that delegates formatting directly to the platform interval formatter.
+ *
+ * Example:
+ * ```kotlin
+ * val combiner = defaultSameDayCombiner()
+ * ```
  */
 fun defaultSameDayCombiner() = SameDayCombiner { interval, _, _, _ ->
     interval.format()
@@ -91,6 +125,11 @@ fun defaultSameDayCombiner() = SameDayCombiner { interval, _, _, _ ->
 
 /**
  * Returns the default [DifferentDateCombiner] that delegates formatting directly to the platform interval formatter.
+ *
+ * Example:
+ * ```kotlin
+ * val combiner = defaultDifferentDateCombiner()
+ * ```
  */
 fun defaultDifferentDateCombiner() = DifferentDateCombiner { interval, _, _ ->
     interval.format()
@@ -98,6 +137,11 @@ fun defaultDifferentDateCombiner() = DifferentDateCombiner { interval, _, _ ->
 
 /**
  * Returns the default [DifferentDateTimeCombiner] that delegates formatting directly to the platform interval formatter.
+ *
+ * Example:
+ * ```kotlin
+ * val combiner = defaultDifferentDateTimeCombiner()
+ * ```
  */
 fun defaultDifferentDateTimeCombiner() = DifferentDateTimeCombiner { interval, _, _ ->
     interval.format()
@@ -178,7 +222,14 @@ internal fun formatInterval(
  * ```kotlin
  * val start = Instant.parse("2024-01-01T10:00:00Z")
  * val end = Instant.parse("2024-01-01T12:00:00Z")
- * val formatted = formatInterval(start, end, DateTimeFormat { time { short() } })
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = formatInterval(
+ *     from = start,
+ *     to = end,
+ *     format = DateTimeFormat { time { short() } },
+ *     locale = myLocale,
+ *     timeZone = TimeZone.UTC
+ * )
  * // e.g. "10:00 AM – 12:00 PM"
  * ```
  *

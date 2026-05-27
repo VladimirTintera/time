@@ -3,6 +3,7 @@ package eu.tintera.time.format
 import eu.tintera.locale.AppLocale
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.UnsafeNumber
+import kotlinx.cinterop.convert
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.number
 import platform.Foundation.*
@@ -18,13 +19,13 @@ internal actual fun nativeDateTimeFormat(
 
     // 1. Vytvoříme surové komponenty
     val components = NSDateComponents().apply {
-        year = date.year.toLong()
-        month = date.month.number.toLong()
-        day = date.day.toLong()
-        hour = date.hour.toLong()
-        minute = date.minute.toLong()
-        second = date.second.toLong()
-        nanosecond = date.nanosecond.toLong()
+        year = date.year.convert()
+        month = date.month.number.convert()
+        day = date.day.convert()
+        hour = date.hour.convert()
+        minute = date.minute.convert()
+        second = date.second.convert()
+        nanosecond = date.nanosecond.convert()
     }
 
     val utcZone = NSTimeZone.timeZoneWithName("UTC")

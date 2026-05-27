@@ -6,6 +6,14 @@ import eu.tintera.time.core.TimeDslMarker
  * Configuration for formatting calendar-based [kotlinx.datetime.DatePeriod]s.
  *
  * Extends [CalendarComponents] to control which fields (years, months, days) are displayed.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DatePeriodFormat {
+ *     width = FormatStyle.Full
+ *     years = UnitVisibility.Always
+ * }
+ * ```
  */
 interface DatePeriodFormat : CalendarComponents {
     /**
@@ -28,6 +36,14 @@ internal data class DatePeriodFormatImpl(
 
 /**
  * Builder for constructing [DatePeriodFormat] instances using a DSL.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = DatePeriodFormatBuilder().apply {
+ *     width = FormatStyle.Short
+ * }
+ * val format = builder.build()
+ * ```
  */
 @TimeDslMarker
 class DatePeriodFormatBuilder internal constructor() : CalendarComponentsBuilder() {
@@ -43,6 +59,12 @@ class DatePeriodFormatBuilder internal constructor() : CalendarComponentsBuilder
 
     /**
      * Builds and returns a [DatePeriodFormat] instance based on the builder's state.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = DatePeriodFormatBuilder()
+     * val format = builder.build()
+     * ```
      */
     override fun build(): DatePeriodFormat = DatePeriodFormatImpl(
         style = width,
@@ -53,6 +75,13 @@ class DatePeriodFormatBuilder internal constructor() : CalendarComponentsBuilder
 
 /**
  * Creates a [DatePeriodFormat] instance using a DSL configuration block.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DatePeriodFormat {
+ *     years = UnitVisibility.Always
+ * }
+ * ```
  *
  * @param block The configuration block applied to the [DatePeriodFormatBuilder].
  * @return The configured [DatePeriodFormat].

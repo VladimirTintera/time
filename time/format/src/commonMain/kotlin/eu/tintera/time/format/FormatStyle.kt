@@ -2,6 +2,11 @@ package eu.tintera.time.format
 
 /**
  * Defines the formatting length style for names of time/date units in periods or durations.
+ *
+ * Example:
+ * ```kotlin
+ * val style = FormatStyle.Full
+ * ```
  */
 enum class FormatStyle {
     /**

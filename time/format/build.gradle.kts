@@ -55,6 +55,10 @@ kotlin {
             implementation(projects.time.core)
         }
 
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
+
         webMain.dependencies {
             implementation(libs.wrappers.browser)
         }

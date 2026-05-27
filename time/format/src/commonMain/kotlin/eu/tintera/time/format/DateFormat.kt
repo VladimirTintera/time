@@ -7,6 +7,14 @@ import eu.tintera.time.core.TimeDslMarker
  *
  * This interface defines which components (weekday, day, month, year) should be included
  * in the formatted output and their respective styles.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DateFormat {
+ *     year = YearFormat.FourDigits
+ *     month = MonthFormat.Name.Full
+ * }
+ * ```
  */
 interface DateFormat {
     /** The format style for the day of the week, or null if omitted. */
@@ -35,6 +43,14 @@ internal fun DateFormat.toDateCldrSkeleton() = buildString {
  * This builder provides a flexible way to construct a [DateFormat] by specifying
  * the desired format for each date component. It also includes predefined styles
  * for convenience.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = DateFormatBuilder().apply {
+ *     year = YearFormat.FourDigits
+ * }
+ * val format = builder.build()
+ * ```
  */
 @TimeDslMarker
 class DateFormatBuilder internal constructor() : DateFormat {
@@ -55,6 +71,14 @@ class DateFormatBuilder internal constructor() : DateFormat {
      *
      * This allows for easily extending or modifying a predefined format.
      *
+     * Example:
+     * ```kotlin
+     * val source = DateFormat { year = YearFormat.FourDigits }
+     * val builder = DateFormatBuilder().apply {
+     *     from(source)
+     * }
+     * ```
+     *
      * @param dateFormat The format to copy from.
      */
     fun from(dateFormat: DateFormat) {
@@ -68,6 +92,13 @@ class DateFormatBuilder internal constructor() : DateFormat {
      * Applies a short date format.
      *
      * This typically includes a padded day, a numeric month, and a two-digit year.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = DateFormatBuilder().apply {
+     *     short()
+     * }
+     * ```
      */
     fun short() {
         day = DayFormat.Padded
@@ -79,6 +110,13 @@ class DateFormatBuilder internal constructor() : DateFormat {
      * Applies a medium date format.
      *
      * This typically includes a standard day, a numeric month, and a four-digit year.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = DateFormatBuilder().apply {
+     *     medium()
+     * }
+     * ```
      */
     fun medium() {
         day = DayFormat.Numeric
@@ -91,6 +129,13 @@ class DateFormatBuilder internal constructor() : DateFormat {
      *
      * This typically includes a standard day, the full month name, and a four-digit year.
      * The weekday is explicitly omitted.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = DateFormatBuilder().apply {
+     *     long()
+     * }
+     * ```
      */
     fun long() {
         day = DayFormat.Numeric
@@ -104,6 +149,13 @@ class DateFormatBuilder internal constructor() : DateFormat {
      *
      * This typically includes the full weekday name, a standard day, the full month name,
      * and a four-digit year.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = DateFormatBuilder().apply {
+     *     full()
+     * }
+     * ```
      */
     fun full() {
         day = DayFormat.Numeric
@@ -115,10 +167,16 @@ class DateFormatBuilder internal constructor() : DateFormat {
     /**
      * Builds and returns a [DateFormat] instance.
      *
+     * Example:
+     * ```kotlin
+     * val builder = DateFormatBuilder().apply {
+     *     year = YearFormat.FourDigits
+     * }
+     * val format = builder.build()
+     * ```
+     *
      * @return The configured [DateFormat].
-     * @throws IllegalArgumentException if no date components have been configured.
      */
-    //"TimeFormat cannot be empty. You must configure at least one date component"
     fun build(): DateFormat = this
 }
 
@@ -127,6 +185,13 @@ class DateFormatBuilder internal constructor() : DateFormat {
  *
  * This function provides a convenient way to construct a [DateFormat] instance
  * by applying a configuration block to a [DateFormatBuilder].
+ *
+ * Example:
+ * ```kotlin
+ * val format = DateFormat {
+ *     year = YearFormat.FourDigits
+ * }
+ * ```
  *
  * @param block The configuration block for the [DateFormatBuilder].
  * @return The newly created [DateFormat].

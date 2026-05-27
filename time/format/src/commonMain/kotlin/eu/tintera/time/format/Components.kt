@@ -4,6 +4,11 @@ package eu.tintera.time.format
  * Defines the formatting style for the year component.
  *
  * Each style corresponds to a specific pattern for representing the year.
+ *
+ * Example:
+ * ```kotlin
+ * val format = YearFormat.FourDigits
+ * ```
  */
 enum class YearFormat(internal val pattern: String) {
     /**
@@ -25,6 +30,11 @@ enum class YearFormat(internal val pattern: String) {
  * Defines the formatting style for the month component.
  *
  * Each style corresponds to a specific pattern for representing the month.
+ *
+ * Example:
+ * ```kotlin
+ * val format = MonthFormat.Name.Full
+ * ```
  */
 sealed class MonthFormat {
 
@@ -79,6 +89,11 @@ sealed class MonthFormat {
  * Defines the formatting style for the day of the month component.
  *
  * Each style corresponds to a specific pattern for representing the day.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DayFormat.Padded
+ * ```
  */
 enum class DayFormat(internal val pattern: String) {
     /**
@@ -100,6 +115,11 @@ enum class DayFormat(internal val pattern: String) {
  * Defines the formatting style for the day of the week component.
  *
  * Each style corresponds to a specific pattern for representing the day of the week.
+ *
+ * Example:
+ * ```kotlin
+ * val format = WeekDayFormat.FullName
+ * ```
  */
 enum class WeekDayFormat(internal val pattern: String) {
     /**
@@ -119,6 +139,11 @@ enum class WeekDayFormat(internal val pattern: String) {
 
 /**
  * Defines the formatting style for the hour component.
+ *
+ * Example:
+ * ```kotlin
+ * val format = HourFormat.Digital24h.Padded
+ * ```
  */
 sealed class HourFormat {
     internal abstract val pattern: String
@@ -195,6 +220,11 @@ sealed class HourFormat {
 
 /**
  * Defines whether to display the day period marker (AM/PM).
+ *
+ * Example:
+ * ```kotlin
+ * val style = DayPeriodStyle.Required
+ * ```
  */
 enum class DayPeriodStyle {
 
@@ -213,6 +243,11 @@ enum class DayPeriodStyle {
  * Defines the formatting style for the minute component.
  *
  * Each style corresponds to a specific pattern for representing the minute.
+ *
+ * Example:
+ * ```kotlin
+ * val format = MinuteFormat.Padded
+ * ```
  */
 enum class MinuteFormat(internal val pattern: String) {
     /**
@@ -234,6 +269,11 @@ enum class MinuteFormat(internal val pattern: String) {
  * Defines the formatting style for the second component.
  *
  * Each style corresponds to a specific pattern for representing the second.
+ *
+ * Example:
+ * ```kotlin
+ * val format = SecondFormat.Padded
+ * ```
  */
 enum class SecondFormat(internal val pattern: String) {
     /**
@@ -255,6 +295,11 @@ enum class SecondFormat(internal val pattern: String) {
  * Defines the precision for the fractional seconds component (e.g., milliseconds).
  *
  * Each style specifies the number of decimal digits to display after the seconds.
+ *
+ * Example:
+ * ```kotlin
+ * val format = FractionalSecondFormat.ThreeDigits
+ * ```
  */
 enum class FractionalSecondFormat(internal val pattern: String, internal val digits: Int) {
     /**

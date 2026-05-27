@@ -6,6 +6,15 @@ import eu.tintera.time.core.TimeDslMarker
  * Configuration for formatting [kotlinx.datetime.DateTimePeriod]s containing both calendar and clock units.
  *
  * Extends [CalendarComponents] and [ClockComponents] to control visibility of fields.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DateTimePeriodFormat {
+ *     width = FormatStyle.Full
+ *     calendar { years = UnitVisibility.Always }
+ *     clock { hours = UnitVisibility.Always }
+ * }
+ * ```
  */
 interface DateTimePeriodFormat : CalendarComponents, ClockComponents {
     /**
@@ -29,6 +38,14 @@ internal data class DateTimePeriodFormatImpl(
 
 /**
  * Builder for constructing [DateTimePeriodFormat] instances using a DSL.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = DateTimePeriodFormatBuilder().apply {
+ *     width = FormatStyle.Short
+ * }
+ * val format = builder.build()
+ * ```
  */
 @TimeDslMarker
 class DateTimePeriodFormatBuilder internal constructor() {
@@ -48,6 +65,15 @@ class DateTimePeriodFormatBuilder internal constructor() {
     /**
      * Configures the visibility of calendar components (years, months, days).
      *
+     * Example:
+     * ```kotlin
+     * val format = DateTimePeriodFormat {
+     *     calendar {
+     *         years = UnitVisibility.Always
+     *     }
+     * }
+     * ```
+     *
      * @param block The configuration block applied to [CalendarComponentsBuilder].
      */
     fun calendar(block: CalendarComponentsBuilder.() -> Unit) {
@@ -57,6 +83,15 @@ class DateTimePeriodFormatBuilder internal constructor() {
     /**
      * Configures the visibility of clock components (hours, minutes, seconds).
      *
+     * Example:
+     * ```kotlin
+     * val format = DateTimePeriodFormat {
+     *     clock {
+     *         hours = UnitVisibility.Always
+     *     }
+     * }
+     * ```
+     *
      * @param block The configuration block applied to [ClockComponentsBuilder].
      */
     fun clock(block: ClockComponentsBuilder.() -> Unit) {
@@ -65,6 +100,12 @@ class DateTimePeriodFormatBuilder internal constructor() {
 
     /**
      * Builds and returns a [DateTimePeriodFormat] instance based on the builder's state.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = DateTimePeriodFormatBuilder()
+     * val format = builder.build()
+     * ```
      */
     fun build(): DateTimePeriodFormat = DateTimePeriodFormatImpl(
         calendarComponents = calendar ?: CalendarComponents {},
@@ -76,6 +117,15 @@ class DateTimePeriodFormatBuilder internal constructor() {
 
 /**
  * Creates a [DateTimePeriodFormat] instance using a DSL configuration block.
+ *
+ * Example:
+ * ```kotlin
+ * val format = DateTimePeriodFormat {
+ *     calendar {
+ *         years = UnitVisibility.Always
+ *     }
+ * }
+ * ```
  *
  * @param block The configuration block applied to the [DateTimePeriodFormatBuilder].
  * @return The configured [DateTimePeriodFormat].

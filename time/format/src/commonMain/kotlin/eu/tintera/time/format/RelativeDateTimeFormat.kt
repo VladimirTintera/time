@@ -6,6 +6,14 @@ import eu.tintera.time.core.TimeDslMarker
  * Configuration for formatting relative date-time differences (e.g., "3 days ago", "in 2 hours").
  *
  * Each unit can have an optional [UnitThreshold] specifying when it should start being used.
+ *
+ * Example:
+ * ```kotlin
+ * val format = RelativeDateTimeFormat {
+ *     style = FormatStyle.Full
+ *     days(2)
+ * }
+ * ```
  */
 interface RelativeDateTimeFormat {
     /**
@@ -34,6 +42,11 @@ interface RelativeDateTimeFormat {
 
 /**
  * Defines a threshold for when a time unit should be used for relative formatting.
+ *
+ * Example:
+ * ```kotlin
+ * val threshold = UnitThreshold(5)
+ * ```
  */
 interface UnitThreshold {
     /**
@@ -44,6 +57,11 @@ interface UnitThreshold {
 
 /**
  * Creates a [UnitThreshold] instance with the specified minimum value.
+ *
+ * Example:
+ * ```kotlin
+ * val threshold = UnitThreshold(min = 5)
+ * ```
  *
  * @param min The minimum absolute value required to trigger this unit.
  * @return The configured [UnitThreshold].
@@ -56,6 +74,15 @@ internal data class UnitThresholdImpl(
 
 /**
  * Builder for constructing [RelativeDateTimeFormat] configurations using a DSL.
+ *
+ * Example:
+ * ```kotlin
+ * val builder = RealRelativeDateTimeFormatBuilder().apply {
+ *     style = FormatStyle.Short
+ *     hours(2)
+ * }
+ * val format = builder.build()
+ * ```
  */
 @TimeDslMarker
 class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTimeFormat {
@@ -83,6 +110,13 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
     /**
      * Configures the threshold for the years unit.
      *
+     * Example:
+     * ```kotlin
+     * val format = RelativeDateTimeFormat {
+     *     years(2)
+     * }
+     * ```
+     *
      * @param min The minimum number of years, or null to disable relative years.
      */
     fun years(min: Int? = 1) {
@@ -91,6 +125,13 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
 
     /**
      * Configures the threshold for the months unit.
+     *
+     * Example:
+     * ```kotlin
+     * val format = RelativeDateTimeFormat {
+     *     months(2)
+     * }
+     * ```
      *
      * @param min The minimum number of months, or null to disable relative months.
      */
@@ -101,6 +142,13 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
     /**
      * Configures the threshold for the days unit.
      *
+     * Example:
+     * ```kotlin
+     * val format = RelativeDateTimeFormat {
+     *     days(2)
+     * }
+     * ```
+     *
      * @param min The minimum number of days, or null to disable relative days.
      */
     fun days(min: Int? = 1) {
@@ -109,6 +157,13 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
 
     /**
      * Configures the threshold for the hours unit.
+     *
+     * Example:
+     * ```kotlin
+     * val format = RelativeDateTimeFormat {
+     *     hours(2)
+     * }
+     * ```
      *
      * @param min The minimum number of hours, or null to disable relative hours.
      */
@@ -119,6 +174,13 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
     /**
      * Configures the threshold for the minutes unit.
      *
+     * Example:
+     * ```kotlin
+     * val format = RelativeDateTimeFormat {
+     *     minutes(2)
+     * }
+     * ```
+     *
      * @param min The minimum number of minutes, or null to disable relative minutes.
      */
     fun minutes(min: Int? = 1) {
@@ -128,6 +190,13 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
     /**
      * Configures the threshold for the seconds unit.
      *
+     * Example:
+     * ```kotlin
+     * val format = RelativeDateTimeFormat {
+     *     seconds(10)
+     * }
+     * ```
+     *
      * @param min The minimum number of seconds, or null to disable relative seconds.
      */
     fun seconds(min: Int? = 1) {
@@ -136,12 +205,26 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
 
     /**
      * Builds and returns a [RelativeDateTimeFormat] instance.
+     *
+     * Example:
+     * ```kotlin
+     * val builder = RealRelativeDateTimeFormatBuilder()
+     * val format = builder.build()
+     * ```
      */
     fun build(): RelativeDateTimeFormat = this
 }
 
 /**
  * Creates a [RelativeDateTimeFormat] instance using a DSL configuration block.
+ *
+ * Example:
+ * ```kotlin
+ * val format = RelativeDateTimeFormat {
+ *     style = FormatStyle.Full
+ *     days(2)
+ * }
+ * ```
  *
  * @param block The configuration block applied to [RealRelativeDateTimeFormatBuilder].
  * @return The configured [RelativeDateTimeFormat].

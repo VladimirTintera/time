@@ -9,11 +9,18 @@ import kotlin.time.Duration
  *
  * Example:
  * ```kotlin
+ * import kotlin.time.Duration.Companion.hours
+ * import kotlin.time.Duration.Companion.minutes
+ *
  * val duration = 2.hours + 30.minutes
- * val formatted = duration.format(DurationFormat {
- *     hours = UnitVisibility.Required
- *     minutes = UnitVisibility.Required
- * })
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = duration.format(
+ *     format = DurationFormat {
+ *         hours = UnitVisibility.Required
+ *         minutes = UnitVisibility.Required
+ *     },
+ *     locale = myLocale
+ * )
  * // e.g. "2 hours, 30 minutes"
  * ```
  *
@@ -35,8 +42,11 @@ fun Duration.format(
  *
  * Example:
  * ```kotlin
+ * import kotlin.time.Duration.Companion.hours
+ *
  * val duration = 2.hours
- * val formatted = duration.format {
+ * val czLocale = localeForLanguageTag("cs-CZ")
+ * val formatted = duration.format(locale = czLocale) {
  *     hours = UnitVisibility.Required
  * }
  * // e.g., "2 hours"
@@ -59,10 +69,18 @@ fun Duration.format(
  *
  * Example:
  * ```kotlin
+ * import kotlin.time.Duration.Companion.hours
+ * import kotlin.time.Duration.Companion.minutes
+ * import kotlin.time.Duration.Companion.seconds
+ *
  * val duration = 1.hours + 23.minutes + 45.seconds
- * val formatted = duration.formatDigital(DurationDigitalFormat {
- *     stopwatch()
- * })
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = duration.formatDigital(
+ *     format = DurationDigitalFormat {
+ *         stopwatch()
+ *     },
+ *     locale = myLocale
+ * )
  * // e.g., "01:23:45"
  * ```
  *
@@ -84,8 +102,12 @@ fun Duration.formatDigital(
  *
  * Example:
  * ```kotlin
+ * import kotlin.time.Duration.Companion.minutes
+ * import kotlin.time.Duration.Companion.seconds
+ *
  * val duration = 12.minutes + 30.seconds
- * val formatted = duration.formatDigital {
+ * val czLocale = localeForLanguageTag("cs-CZ")
+ * val formatted = duration.formatDigital(locale = czLocale) {
  *     stopwatch()
  * }
  * // e.g., "12:30" (or "00:12:30" depending on stopwatch config)
