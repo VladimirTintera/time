@@ -77,7 +77,7 @@ internal data class UnitThresholdImpl(
  *
  * Example:
  * ```kotlin
- * val builder = RealRelativeDateTimeFormatBuilder().apply {
+ * val builder = RelativeDateTimeFormatBuilder().apply {
  *     style = FormatStyle.Short
  *     hours(2)
  * }
@@ -85,7 +85,7 @@ internal data class UnitThresholdImpl(
  * ```
  */
 @TimeDslMarker
-class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTimeFormat {
+class RelativeDateTimeFormatBuilder internal constructor() : RelativeDateTimeFormat {
     /** The style to use for formatting. Defaults to [FormatStyle.Full]. */
     override var style: FormatStyle = FormatStyle.Full
 
@@ -208,7 +208,7 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
      *
      * Example:
      * ```kotlin
-     * val builder = RealRelativeDateTimeFormatBuilder()
+     * val builder = RelativeDateTimeFormatBuilder()
      * val format = builder.build()
      * ```
      */
@@ -226,9 +226,9 @@ class RealRelativeDateTimeFormatBuilder internal constructor() : RelativeDateTim
  * }
  * ```
  *
- * @param block The configuration block applied to [RealRelativeDateTimeFormatBuilder].
+ * @param block The configuration block applied to [RelativeDateTimeFormatBuilder].
  * @return The configured [RelativeDateTimeFormat].
  */
 fun RelativeDateTimeFormat(
-    block: RealRelativeDateTimeFormatBuilder.() -> Unit
-) = RealRelativeDateTimeFormatBuilder().apply(block).build()
+    block: RelativeDateTimeFormatBuilder.() -> Unit
+) = RelativeDateTimeFormatBuilder().apply(block).build()

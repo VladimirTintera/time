@@ -132,7 +132,7 @@ fun LocalDateTime.formatRelative(
     now: LocalDateTime,
     timeZone: TimeZone,
     locale: AppLocale,
-    block: RealRelativeDateTimeFormatBuilder.() -> Unit
+    block: RelativeDateTimeFormatBuilder.() -> Unit
 ): String = platformRelativeTimeFormat(
     target = this.toInstant(timeZone),
     now = now.toInstant(timeZone),

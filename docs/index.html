@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>All modules</title>
+    <link href="images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="scripts/sourceset_dependencies.js" async="async"></script>
+<link href="styles/style.css" rel="Stylesheet">
+<link href="styles/main.css" rel="Stylesheet">
+<link href="styles/prism.css" rel="Stylesheet">
+<link href="styles/logo-styles.css" rel="Stylesheet">
+<link href="ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="ui-kit/ui-kit.min.js" defer="defer"></script>
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="index.html" tabindex="1">
+                    Ecosystem
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    Ecosystem
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" id="content" pageIds="Ecosystem::.ext/allModules///PointingToDeclaration//0">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <div class="cover ">
+      <h1 class="">Time Library</h1>
+      <p class="paragraph">A premium Kotlin Multiplatform library for elegant, type-safe, and locale-aware date, time, interval, relative time, duration, and period formatting. Built directly on top of <code class="lang-kotlin">kotlinx-datetime</code>, it offers flexible formatting DSLs and native platform performance.</p>
+
+      <h2 class="">Core Philosophy</h2>
+      <p class="paragraph">This library is designed to be <strong>lightweight</strong> and performant across multiple platforms by leveraging native platform capabilities:</p>
+      <ul>
+        <li>
+          <p class="paragraph"><strong>Android</strong>: Uses the system's native <code class="lang-kotlin">android.icu</code> library.</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>iOS / macOS / watchOS / tvOS</strong>: Uses the native Foundation framework (<code class="lang-kotlin">NSLocale</code>, <code class="lang-kotlin">NSDateFormatter</code>, etc.).</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>JS / Wasm</strong>: Uses the standard JavaScript <code class="lang-kotlin">Intl</code> API.</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>JVM</strong>: On the JVM, Java's standard library does not bundle native ICU/CLDR formatting resources in a reliable cross-platform way. Therefore, the JVM target includes a dependency on IBM's <strong>ICU4J</strong> (<code class="lang-kotlin">com.ibm.icu:icu4j</code>) to guarantee correct, standard-compliant formatting.</p>
+        </li>
+      </ul>
+
+      <h2 class="">Features</h2>
+      <ul>
+        <li>
+          <p class="paragraph">🛠️ <strong>DSL-based formatting</strong>: Safe, readable configuration of dates, times, durations, and periods using Kotlin DSL builders.</p>
+        </li>
+        <li>
+          <p class="paragraph">📆 <strong>Extensions for </strong><code class="strong lang-kotlin"><strong>kotlinx-datetime</strong></code><strong> types</strong>: Easily format <code class="lang-kotlin">LocalDate</code>, <code class="lang-kotlin">LocalTime</code>, <code class="lang-kotlin">LocalDateTime</code>, and <code class="lang-kotlin">Instant</code>.</p>
+        </li>
+        <li>
+          <p class="paragraph">🔀 <strong>Interval formatting</strong>: Smartly format date and time ranges, automatically merging redundant information (e.g., &quot;Tuesday 19 – Wednesday 20 May 2026&quot;).</p>
+        </li>
+        <li>
+          <p class="paragraph">⏱️ <strong>Relative time formatting</strong>: Human-readable differences in various styles (e.g., &quot;5 minutes ago&quot;, &quot;in 2 hours&quot;).</p>
+        </li>
+        <li>
+          <p class="paragraph">🌍 <strong>Locale-aware</strong>: Leverages native platform capabilities for correct, localized formatting and CLDR patterns. Custom locales are represented by the platform-mapped <code class="lang-kotlin">AppLocale</code>.</p>
+        </li>
+        <li>
+          <p class="paragraph">🧬 <strong>Context Parameter support</strong>: Opt-in support for Kotlin's context parameters to automatically propagate timezone and locale contexts.</p>
+        </li>
+      </ul>
+
+      <h2 class="">Module Architecture</h2>
+      <p class="paragraph">The library is split into separate modules to keep the core light and allow opt-in support for Kotlin's context parameters:</p>
+      <div class="table--container">
+        <table>
+          <thead>
+            <tr>
+              <th>Module</th>
+              <th>Purpose</th>
+              <th>Key API & Mappings</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:locale</strong></code></td>
+              <td>Native platform locale abstraction.</td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">AppLocale</code> (JVM: <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">java.util.Locale</code>, Android: <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">android.icu.util.ULocale</code>, Apple: <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">NSLocale</code>, Web: <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">String</code>), <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">currentLocale</code>, <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">availableLocales()</code>, <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">localeForLanguageTag(tag)</code></td>
+            </tr>
+            <tr>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:time:core</strong></code></td>
+              <td>Calendar calculations and sequence utilities.</td>
+              <td>timezone-aware extensions, sequence generation (<code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">generateSequence</code>, <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">slice</code>), aligns (<code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">floorTo</code>, <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">ceilTo</code>), and the <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">modify {}</code> builder DSL.</td>
+            </tr>
+            <tr>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:time:core-context</strong></code></td>
+              <td>Context-aware version of <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">:time:core</code> arithmetic.</td>
+              <td>Context-parameter functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">context(timeZone: TimeZone)</code>.</td>
+            </tr>
+            <tr>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:time:format</strong></code></td>
+              <td>Formatting engine and configuration DSLs.</td>
+              <td>DSL formats for date/time, interval formatting, relative formatting, duration formatting, and period formatting.</td>
+            </tr>
+            <tr>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:time:format-context</strong></code></td>
+              <td>Context-aware formatting wrappers.</td>
+              <td>Context-parameter formatting functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">context(locale: AppLocale)</code> or <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">context(locale: AppLocale, timeZone: TimeZone)</code>. Includes the <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">withRegionalContext</code> scope helper.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 class="">Installation & Configuration</h2>
+      <p class="paragraph">Add the desired modules to your Kotlin Multiplatform project.</p>
+      <h3 class="">1. Dependency Setup (<code class="lang-kotlin">build.gradle.kts</code>)</h3>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">kotlin {<br>    sourceSets {<br>        commonMain.dependencies {<br>            // Core formatting and locale module<br>            implementation(&quot;eu.tintera.locale:locale:x.y.z&quot;)<br>            implementation(&quot;eu.tintera.time:core:x.y.z&quot;)<br>            implementation(&quot;eu.tintera.time:format:x.y.z&quot;)<br>            <br>            // Optional: Context-aware modules (requires Kotlin 2.2+)<br>            implementation(&quot;eu.tintera.time:core-context:x.y.z&quot;)<br>            implementation(&quot;eu.tintera.time:format-context:x.y.z&quot;)<br>        }<br>    }<br>}</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <h3 class="">2. Enabling Context Parameters</h3>
+      <blockquote class="quotation">
+        <p class="paragraph">!IMPORTANT The context-aware modules (<code class="lang-kotlin">:time:core-context</code> and <code class="lang-kotlin">:time:format-context</code>) utilize <strong>Kotlin 2.2+ Context Parameters</strong> (which replace context receivers). To use these modules, you must enable the experimental compiler flag in your build configuration:</p>
+      </blockquote>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">kotlin {<br>    compilerOptions {<br>        freeCompilerArgs.add(&quot;-Xcontext-parameters&quot;)<br>    }<br>}</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+
+      <h2 class="">Detailed Usage Examples</h2>
+      <h3 class="">1. Context-Aware Calculations & Formatting (Context Parameters)</h3>
+      <p class="paragraph">With the context-aware modules, you can define a scope with implicit locale and timezone contexts, eliminating the need to pass them explicitly to every function call.</p>
+      <h4 class="">Option A: Using the <code class="lang-kotlin">withRegionalContext</code> Scope Helper</h4>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.localeForLanguageTag<br>import eu.tintera.time.core.context.modify<br>import eu.tintera.time.core.context.toLocalDateTime<br>import eu.tintera.time.format.context.*<br>import kotlinx.datetime.Instant<br>import kotlinx.datetime.LocalTime<br>import kotlinx.datetime.TimeZone<br><br>val czechLocale = localeForLanguageTag(&quot;cs-CZ&quot;)<br>val pragueTimeZone = TimeZone.of(&quot;Europe/Prague&quot;)<br><br>// 1. Establish the context scope<br>withRegionalContext(timeZone = pragueTimeZone, locale = czechLocale) {<br>    val instant = Instant.parse(&quot;2026-05-27T10:00:00Z&quot;)<br>    <br>    // toLocalDateTime resolves the TimeZone automatically from context<br>    val localDateTime = instant.toLocalDateTime() // 2026-05-27T12:00:00<br>    <br>    // format resolves the AppLocale automatically from context<br>    val formattedDate = localDateTime.format {<br>        full()<br>    } // &quot;středa 27. května 2026&quot;<br>    <br>    // modify resolves the TimeZone automatically from context<br>    val modifiedDateTime = localDateTime.modify {<br>        plusDays(1)<br>        plusTime(LocalTime(12, 0))<br>    }<br>}</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <h4 class="">Option B: Declaring Context Parameters on Functions</h4>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.AppLocale<br>import eu.tintera.time.core.context.toLocalDateTime<br>import eu.tintera.time.format.context.*<br>import kotlinx.datetime.Instant<br>import kotlinx.datetime.TimeZone<br><br>// Require AppLocale and TimeZone context parameters<br>context(locale: AppLocale, timeZone: TimeZone)<br>fun formatAppEvent(instant: Instant): String {<br>    val localDateTime = instant.toLocalDateTime() // implicitly uses timeZone<br>    return localDateTime.format { // implicitly uses locale<br>        date { full() }<br>        time { short() }<br>    }<br>}</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+
+      <h3 class="">2. Standard Formatting (Explicit Parameters)</h3>
+      <p class="paragraph">If you prefer not to use context parameters, you can pass the locale and timezone parameters explicitly.</p>
+      <h4 class="">Date Formatting</h4>
+      <p class="paragraph">Format dates using predefined styles (<code class="lang-kotlin">short()</code>, <code class="lang-kotlin">medium()</code>, <code class="lang-kotlin">long()</code>, <code class="lang-kotlin">full()</code>) or custom configurations:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.locale.localeForLanguageTag<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.LocalDate<br><br>val date = LocalDate(2025, 4, 15)<br>val defaultLocale = currentLocale<br><br>// Predefined full date format<br>val fullFormatted = date.format(locale = defaultLocale) {<br>    full()<br>} // e.g., &quot;Tuesday, April 15, 2025&quot; (depending on system locale)<br><br>// Custom format configuration<br>val customFormatted = date.format(locale = defaultLocale) {<br>    day = DayFormat.Numeric<br>    month = MonthFormat.Name.Short<br>    year = YearFormat.FourDigits<br>} // e.g., &quot;15 Apr 2025&quot;<br><br>// Custom locale<br>val czechLocale = localeForLanguageTag(&quot;cs-CZ&quot;)<br>val localizedDate = date.format(locale = czechLocale) {<br>    long()<br>} // e.g., &quot;15. dubna 2025&quot;</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <h4 class="">Time Formatting</h4>
+      <p class="paragraph">Format times easily, automatically handling 12/24 hour preferences based on the locale:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.LocalTime<br><br>val time = LocalTime(14, 30)<br>val defaultLocale = currentLocale<br><br>val formattedTime = time.format(locale = defaultLocale) {<br>    short()<br>} // e.g., &quot;2:30 PM&quot; or &quot;14:30&quot; depending on system locale</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <h4 class="">Date and Time Formatting</h4>
+      <p class="paragraph">Combine date and time formatting using the <code class="lang-kotlin">DateTimeFormat</code> builder DSL:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.LocalDateTime<br><br>val dateTime = LocalDateTime(2025, 4, 15, 14, 30)<br>val defaultLocale = currentLocale<br><br>val formattedDateTime = dateTime.format(locale = defaultLocale) {<br>    date { short() }<br>    time { full() }<br>} // e.g., &quot;4/15/25, 2:30:00 PM&quot;</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+
+      <h3 class="">3. Interval Formatting</h3>
+      <p class="paragraph">Format intervals intelligently. The library automatically omits redundant information (like repeating the year or month if both dates fall in the same month/year).</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.LocalDateTime<br>import kotlinx.datetime.TimeZone<br><br>val start = LocalDateTime(2026, 5, 19, 14, 0)<br>val end = LocalDateTime(2026, 5, 20, 16, 30)<br>val defaultLocale = currentLocale<br>val defaultTimeZone = TimeZone.currentSystemDefault()<br><br>// Standard interval formatting<br>val intervalString = start.formatInterval(<br>    to = end,<br>    locale = defaultLocale,<br>    timeZone = defaultTimeZone<br>) {<br>    date {<br>        day = DayFormat.Numeric<br>        month = MonthFormat.Name.Full<br>        year = YearFormat.FourDigits<br>        weekDay = WeekDayFormat.FullName<br>    }<br>} // e.g., &quot;Tuesday 19 – Wednesday 20 May 2026&quot;</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">You can also provide custom combiners for specific scenarios (same day, same month, same year, or different date):</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">val customInterval = start.formatInterval(<br>    to = end,<br>    locale = defaultLocale,<br>    timeZone = defaultTimeZone,<br>    onSameMonth = { interval, startDate, endDate -&gt;<br>        val startDay = startDate.dayOfMonth<br>        val endPart = endDate.format(interval.locale) { medium() }<br>        &quot;$startDay. – $endPart&quot;<br>    }<br>) {<br>    date { medium() }<br>} // e.g., &quot;19. – 20. května 2026&quot; (for cs-CZ)</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+
+      <h3 class="">4. Relative Time Formatting</h3>
+      <p class="paragraph">Format a time relative to another time (e.g., now) with custom thresholds and style settings.</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.Clock<br>import kotlinx.datetime.TimeZone<br>import kotlin.time.Duration.Companion.minutes<br><br>val now = Clock.System.now()<br>val past = now.minus(5.minutes)<br>val defaultLocale = currentLocale<br>val defaultTimeZone = TimeZone.currentSystemDefault()<br><br>val relative = past.formatRelative(<br>    now = now,<br>    timeZone = defaultTimeZone,<br>    locale = defaultLocale<br>) {<br>    style = FormatStyle.Full<br>    minutes() // Enable formatting in minutes<br>} // e.g., &quot;5 minutes ago&quot; (or &quot;před 5 minutami&quot; in Czech)</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">Within a context parameter scope:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">withRegionalContext(locale = defaultLocale, timeZone = defaultTimeZone) {<br>    val relative = past.formatRelative(now = now) {<br>        style = FormatStyle.Full<br>        minutes()<br>    }<br>}</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+
+      <h3 class="">5. Duration and Period Formatting</h3>
+      <p class="paragraph">The library supports formatting Kotlin <code class="lang-kotlin">Duration</code>, <code class="lang-kotlin">DatePeriod</code>, and <code class="lang-kotlin">DateTimePeriod</code> textually (e.g., &quot;2 hours, 30 minutes&quot;) or digitally (e.g., &quot;02:30:00&quot;).</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.DatePeriod<br>import kotlinx.datetime.DateTimePeriod<br>import kotlin.time.Duration.Companion.days<br>import kotlin.time.Duration.Companion.hours<br>import kotlin.time.Duration.Companion.minutes<br><br>val duration = 10.days + 5.hours + 10.minutes<br>val locale = currentLocale<br><br>// 1. Textual duration formatting<br>val textDuration = duration.format(locale = locale) {<br>    style = FormatStyle.Full<br>    days = UnitVisibility.Auto<br>    hours = UnitVisibility.Auto<br>    minutes = UnitVisibility.Auto<br>} // e.g. &quot;10 days, 5 hours, 10 minutes&quot;<br><br>// 2. Digital clock-style duration formatting<br>val digitalDuration = duration.formatDigital(locale = locale) {<br>    day = FormatStyle.Full<br>    hour = HourFormat.Digital24h.Padded<br>    minute = MinuteFormat.Padded<br>    second = SecondFormat.Padded<br>} // e.g. &quot;10 days 05:10:00&quot;<br><br>val datePeriod = DatePeriod(years = 0, months = 3, days = 8)<br>val dateTimePeriod = DateTimePeriod(years = 0, months = 3, days = 8, hours = 10, minutes = 5)<br><br>// 3. DatePeriod calendar formatting<br>val formattedDatePeriod = datePeriod.formatCalendar(locale = locale) {<br>    years = UnitVisibility.Auto<br>    months = UnitVisibility.Required<br>    days = UnitVisibility.Required<br>} // e.g. &quot;3 months, 8 days&quot;<br><br>// 4. DateTimePeriod formatting (both calendar and clock units)<br>val formattedDateTimePeriod = dateTimePeriod.format(locale = locale) {<br>    maxUnitsCount = null // output all configured units<br>    calendar {<br>        years = UnitVisibility.Auto<br>        months = UnitVisibility.Required<br>        days = UnitVisibility.Required<br>    }<br>    clock {<br>        hours = UnitVisibility.Auto<br>        minutes = UnitVisibility.Required<br>    }<br>} // e.g. &quot;3 months, 8 days, 10 hours, 5 minutes&quot;</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+
+      <h3 class="">6. Core Arithmetic & Sequences (<code class="lang-kotlin">:time:core</code>)</h3>
+      <p class="paragraph"><code class="lang-kotlin">:time:core</code> includes platform-independent extensions to <code class="lang-kotlin">LocalDateTime</code> and ranges. When using <code class="lang-kotlin">:time:core-context</code>, the <code class="lang-kotlin">TimeZone</code> parameter is automatically resolved from the context.</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.time.core.*<br>import kotlinx.datetime.DateTimePeriod<br>import kotlinx.datetime.LocalDateTime<br>import kotlinx.datetime.TimeZone<br><br>val startLdt = LocalDateTime(2026, 5, 27, 9, 0)<br>val timeZone = TimeZone.of(&quot;Europe/Prague&quot;)<br>val period = DateTimePeriod(hours = 2)<br><br>// Generate a sequence of consecutive time intervals<br>val intervals: Sequence&lt;OpenEndRange&lt;LocalDateTime&gt;&gt; = <br>    startLdt.generateSequence(period = period, timeZone = timeZone)<br><br>// Align LocalDateTime to the start/end of the nearest interval boundary<br>val floored = startLdt.floorTo(period = period, timeZone = timeZone)<br>val ceiled = startLdt.ceilTo(period = period, timeZone = timeZone)<br><br>// Modify LocalDateTime using a fluid DSL<br>val modified = startLdt.modify(timeZone = timeZone) {<br>    plusYears(1)<br>    plusDays(5)<br>    withTime(hour = 12, minute = 0)<br>}</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">With <code class="lang-kotlin">:time:core-context</code> inside a context scope:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.time.core.context.*<br><br>context(timeZone: TimeZone)<br>fun adjustDateTime(ldt: LocalDateTime): LocalDateTime {<br>    val intervals = ldt.generateSequence(period) // implicitly uses timeZone<br>    return ldt.modify { // implicitly uses timeZone<br>        plusDays(1)<br>    }<br>}</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+
+      <h3 class="">7. Helper Utilities</h3>
+      <p class="paragraph">Get localized names for days, months, decimal separators, and first day of the week:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.Month<br>import kotlinx.datetime.DayOfWeek<br><br>val locale = currentLocale<br><br>val monthName = Month.APRIL.formatName(locale = locale, format = MonthFormat.Name.Full) // &quot;April&quot;<br>val dayName = DayOfWeek.MONDAY.formatName(locale = locale, format = WeekDayFormat.ShortName) // &quot;Mon&quot;<br>val separator = getDecimalSeparator(locale = locale) // &quot;.&quot; or &quot;,&quot;<br><br>// Platform-aware first day of the week (no locale parameter required)<br>val firstDay = getFirstDayOfWeek() // e.g., DayOfWeek.SUNDAY or DayOfWeek.MONDAY</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">Under <code class="lang-kotlin">withRegionalContext</code> (using <code class="lang-kotlin">:time:format-context</code>):</p>
+      <div class="sample-container">
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.time.format.context.*<br><br>withRegionalContext(locale = locale) {<br>    val monthName = Month.APRIL.formatName() // implicit locale<br>    val dayName = DayOfWeek.MONDAY.formatName(WeekDayFormat.ShortName) // implicit locale<br>    val separator = getDecimalSeparator() // implicit locale<br>}</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+
+      <h2 class="">Detailed DSL Reference</h2>
+      <h3 class="">Date Format Config (<code class="lang-kotlin">DateFormatBuilder</code>)</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">weekDay</code>: <code class="lang-kotlin">WeekDayFormat</code> (<code class="lang-kotlin">FullName</code> e.g., &quot;Monday&quot; or <code class="lang-kotlin">ShortName</code> e.g., &quot;Mon&quot;)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">day</code>: <code class="lang-kotlin">DayFormat</code> (<code class="lang-kotlin">Numeric</code> e.g., &quot;5&quot; or <code class="lang-kotlin">Padded</code> e.g., &quot;05&quot;)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">month</code>: <code class="lang-kotlin">MonthFormat</code></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Name: <code class="lang-kotlin">MonthFormat.Name.Full</code> (e.g., &quot;January&quot;) or <code class="lang-kotlin">MonthFormat.Name.Short</code> (e.g., &quot;Jan&quot;)</p>
+          </li>
+          <li>
+            <p class="paragraph">Digital: <code class="lang-kotlin">MonthFormat.Digital.Numeric</code> (e.g., &quot;1&quot;) or <code class="lang-kotlin">MonthFormat.Digital.Padded</code> (e.g., &quot;01&quot;)</p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">year</code>: <code class="lang-kotlin">YearFormat</code> (<code class="lang-kotlin">FourDigits</code> e.g., &quot;2026&quot; or <code class="lang-kotlin">TwoDigits</code> e.g., &quot;26&quot;)</p>
+        </li>
+        <li>
+          <p class="paragraph">Predefined styles: <code class="lang-kotlin">short()</code>, <code class="lang-kotlin">medium()</code>, <code class="lang-kotlin">long()</code>, <code class="lang-kotlin">full()</code>.</p>
+        </li>
+      </ul>
+      <h3 class="">Time Format Config (<code class="lang-kotlin">TimeFormatBuilder</code>)</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">hour</code>: <code class="lang-kotlin">HourFormat</code></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">24h: <code class="lang-kotlin">HourFormat.Digital24h.Numeric</code> (e.g., &quot;9&quot;, &quot;13&quot;) or <code class="lang-kotlin">HourFormat.Digital24h.Padded</code> (e.g., &quot;09&quot;, &quot;13&quot;)</p>
+          </li>
+          <li>
+            <p class="paragraph">12h: <code class="lang-kotlin">HourFormat.Digital12.Numeric</code> (e.g., &quot;9&quot;, &quot;1&quot;) or <code class="lang-kotlin">HourFormat.Digital12.Padded</code> (e.g., &quot;09&quot;, &quot;01&quot;)</p>
+          </li>
+          <li>
+            <p class="paragraph">Auto (prefers local 12/24h setting): <code class="lang-kotlin">HourFormat.Auto.Numeric</code> or <code class="lang-kotlin">HourFormat.Auto.Padded</code></p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">minute</code>: <code class="lang-kotlin">MinuteFormat</code> (<code class="lang-kotlin">Numeric</code> or <code class="lang-kotlin">Padded</code>)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">second</code>: <code class="lang-kotlin">SecondFormat</code> (<code class="lang-kotlin">Numeric</code> or <code class="lang-kotlin">Padded</code>)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">fractionalSecond</code>: <code class="lang-kotlin">FractionalSecondFormat</code> (<code class="lang-kotlin">OneDigits</code>, <code class="lang-kotlin">TwoDigits</code>, <code class="lang-kotlin">ThreeDigits</code>)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">periodStyle</code>: <code class="lang-kotlin">DayPeriodStyle</code> (<code class="lang-kotlin">Required</code> forces display of AM/PM, <code class="lang-kotlin">None</code> forces omission)</p>
+        </li>
+        <li>
+          <p class="paragraph">Predefined styles: <code class="lang-kotlin">short()</code>, <code class="lang-kotlin">full()</code>.</p>
+        </li>
+      </ul>
+      <h3 class="">Relative DateTime Config (<code class="lang-kotlin">RelativeDateTimeFormatBuilder</code>)</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">style</code>: <code class="lang-kotlin">FormatStyle</code> (<code class="lang-kotlin">Full</code>, <code class="lang-kotlin">Short</code>, <code class="lang-kotlin">Narrow</code>)</p>
+        </li>
+        <li>
+          <p class="paragraph">Unit threshold configuration functions: <code class="lang-kotlin">years(min: Int?)</code>, <code class="lang-kotlin">months(min: Int?)</code>, <code class="lang-kotlin">days(min: Int?)</code>, <code class="lang-kotlin">hours(min: Int?)</code>, <code class="lang-kotlin">minutes(min: Int?)</code>, <code class="lang-kotlin">seconds(min: Int?)</code>.</p>
+        </li>
+      </ul>
+      <h3 class="">Duration Config (<code class="lang-kotlin">DurationFormatBuilder</code>)</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">style</code>: <code class="lang-kotlin">FormatStyle</code> (<code class="lang-kotlin">Full</code>, <code class="lang-kotlin">Short</code>, <code class="lang-kotlin">Narrow</code>)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">days</code>, <code class="lang-kotlin">hours</code>, <code class="lang-kotlin">minutes</code>, <code class="lang-kotlin">seconds</code>, <code class="lang-kotlin">fractionalSeconds</code>: Set each to <code class="lang-kotlin">UnitVisibility.Auto</code>, <code class="lang-kotlin">UnitVisibility.Required</code>, or <code class="lang-kotlin">null</code> to omit.</p>
+        </li>
+        <li>
+          <p class="paragraph">Predefined styles: <code class="lang-kotlin">short()</code>, <code class="lang-kotlin">full()</code>.</p>
+        </li>
+      </ul>
+      <h3 class="">Duration Digital Config (<code class="lang-kotlin">DurationDigitalFormatBuilder</code>)</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">day</code>: <code class="lang-kotlin">FormatStyle?</code> (textual width style for day component)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">hour</code>: <code class="lang-kotlin">HourFormat.Digital24h?</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">minute</code>: <code class="lang-kotlin">MinuteFormat?</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">second</code>: <code class="lang-kotlin">SecondFormat?</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">fractionalSecond</code>: <code class="lang-kotlin">FractionalSecondFormat?</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">separator</code>: <code class="lang-kotlin">String</code> (defaults to <code class="lang-kotlin">&quot; &quot;</code>)</p>
+        </li>
+        <li>
+          <p class="paragraph">Predefined style: <code class="lang-kotlin">stopwatch()</code>.</p>
+        </li>
+      </ul>
+      <h3 class="">DatePeriod Config (<code class="lang-kotlin">DatePeriodFormatBuilder</code>)</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">style</code>: <code class="lang-kotlin">FormatStyle</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">maxUnitsCount</code>: <code class="lang-kotlin">Int?</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">years</code>, <code class="lang-kotlin">months</code>, <code class="lang-kotlin">days</code>: <code class="lang-kotlin">UnitVisibility</code> (<code class="lang-kotlin">Auto</code> or <code class="lang-kotlin">Required</code>)</p>
+        </li>
+      </ul>
+      <h3 class="">DateTimePeriod Config (<code class="lang-kotlin">DateTimePeriodFormatBuilder</code>)</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">style</code>: <code class="lang-kotlin">FormatStyle</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">maxUnitsCount</code>: <code class="lang-kotlin">Int?</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">calendar {}</code> block configuration (for years, months, days)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">clock {}</code> block configuration (for hours, minutes, seconds)</p>
+        </li>
+      </ul>
+    </div>
+    <h2 class="">All modules:</h2>
+    <div class="table"><a data-name="-387464810%2FMain%2F0" anchor-label="core" id="-387464810%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="time/core/index.html">core</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-387464810%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1227281908%2FMain%2F0" anchor-label="core-context" id="1227281908%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="time/core-context/index.html">core-context</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1227281908%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="1924010814%2FMain%2F0" anchor-label="format" id="1924010814%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="time/format/index.html">format</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1924010814%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="-1594556516%2FMain%2F0" anchor-label="format-context" id="-1594556516%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="time/format-context/index.html">format-context</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1594556516%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+<a data-name="-1788353989%2FMain%2F0" anchor-label="locale" id="-1788353989%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="locale/index.html">locale</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1788353989%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2026 Copyright</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

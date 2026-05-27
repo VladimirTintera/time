@@ -1,0 +1,13 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:locale
+eu.tintera.locale
+module:core
+eu.tintera.time.core
+module:core-context
+eu.tintera.time.core.context
+module:format
+eu.tintera.time.format
+module:format-context
+eu.tintera.time.format.context

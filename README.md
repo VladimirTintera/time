@@ -453,7 +453,7 @@ withRegionalContext(locale = locale) {
 - `periodStyle`: `DayPeriodStyle` (`Required` forces display of AM/PM, `None` forces omission)
 - Predefined styles: `short()`, `full()`.
 
-### Relative DateTime Config (`RealRelativeDateTimeFormatBuilder`)
+### Relative DateTime Config (`RelativeDateTimeFormatBuilder`)
 - `style`: `FormatStyle` (`Full`, `Short`, `Narrow`)
 - Unit threshold configuration functions: `years(min: Int?)`, `months(min: Int?)`, `days(min: Int?)`, `hours(min: Int?)`, `minutes(min: Int?)`, `seconds(min: Int?)`.
 

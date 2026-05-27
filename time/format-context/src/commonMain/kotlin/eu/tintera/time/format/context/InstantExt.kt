@@ -108,7 +108,7 @@ fun Instant.formatRelative(
 context(locale: AppLocale, timeZone: TimeZone)
 fun Instant.formatRelative(
     now: Instant,
-    block: RealRelativeDateTimeFormatBuilder.() -> Unit
+    block: RelativeDateTimeFormatBuilder.() -> Unit
 ): String = formatRelative(now, timeZone, locale, block)
 
 /**

@@ -4,7 +4,6 @@ import eu.tintera.locale.AppLocale
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Clock
 import kotlin.time.Instant
 
 /**
@@ -147,7 +146,7 @@ fun Instant.formatRelative(
     now: Instant,
     timeZone: TimeZone,
     locale: AppLocale,
-    block: RealRelativeDateTimeFormatBuilder.() -> Unit
+    block: RelativeDateTimeFormatBuilder.() -> Unit
 ) = formatRelative(
     now = now,
     timeZone = timeZone,

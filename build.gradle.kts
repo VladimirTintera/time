@@ -7,5 +7,20 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
-    alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.dokka) apply true
+}
+
+dokka {
+    dokkaPublications.html {
+        outputDirectory.set(rootDir.resolve("docs"))
+        includes.from(project.layout.projectDirectory.file("README.md"))
+    }
+}
+
+dependencies {
+    dokka(projects.locale)
+    dokka(projects.time.core)
+    dokka(projects.time.format)
+    dokka(projects.time.coreContext)
+    dokka(projects.time.formatContext)
 }

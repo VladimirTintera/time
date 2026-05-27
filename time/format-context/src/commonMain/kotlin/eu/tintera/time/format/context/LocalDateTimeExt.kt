@@ -108,7 +108,7 @@ fun LocalDateTime.formatRelative(
 context(locale: AppLocale, timeZone: TimeZone)
 fun LocalDateTime.formatRelative(
     now: LocalDateTime,
-    block: RealRelativeDateTimeFormatBuilder.() -> Unit
+    block: RelativeDateTimeFormatBuilder.() -> Unit
 ): String = formatRelative(now, timeZone, locale, block)
 
 /**
