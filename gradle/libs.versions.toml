@@ -17,6 +17,7 @@ kotlin-wrappers = "2026.5.3"
 kotlinx-coroutines = "1.11.0"
 kotlinxDatetime = "0.8.0"
 material3 = "1.11.0-alpha07"
+dokka = "2.2.0"
 
 [libraries]
 icu4j = { module = "com.ibm.icu:icu4j", version.ref = "icu4j" }
@@ -48,3 +49,4 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMul
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

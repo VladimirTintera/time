@@ -9,6 +9,13 @@ plugins {
 }
 
 kotlin {
+
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xcontext-parameters"
+        )
+    }
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -59,7 +66,11 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(projects.time)
+            implementation(projects.time.format)
+            implementation(projects.time.core)
+            implementation(projects.time.coreContext)
+            implementation(projects.locale)
+            implementation(projects.time.formatContext)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

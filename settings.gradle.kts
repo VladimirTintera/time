@@ -1,4 +1,4 @@
-rootProject.name = "TimeLib"
+rootProject.name = "Ecosystem"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
@@ -36,4 +36,9 @@ include(":androidApp")
 include(":desktopApp")
 include(":shared")
 include(":webApp")
-include(":time")
+include(":locale")
+include(":locale-context")
+include(":time:format")
+include(":time:core")
+include(":time:core-context")
+include(":time:format-context")
