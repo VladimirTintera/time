@@ -50,7 +50,7 @@ class DatePeriodFormatBuilder internal constructor() : CalendarComponentsBuilder
     /**
      * The formatting style to use for unit names. Defaults to [FormatStyle.Full].
      */
-    var width: FormatStyle = FormatStyle.Full
+    var style: FormatStyle = FormatStyle.Full
 
     /**
      * The maximum number of units to format. If null, all configured units are formatted.
@@ -67,7 +67,7 @@ class DatePeriodFormatBuilder internal constructor() : CalendarComponentsBuilder
      * ```
      */
     override fun build(): DatePeriodFormat = DatePeriodFormatImpl(
-        style = width,
+        style = style,
         calendar = super.build(),
         maxUnitsCount = maxUnitsCount
     )

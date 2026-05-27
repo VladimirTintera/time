@@ -19,7 +19,7 @@ class DatePeriodFormatTest {
     @Test
     fun testBuilderDsl() {
         val format = DatePeriodFormat {
-            width = FormatStyle.Narrow
+            style = FormatStyle.Narrow
             maxUnitsCount = 2
             years = UnitVisibility.Required
             months = UnitVisibility.Auto

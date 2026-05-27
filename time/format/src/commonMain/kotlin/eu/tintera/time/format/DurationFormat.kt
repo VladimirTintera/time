@@ -57,7 +57,7 @@ class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
     /**
      * The formatting style to use for unit names. Defaults to [FormatStyle.Full].
      */
-    var width: FormatStyle = FormatStyle.Full
+    var style: FormatStyle = FormatStyle.Full
 
     /**
      * Visibility setting for the days unit.
@@ -81,7 +81,7 @@ class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
      * ```
      */
     fun full() {
-        width = FormatStyle.Full
+        style = FormatStyle.Full
         days = UnitVisibility.Auto
         hours = UnitVisibility.Auto
         minutes = UnitVisibility.Auto
@@ -101,7 +101,7 @@ class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
      * ```
      */
     fun short() {
-        width = FormatStyle.Short
+        style = FormatStyle.Short
         days = UnitVisibility.Auto
         hours = UnitVisibility.Auto
         minutes = UnitVisibility.Auto
@@ -119,7 +119,7 @@ class DurationFormatBuilder internal constructor(): ClockComponentsBuilder() {
      * ```
      */
     override fun build(): DurationFormat = DurationFormatImpl(
-        style = width,
+        style = style,
         clock = super.build(),
         days = days,
         fractionalSeconds = fractionalSeconds

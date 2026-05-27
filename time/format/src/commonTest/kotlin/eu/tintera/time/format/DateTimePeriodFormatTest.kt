@@ -22,7 +22,7 @@ class DateTimePeriodFormatTest {
     @Test
     fun testBuilderDsl() {
         val format = DateTimePeriodFormat {
-            width = FormatStyle.Narrow
+            style = FormatStyle.Narrow
             maxUnitsCount = 3
             calendar {
                 years = UnitVisibility.Required

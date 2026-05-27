@@ -312,7 +312,7 @@ val locale = currentLocale
 
 // 1. Textual duration formatting
 val textDuration = duration.format(locale = locale) {
-    width = FormatStyle.Full
+    style = FormatStyle.Full
     days = UnitVisibility.Auto
     hours = UnitVisibility.Auto
     minutes = UnitVisibility.Auto
@@ -458,7 +458,7 @@ withRegionalContext(locale = locale) {
 - Unit threshold configuration functions: `years(min: Int?)`, `months(min: Int?)`, `days(min: Int?)`, `hours(min: Int?)`, `minutes(min: Int?)`, `seconds(min: Int?)`.
 
 ### Duration Config (`DurationFormatBuilder`)
-- `width`: `FormatStyle` (`Full`, `Short`, `Narrow`)
+- `style`: `FormatStyle` (`Full`, `Short`, `Narrow`)
 - `days`, `hours`, `minutes`, `seconds`, `fractionalSeconds`: Set each to `UnitVisibility.Auto`, `UnitVisibility.Required`, or `null` to omit.
 - Predefined styles: `short()`, `full()`.
 
@@ -472,12 +472,12 @@ withRegionalContext(locale = locale) {
 - Predefined style: `stopwatch()`.
 
 ### DatePeriod Config (`DatePeriodFormatBuilder`)
-- `width`: `FormatStyle`
+- `style`: `FormatStyle`
 - `maxUnitsCount`: `Int?`
 - `years`, `months`, `days`: `UnitVisibility` (`Auto` or `Required`)
 
 ### DateTimePeriod Config (`DateTimePeriodFormatBuilder`)
-- `width`: `FormatStyle`
+- `style`: `FormatStyle`
 - `maxUnitsCount`: `Int?`
 - `calendar {}` block configuration (for years, months, days)
 - `clock {}` block configuration (for hours, minutes, seconds)

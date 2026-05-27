@@ -139,7 +139,7 @@ private fun digitalFormat(
         buildList {
             format.day?.takeIf { days > 0 }?.also { dayStyle ->
                 val formattedDays = duration.format(locale) {
-                    width = dayStyle
+                    style = dayStyle
                     this.days = UnitVisibility.Required
                 }
                 add(formattedDays)

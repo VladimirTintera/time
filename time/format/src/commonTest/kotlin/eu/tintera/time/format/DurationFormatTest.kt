@@ -20,7 +20,7 @@ class DurationFormatTest {
     @Test
     fun testBuilderDsl() {
         val format = DurationFormat {
-            width = FormatStyle.Narrow
+            style = FormatStyle.Narrow
             days = UnitVisibility.Required
             hours = UnitVisibility.Auto
             minutes = UnitVisibility.Required

@@ -53,7 +53,7 @@ class DateTimePeriodFormatBuilder internal constructor() {
     /**
      * The formatting style to use for units (full, short, narrow). Defaults to [FormatStyle.Full].
      */
-    var width: FormatStyle = FormatStyle.Full
+    var style: FormatStyle = FormatStyle.Full
 
     /**
      * The maximum number of units to format. If null, all configured units are formatted.
@@ -110,7 +110,7 @@ class DateTimePeriodFormatBuilder internal constructor() {
     fun build(): DateTimePeriodFormat = DateTimePeriodFormatImpl(
         calendarComponents = calendar ?: CalendarComponents {},
         clockComponents = clock ?: ClockComponents {},
-        style = width,
+        style = style,
         maxUnitsCount = maxUnitsCount,
     )
 }
