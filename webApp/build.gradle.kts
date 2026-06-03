@@ -26,3 +26,15 @@ kotlin {
         }
     }
 }
+
+tasks.register<Copy>("copyJsDistToDocs") {
+    dependsOn("jsBrowserDistribution")
+    from(layout.buildDirectory.dir("dist/js/productionExecutable"))
+    into(rootProject.layout.projectDirectory.dir("docs/demo"))
+}
+
+tasks.register<Copy>("copyWasmJsDistToDocs") {
+    dependsOn("wasmJsBrowserDistribution")
+    from(layout.buildDirectory.dir("dist/wasmJs/productionExecutable"))
+    into(rootProject.layout.projectDirectory.dir("docs/demo-wasm"))
+}

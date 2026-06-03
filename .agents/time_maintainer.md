@@ -59,6 +59,7 @@ Your goal is to maintain the root [README.md](file:///Users/vladimirtintera/Deve
 3. **Usage Examples**: Provide realistic, copy-pasteable, and compileable examples for date/time formatting, interval formatting, relative time, stopwatch formats, calendar arithmetic, and context-receiver use cases.
 4. **Experimental Flags**: Clearly document the requirement to enable `-Xcontext-parameters` in `build.gradle.kts` for context-receiver modules.
 5. **API Documentation Link**: Ensure that the README contains a prominent link to the full generated API documentation hosted at `https://vladimirtintera.github.io/time/`.
+6. **Interactive Web Demo Link**: Ensure that the README contains a prominent link to the interactive web demo hosted at `https://vladimirtintera.github.io/time/demo/`.
 
 ---
 

@@ -2,7 +2,8 @@
 
 A premium Kotlin Multiplatform library for elegant, type-safe, and locale-aware date, time, interval, relative time, duration, and period formatting. Built directly on top of `kotlinx-datetime`, it offers flexible formatting DSLs and native platform performance.
 
-📖 **Full API Documentation**: [vladimirtintera.github.io/time](https://vladimirtintera.github.io/time/)
+📖 **Full API Documentation**: [vladimirtintera.github.io/time](https://vladimirtintera.github.io/time/)  
+🎮 **Interactive Web Demo**: [vladimirtintera.github.io/time/demo](https://vladimirtintera.github.io/time/demo/)
 
 ---
 
