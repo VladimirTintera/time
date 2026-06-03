@@ -42,10 +42,12 @@ internal actual fun nativePeriodFormat(
                 components.minute = it.value.convert()
             }
 
-            MeasureUnit.SECOND -> {
+            MeasureUnit.SECONDS -> {
                 allowedUnitsMask = allowedUnitsMask or NSCalendarUnitSecond
                 components.second = it.value.convert()
             }
+
+            MeasureUnit.FRACTIONAL_SECONDS -> throw UnsupportedOperationException("Unsupported unit: ${it.unit}")
         }
     }
 

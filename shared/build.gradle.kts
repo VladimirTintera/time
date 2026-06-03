@@ -14,6 +14,9 @@ kotlin {
         freeCompilerArgs.addAll(
             "-Xcontext-parameters"
         )
+        optIn.addAll(
+            "androidx.compose.material3.ExperimentalMaterial3Api"
+        )
     }
 
     listOf(

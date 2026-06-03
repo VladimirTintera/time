@@ -11,6 +11,9 @@ package eu.tintera.time.format
  *     // handle exception
  * }
  * ```
+ *
+ * @param message The detail message explaining the cause of the formatting error.
+ * @param cause The underlying cause of the exception, if any.
  */
 open class FormattingException(
     message: String,
@@ -28,5 +31,7 @@ open class FormattingException(
  *     // handle exception
  * }
  * ```
+ *
+ * @param message The detail message explaining why the format configuration was empty.
  */
 class EmptyFormatConfigurationException(message: String) : FormattingException(message)

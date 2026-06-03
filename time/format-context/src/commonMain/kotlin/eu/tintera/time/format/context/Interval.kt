@@ -35,7 +35,7 @@ context(locale: AppLocale, timeZone: TimeZone)
 fun formatInterval(
     from: Instant,
     to: Instant,
-    format: DateTimeFormat,
+    format: DateTimeIntervalFormat,
     onSameDate: SameDayCombiner = defaultSameDayCombiner(),
     onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),

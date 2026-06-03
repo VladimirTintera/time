@@ -1,6 +1,7 @@
 package eu.tintera.time.format
 
 import eu.tintera.locale.AppLocale
+import eu.tintera.locale.languageTag
 import kotlinx.datetime.*
 import kotlin.time.Instant
 
@@ -22,8 +23,7 @@ class Interval internal constructor(
     val from: Instant,
     /** The end instant of the interval. */
     val to: Instant,
-    private val dateFormat: DateFormat,
-    private val timeFormat: TimeFormat?,
+    private val format: DateTimeIntervalFormat,
     /** The time zone in which the interval is formatted. */
     val timeZone: TimeZone,
     /** The locale used for localized text/formatting. */
@@ -37,8 +37,7 @@ class Interval internal constructor(
     fun format() = platformIntervalFormat(
         from = from,
         to = to,
-        dateFormat = dateFormat,
-        timeFormat = timeFormat,
+        format = format,
         locale = locale,
         timeZone = timeZone
     )
@@ -147,17 +146,16 @@ fun defaultDifferentDateTimeCombiner() = DifferentDateTimeCombiner { interval, _
     interval.format()
 }
 
-internal fun formatInterval(
+fun formatInterval(
     from: Instant,
     to: Instant,
-    dateFormat: DateFormat,
-    timeFormat: TimeFormat?,
+    format: DateTimeIntervalFormat,
     locale: AppLocale,
     timeZone: TimeZone,
-    onSameDate: SameDayCombiner,
-    onSameMonth: DifferentDateCombiner,
-    onSameYear: DifferentDateCombiner,
-    onDifferentDate: DifferentDateTimeCombiner,
+    onSameDate: SameDayCombiner = defaultSameDayCombiner(),
+    onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
+    onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),
+    onDifferentDate: DifferentDateTimeCombiner = defaultDifferentDateTimeCombiner(),
 ): String {
 
     val startInstant = if (from <= to) from else to
@@ -168,23 +166,24 @@ internal fun formatInterval(
         to = endInstant,
         locale = locale,
         timeZone = timeZone,
-        dateFormat = dateFormat,
-        timeFormat = timeFormat
+        format = format
     )
 
     val start = startInstant.toLocalDateTime(timeZone)
     val end = endInstant.toLocalDateTime(timeZone)
 
-    if (start == end) return platformDateTimeFormat(
+    /*if (start == end) return platformDateTimeFormat(
         date = start,
-        dateFormat = dateFormat,
-        timeFormat = timeFormat,
+        format = format,
         locale = locale,
-    )
+        dateRequired = false,
+        timeRequired = false,
+    )*/
 
     val emptyTime = LocalTime(0, 0)
 
-    val isAllDay = (start.time == emptyTime && end.time == emptyTime) || (timeFormat == null || timeFormat.isEmpty())
+    val isAllDay =
+        (start.time == emptyTime && end.time == emptyTime) //|| (timeFormat == null /*|| timeFormat.isEmpty()*/)
 
     return when {
         // Scénář A: Úplně stejný den. Tady čas nevadí, naopak – combiner dostává startTime a endTime,
@@ -215,84 +214,48 @@ internal fun formatInterval(
     }
 }
 
-/**
- * Formats a time interval between two instants into a localized string using combiners for different date/time scenarios.
- *
- * Example:
- * ```kotlin
- * val start = Instant.parse("2024-01-01T10:00:00Z")
- * val end = Instant.parse("2024-01-01T12:00:00Z")
- * val myLocale = localeForLanguageTag("en-US")
- * val formatted = formatInterval(
- *     from = start,
- *     to = end,
- *     format = DateTimeFormat { time { short() } },
- *     locale = myLocale,
- *     timeZone = TimeZone.UTC
- * )
- * // e.g. "10:00 AM – 12:00 PM"
- * ```
- *
- * @param from The start instant of the interval.
- * @param to The end instant of the interval.
- * @param format The [DateTimeFormat] configuration.
- * @param locale The [AppLocale] to use.
- * @param timeZone The time zone to use.
- * @param onSameDate Custom combiner for events on the same day.
- * @param onSameMonth Custom combiner for events in the same month (all-day only).
- * @param onSameYear Custom combiner for events in the same year (all-day only).
- * @param onDifferentDate Custom combiner for multi-day events or when times are specified.
- * @return The formatted interval string.
- */
-fun formatInterval(
-    from: Instant,
-    to: Instant,
-    format: DateTimeFormat,
-    locale: AppLocale,
-    timeZone: TimeZone,
-    onSameDate: SameDayCombiner = defaultSameDayCombiner(),
-    onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
-    onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),
-    onDifferentDate: DifferentDateTimeCombiner = defaultDifferentDateTimeCombiner(),
-): String = formatInterval(
-    from = from,
-    to = to,
-    dateFormat = format,
-    timeFormat = format,
-    locale = locale,
-    timeZone = timeZone,
-    onSameDate = onSameDate,
-    onSameMonth = onSameMonth,
-    onSameYear = onSameYear,
-    onDifferentDate = onDifferentDate
+internal data class IntervalCacheKey(
+    val skeleton: String,
+    val languageTag: String,
+    val timeZoneId: String
 )
+
+internal expect val intervalFormatterCache: Cache<IntervalCacheKey, IntervalFormatter>
 
 internal fun platformIntervalFormat(
     from: Instant,
     to: Instant,
-    dateFormat: DateFormat,
-    timeFormat: TimeFormat?,
+    format: DateTimeIntervalFormat,
     locale: AppLocale,
     timeZone: TimeZone
 ): String {
 
-    return nativeIntervalFormat(
-        from = from,
-        to = to,
-        dateFormat = dateFormat,
-        timeFormat = timeFormat,
-        locale = locale,
-        timeZone = timeZone,
-        skeleton = cldrSkeleton(dateFormat, timeFormat)
-    )
-}
+    val start = (if (from < to) from else to).toLocalDateTime(timeZone)
+    val end = (if (to > from) to else from).toLocalDateTime(timeZone)
 
-internal expect fun nativeIntervalFormat(
-    from: Instant,
-    to: Instant,
-    dateFormat: DateFormat,
-    timeFormat: TimeFormat?,
-    skeleton: String,
-    locale: AppLocale,
-    timeZone: TimeZone
-): String
+    val scope = DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>(
+        value = start..<end,
+        date = start.date..<end.date,
+        time = start.time..<end.time,
+        locale = locale,
+    )
+
+    format.block(scope)
+
+    val skeleton = scope.cldrSkeleton()
+
+    val formatter = intervalFormatterCache.getOrPut(
+        IntervalCacheKey(
+            skeleton = skeleton,
+            languageTag = locale.languageTag,
+            timeZoneId = timeZone.id
+        )
+    ) {
+        createIntervalFormatterFactory(
+            locale = locale,
+            timeZone = timeZone
+        ).formatter(skeleton, scope.dateFormatScope, scope.timeFormatScope)
+    }
+
+    return formatter.format(from, to)
+}

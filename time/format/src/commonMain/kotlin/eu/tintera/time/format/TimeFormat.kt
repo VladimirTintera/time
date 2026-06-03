@@ -1,12 +1,30 @@
 package eu.tintera.time.format
 
+import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
+import kotlinx.datetime.LocalTime
+
+class TimeFormat internal constructor(
+    block: TimeFormatScope<LocalTime>.() -> Unit
+) : BaseTimeFormat<LocalTime>(block) {
+    companion object {
+        operator fun invoke(
+            block: TimeFormatScope<LocalTime>.() -> Unit = TimeFormatScope.defaultConfig()
+        ): BaseTimeFormat<LocalTime> = TimeFormat(block)
+    }
+}
+
+abstract class BaseTimeFormat<T : Any> internal constructor(
+    internal val block: TimeFormatScope<T>.() -> Unit
+)
+
 
 /**
- * Represents a configuration for formatting times.
+ * Scope class for configuring [TimeFormat] instances using a DSL.
  *
- * This interface defines which components (hour, minute, seconds, milliseconds, am/pm)
- * should be included in the formatted output and their respective styles.
+ * This class provides a flexible way to configure a [TimeFormat] by specifying
+ * the desired format for each time component. It also includes predefined styles
+ * for convenience.
  *
  * Example:
  * ```kotlin
@@ -16,103 +34,26 @@ import eu.tintera.time.core.TimeDslMarker
  * }
  * ```
  */
-interface TimeFormat {
-    /** The format style for the hour component, or null if omitted. */
-    val hour: HourFormat?
-
-    /** The format style for the minute component, or null if omitted. */
-    val minute: MinuteFormat?
-
-    /** The format style for the second component, or null if omitted. */
-    val second: SecondFormat?
-
-    /** The format style for the fractional second component, or null if omitted. */
-    val fractionalSecond: FractionalSecondFormat?
-
-    /** Indicates whether to include the AM/PM marker in the formatted output. */
-    val periodStyle: DayPeriodStyle?
-}
-
-internal fun TimeFormat.isEmpty() = hour == null && minute == null && second == null
-
-internal fun TimeFormat.toTimeCldrSkeleton(): String = buildString {
-
-    when (periodStyle) {
-        DayPeriodStyle.Required -> {
-            when (hour) {
-                HourFormat.Auto.Numeric -> append(HourFormat.Digital12.Numeric.pattern)
-                HourFormat.Auto.Padded -> append(HourFormat.Digital12.Padded.pattern)
-                else -> hour?.also { append(it.pattern) }
-            }
-            append("a")
-        }
-
-        DayPeriodStyle.None -> hour?.also {
-            when (it) {
-                HourFormat.Auto.Numeric, HourFormat.Digital12.Numeric -> append(HourFormat.Digital24h.Numeric.pattern)
-                HourFormat.Auto.Padded, HourFormat.Digital12.Padded -> append(HourFormat.Digital24h.Padded.pattern)
-                else -> append(it.pattern)
-            }
-        }
-
-        else -> hour?.also { append(it.pattern) }
-    }
-
-    minute?.also { append(it.pattern) }
-    second?.also {
-        append(it.pattern)
-        fractionalSecond?.also { fraction ->
-            append(".")
-            append(fraction.pattern)
-        }
-    }
-}
-
-/**
- * Builder for creating [TimeFormat] instances using a DSL.
- *
- * This builder provides a flexible way to construct a [TimeFormat] by specifying
- * the desired format for each time component. It also includes predefined styles
- * for convenience.
- *
- * Example:
- * ```kotlin
- * val builder = TimeFormatBuilder().apply {
- *     hour = HourFormat.Auto.Numeric
- *     minute = MinuteFormat.Padded
- * }
- * val format = builder.build()
- * ```
- */
 @TimeDslMarker
-class TimeFormatBuilder internal constructor() : TimeFormat {
+class TimeFormatScope<T : Any> internal constructor(
+    override val value: T,
+    override val locale: AppLocale
+) : FormatScope<T> {
+
     /** The format style for the hour component, or null if omitted. */
-    override var hour: HourFormat? = null
+    var hour: HourFormat? = null
 
     /** The format style for the minute component, or null if omitted. */
-    override var minute: MinuteFormat? = null
+    var minute: MinuteFormat? = null
 
     /** The format style for the second component, or null if omitted. */
-    override var second: SecondFormat? = null
+    var second: SecondFormat? = null
 
     /** The format style for the fractional second component, or null if omitted. */
-    override var fractionalSecond: FractionalSecondFormat? = null
+    var fractionalSecond: FractionalSecondFormat? = null
 
     /** Indicates whether to include the AM/PM marker in the formatted output. */
-    override var periodStyle: DayPeriodStyle? = null
-
-    /**
-     * Builds and returns a [TimeFormat] instance.
-     *
-     * Example:
-     * ```kotlin
-     * val builder = TimeFormatBuilder()
-     * val format = builder.build()
-     * ```
-     *
-     * @return The configured [TimeFormat].
-     */
-    fun build(): TimeFormat = this
+    var periodStyle: DayPeriodStyle? = null
 
     /**
      * Copies the configuration from an existing [TimeFormat].
@@ -124,18 +65,14 @@ class TimeFormatBuilder internal constructor() : TimeFormat {
      * val existingFormat = TimeFormat { short() }
      * val format = TimeFormat {
      *     from(existingFormat)
-      *    second = SecondFormat.Padded
+     *    second = SecondFormat.Padded
      * }
      * ```
      *
      * @param timeFormat The format to copy from.
      */
-    fun from(timeFormat: TimeFormat) {
-        hour = timeFormat.hour
-        minute = timeFormat.minute
-        second = timeFormat.second
-        fractionalSecond = timeFormat.fractionalSecond
-        periodStyle = timeFormat.periodStyle
+    fun from(timeFormat: BaseTimeFormat<T>) {
+        return timeFormat.block(this)
     }
 
     /**
@@ -172,25 +109,55 @@ class TimeFormatBuilder internal constructor() : TimeFormat {
         minute = MinuteFormat.Padded
         second = SecondFormat.Padded
     }
-}
 
-/**
- * Creates a [TimeFormat] using a DSL.
- *
- * This function provides a convenient way to construct a [TimeFormat] instance
- * by applying a configuration block to a [TimeFormatBuilder].
- *
- * Example:
- * ```kotlin
- * val format = TimeFormat {
- *     hour = HourFormat.Auto.Numeric
- *     minute = MinuteFormat.Padded
- * }
- * ```
- *
- * @param block The configuration block for the [TimeFormatBuilder].
- * @return The newly created [TimeFormat].
- */
-fun TimeFormat(
-    block: TimeFormatBuilder.() -> Unit
-): TimeFormat = TimeFormatBuilder().apply(block).build()
+    internal fun cldrSkeleton(): String = buildString {
+
+        when (periodStyle) {
+            DayPeriodStyle.Required -> {
+                when (hour) {
+                    HourFormat.Auto.Numeric -> append(HourFormat.Digital12.Numeric.pattern)
+                    HourFormat.Auto.Padded -> append(HourFormat.Digital12.Padded.pattern)
+                    else -> hour?.also { append(it.pattern) }
+                }
+                append("a")
+            }
+
+            DayPeriodStyle.None -> hour?.also {
+                when (it) {
+                    HourFormat.Auto.Numeric, HourFormat.Digital12.Numeric -> append(HourFormat.Digital24h.Numeric.pattern)
+                    HourFormat.Auto.Padded, HourFormat.Digital12.Padded -> append(HourFormat.Digital24h.Padded.pattern)
+                    else -> append(it.pattern)
+                }
+            }
+
+            else -> hour?.also { append(it.pattern) }
+        }
+
+        minute?.also { append(it.pattern) }
+        second?.also {
+            append(it.pattern)
+            fractionalSecond?.also { fraction ->
+                append(".")
+                append(fraction.pattern)
+            }
+        }
+    }
+
+    internal fun isEmpty() = hour == null && minute == null && second == null
+
+    companion object {
+        /**
+         * The default configuration block for [TimeFormatScope].
+         *
+         * By default, it sets the time format to short style.
+         *
+         * Example:
+         * ```kotlin
+         * val config = TimeFormatScope.defaultConfig<kotlinx.datetime.LocalTime>()
+         * ```
+         */
+        fun <T : Any> defaultConfig(): TimeFormatScope<T>.() -> Unit = {
+            short()
+        }
+    }
+}

@@ -6,5 +6,5 @@ internal data class Measurable(
 )
 
 internal enum class MeasureUnit {
-    YEARS, MONTHS, DAYS, HOURS, MINUTES, SECOND
+    YEARS, MONTHS, DAYS, HOURS, MINUTES, SECONDS, FRACTIONAL_SECONDS
 }

@@ -30,7 +30,8 @@ internal actual fun nativePeriodFormat(
                     MeasureUnit.DAYS -> DurationFormatUnit.days
                     MeasureUnit.HOURS -> DurationFormatUnit.hours
                     MeasureUnit.MINUTES -> DurationFormatUnit.minutes
-                    MeasureUnit.SECOND -> DurationFormatUnit.seconds
+                    MeasureUnit.SECONDS -> DurationFormatUnit.seconds
+                    MeasureUnit.FRACTIONAL_SECONDS -> DurationFormatUnit.milliseconds
                 },
                 value = it.value.toJsInt()
             )

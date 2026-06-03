@@ -2,6 +2,8 @@
 
 A premium Kotlin Multiplatform library for elegant, type-safe, and locale-aware date, time, interval, relative time, duration, and period formatting. Built directly on top of `kotlinx-datetime`, it offers flexible formatting DSLs and native platform performance.
 
+📖 **Full API Documentation**: [vladimirtintera.github.io/time](https://vladimirtintera.github.io/time/)
+
 ---
 
 ## Core Philosophy
@@ -235,6 +237,20 @@ val intervalString = start.formatInterval(
         weekDay = WeekDayFormat.FullName
     }
 } // e.g., "Tuesday 19 – Wednesday 20 May 2026"
+
+// Formatting an OpenEndRange directly
+val range = start..<end
+val rangeFormatted = range.format(
+    locale = defaultLocale,
+    timeZone = defaultTimeZone
+) {
+    date {
+        day = DayFormat.Numeric
+        month = MonthFormat.Name.Full
+        year = YearFormat.FourDigits
+        weekDay = WeekDayFormat.FullName
+    }
+}
 ```
 
 You can also provide custom combiners for specific scenarios (same day, same month, same year, or different date):
@@ -433,7 +449,7 @@ withRegionalContext(locale = locale) {
 
 ## Detailed DSL Reference
 
-### Date Format Config (`DateFormatBuilder`)
+### Date Format Config (`DateFormatScope`)
 - `weekDay`: `WeekDayFormat` (`FullName` e.g., "Monday" or `ShortName` e.g., "Mon")
 - `day`: `DayFormat` (`Numeric` e.g., "5" or `Padded` e.g., "05")
 - `month`: `MonthFormat`
@@ -442,7 +458,7 @@ withRegionalContext(locale = locale) {
 - `year`: `YearFormat` (`FourDigits` e.g., "2026" or `TwoDigits` e.g., "26")
 - Predefined styles: `short()`, `medium()`, `long()`, `full()`.
 
-### Time Format Config (`TimeFormatBuilder`)
+### Time Format Config (`TimeFormatScope`)
 - `hour`: `HourFormat`
   - 24h: `HourFormat.Digital24h.Numeric` (e.g., "9", "13") or `HourFormat.Digital24h.Padded` (e.g., "09", "13")
   - 12h: `HourFormat.Digital12.Numeric` (e.g., "9", "1") or `HourFormat.Digital12.Padded` (e.g., "09", "01")
@@ -453,16 +469,16 @@ withRegionalContext(locale = locale) {
 - `periodStyle`: `DayPeriodStyle` (`Required` forces display of AM/PM, `None` forces omission)
 - Predefined styles: `short()`, `full()`.
 
-### Relative DateTime Config (`RelativeDateTimeFormatBuilder`)
+### Relative DateTime Config (`RelativeDateTimeFormatScope`)
 - `style`: `FormatStyle` (`Full`, `Short`, `Narrow`)
 - Unit threshold configuration functions: `years(min: Int?)`, `months(min: Int?)`, `days(min: Int?)`, `hours(min: Int?)`, `minutes(min: Int?)`, `seconds(min: Int?)`.
 
-### Duration Config (`DurationFormatBuilder`)
+### Duration Config (`DurationFormatScope`)
 - `style`: `FormatStyle` (`Full`, `Short`, `Narrow`)
 - `days`, `hours`, `minutes`, `seconds`, `fractionalSeconds`: Set each to `UnitVisibility.Auto`, `UnitVisibility.Required`, or `null` to omit.
 - Predefined styles: `short()`, `full()`.
 
-### Duration Digital Config (`DurationDigitalFormatBuilder`)
+### Duration Digital Config (`DurationDigitalFormatScope`)
 - `day`: `FormatStyle?` (textual width style for day component)
 - `hour`: `HourFormat.Digital24h?`
 - `minute`: `MinuteFormat?`
@@ -471,12 +487,12 @@ withRegionalContext(locale = locale) {
 - `separator`: `String` (defaults to `" "`)
 - Predefined style: `stopwatch()`.
 
-### DatePeriod Config (`DatePeriodFormatBuilder`)
+### DatePeriod Config (`DatePeriodFormatScope`)
 - `style`: `FormatStyle`
 - `maxUnitsCount`: `Int?`
 - `years`, `months`, `days`: `UnitVisibility` (`Auto` or `Required`)
 
-### DateTimePeriod Config (`DateTimePeriodFormatBuilder`)
+### DateTimePeriod Config (`DateTimePeriodFormatScope`)
 - `style`: `FormatStyle`
 - `maxUnitsCount`: `Int?`
 - `calendar {}` block configuration (for years, months, days)

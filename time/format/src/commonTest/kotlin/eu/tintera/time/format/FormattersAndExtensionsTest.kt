@@ -1,17 +1,12 @@
 package eu.tintera.time.format
 
-import eu.tintera.locale.AppLocale
-import eu.tintera.locale.currentLocale
 import eu.tintera.locale.localeForLanguageTag
 import kotlinx.datetime.*
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertTrue
-import kotlin.test.assertNotNull
+import kotlin.test.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 class FormattersAndExtensionsTest {
 
@@ -21,7 +16,7 @@ class FormattersAndExtensionsTest {
     @Test
     fun testDatePeriodFormat() {
         val period = DatePeriod(years = 1, months = 2, days = 3)
-        
+
         // Success case
         val formatted = period.formatCalendar(locale) {
             years = UnitVisibility.Required
@@ -188,6 +183,18 @@ class FormattersAndExtensionsTest {
             time { short() }
         }
         assertTrue(intervalFormatted.isNotEmpty())
+
+        // Range format (OpenEndRange<LocalDateTime>.format)
+        val range = ldt..<toLdt
+        val rangeFormatted = range.format(locale, tz) {
+            time { short() }
+        }
+        assertEquals(intervalFormatted, rangeFormatted)
+
+        val rangeFormattedExplicit = range.format(locale, tz, DateTimeIntervalFormat {
+            time { short() }
+        })
+        assertEquals(intervalFormatted, rangeFormattedExplicit)
     }
 
     @Test

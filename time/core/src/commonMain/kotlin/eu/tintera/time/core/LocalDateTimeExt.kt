@@ -23,9 +23,29 @@ fun LocalDateTime.plus(
     period: DateTimePeriod,
     timeZone: TimeZone
 ): LocalDateTime {
-    val instant = date.plus(period.datePeriod).atTime(time).toInstant(timeZone)
-    val finalInstant = instant + period.timeDuration
-    return finalInstant.toLocalDateTime(timeZone)
+    return toInstant(timeZone).plus(period, timeZone).toLocalDateTime(timeZone)
+}
+
+/**
+ * Returns a new [LocalDateTime] with the given [DateTimePeriod] subtracted from this [LocalDateTime] in the specified [TimeZone].
+ *
+ * Example:
+ * ```kotlin
+ * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
+ * val period = DateTimePeriod(days = 1)
+ * val tz = TimeZone.UTC
+ * val result = ldt.minus(period, tz)
+ * ```
+ *
+ * @param period The period to subtract.
+ * @param timeZone The time zone in which the calculation is performed.
+ * @return A [LocalDateTime] representing the difference.
+ */
+fun LocalDateTime.minus(
+    period: DateTimePeriod,
+    timeZone: TimeZone
+): LocalDateTime {
+    return toInstant(timeZone).minus(period, timeZone).toLocalDateTime(timeZone)
 }
 
 /**
@@ -106,7 +126,7 @@ operator fun LocalDateTime.plus(
  * @return A sequence of [OpenEndRange] of [LocalDateTime].
  * @throws IllegalArgumentException if the [period] does not move time forward.
  */
-fun LocalDateTime.generateSequence(
+internal fun LocalDateTime.generateAscendingSequence(
     period: DateTimePeriod,
     timeZone: TimeZone
 ): Sequence<OpenEndRange<LocalDateTime>> {
@@ -130,6 +150,103 @@ fun LocalDateTime.generateSequence(
     }
 }
 
+internal fun LocalDateTime.generateDescendingSequence(
+    period: DateTimePeriod,
+    timeZone: TimeZone
+): Sequence<OpenEndRange<LocalDateTime>> {
+
+    // Inicializační krok – ověříme hned první posun vzad (odečtení)
+    val firstStart = this.minus(period, timeZone)
+
+    // 👑 Fail-Fast: Pokud perioda neposouvá čas vzad, okamžitě vyhodíme výjimku
+    require(firstStart < this) {
+        "DateTimePeriod must move time backward. Invalid period: $period"
+    }
+
+    // První bucket stavíme od minulosti (firstStart) do teď (this)
+    return generateSequence(firstStart..<this) { previous ->
+        val nextEnd = previous.start
+        val nextStart = nextEnd.minus(period, timeZone)
+
+        // Pojistka pro jistotu i v průběhu (např. kvůli DST anomáliím)
+        check(nextStart < nextEnd) { "Sequence generation detected a non-regressive time step." }
+
+        nextStart..<nextEnd
+    }
+}
+
+/**
+ * Generates an infinite sequence of consecutive, non-overlapping intervals starting from this [LocalDateTime] in a specified direction.
+ *
+ * Example:
+ * ```kotlin
+ * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
+ * val period = DateTimePeriod(days = 1)
+ * val tz = TimeZone.UTC
+ * val seq = ldt.generateSequence(SequenceDirection.Forward, period, tz)
+ * ```
+ *
+ * @param direction The direction of sequence generation (Forward or Backward).
+ * @param period The period of each interval. Must be positive.
+ * @param timeZone The time zone in which the calculation is performed.
+ * @return A sequence of [OpenEndRange] of [LocalDateTime].
+ * @throws IllegalArgumentException if the [period] is not positive.
+ */
+fun LocalDateTime.generateSequence(
+    direction: SequenceDirection,
+    period: DateTimePeriod,
+    timeZone: TimeZone
+): Sequence<OpenEndRange<LocalDateTime>> {
+
+    // 👑 Kontrola, že je perioda striktně kladná (posouvá čas dopředu)
+    val probe = this.plus(period, timeZone)
+    require(probe > this) {
+        "For explicit direction, the DateTimePeriod must be positive. Invalid period: $period"
+    }
+
+    return when (direction) {
+        SequenceDirection.Forward -> generateAscendingSequence(period, timeZone)
+        SequenceDirection.Backward -> generateDescendingSequence(period, timeZone)
+    }
+}
+
+/**
+ * Generates an infinite sequence of consecutive, non-overlapping intervals starting from this [LocalDateTime] based on the sign of the period.
+ *
+ * Example:
+ * ```kotlin
+ * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
+ * val period = DateTimePeriod(days = 1)
+ * val tz = TimeZone.UTC
+ * val seq = ldt.generateSequence(period, tz)
+ * ```
+ *
+ * @param period The period of each interval. A positive period generates ascending intervals, a negative period generates descending intervals.
+ * @param timeZone The time zone in which the calculation is performed.
+ * @return A sequence of [OpenEndRange] of [LocalDateTime].
+ * @throws IllegalArgumentException if the [period] is zero.
+ */
+fun LocalDateTime.generateSequence(
+    period: DateTimePeriod,
+    timeZone: TimeZone
+): Sequence<OpenEndRange<LocalDateTime>> {
+    val probe = this.plus(period, timeZone)
+
+    return when {
+        probe > this -> {
+            // Perioda je kladná -> posíláme ji tak, jak je
+            generateAscendingSequence(period, timeZone)
+        }
+        probe < this -> {
+            // 👑 Perioda je záporná -> OTOČÍME JI unárním mínus!
+            // Tím z ní uděláme periodu, která posouvá čas dopředu,
+            // a generateDescendingSequence ji pak může bezpečně odčítat.
+            generateDescendingSequence(-period, timeZone)
+        }
+        else -> throw IllegalArgumentException("DateTimePeriod does not shift time at all: $period")
+    }
+}
+
 /**
  * Slices this range of [LocalDateTime] into smaller consecutive intervals of the specified [DateTimePeriod].
  *
@@ -150,7 +267,7 @@ fun LocalDateTime.generateSequence(
 fun OpenEndRange<LocalDateTime>.slice(
     period: DateTimePeriod,
     timeZone: TimeZone
-) = start.generateSequence(period, timeZone).takeWhile {
+) = start.generateAscendingSequence(period, timeZone).takeWhile {
     it.start < endExclusive
 }.map { item ->
     if (item.endExclusive > this.endExclusive) {
@@ -177,19 +294,67 @@ fun OpenEndRange<LocalDateTime>.slice(
  */
 fun LocalDateTime.findInterval(
     period: DateTimePeriod,
+    anchor: LocalDateTime,
     timeZone: TimeZone
 ): OpenEndRange<LocalDateTime>? {
 
     if (period.years == 0 && period.months == 0 && period.days == 0) {
-        return findTimeInterval(period.timeDuration, timeZone)
+        return findTimeInterval(period.timeDuration, anchor, timeZone)
     }
 
-    return findInterval(
-        generateSequence(period, timeZone).takeWhile { interval ->
-            interval.start <= this
-        }.toList()
-    )
+    // 2. Kalendářní cesta (DateTimePeriod)
+    val probe = anchor.plus(period, timeZone)
+
+    val intervals = when {
+        probe > anchor -> {
+            if (this >= anchor) {
+                anchor.generateAscendingSequence(period, timeZone)
+                    .takeWhile { interval -> interval.start <= this }
+                    .toList()
+            } else {
+                anchor.generateDescendingSequence(period, timeZone)
+                    .takeWhile { interval -> interval.endExclusive > this }
+                    .toList()
+                    .reversed()
+            }
+        }
+        probe < anchor -> {
+            if (this <= anchor) {
+                anchor.generateDescendingSequence(period, timeZone)
+                    .takeWhile { interval -> interval.endExclusive >= this }
+                    .toList()
+                    .reversed()
+            } else {
+                anchor.generateAscendingSequence(period, timeZone)
+                    .takeWhile { interval -> interval.start <= this }
+                    .toList()
+            }
+        }
+        else -> throw IllegalArgumentException("DateTimePeriod does not shift time at all: $period")
+    }
+
+    return findInterval(intervals)
 }
+
+/**
+ * Finds the interval in which this [LocalDateTime] lies, according to the specified [DateTimePeriod].
+ *
+ * Example:
+ * ```kotlin
+ * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
+ * val period = DateTimePeriod(hours = 2)
+ * val tz = TimeZone.UTC
+ * val interval = ldt.findInterval(period, tz)
+ * ```
+ *
+ * @param period The period defining the interval grid.
+ * @param timeZone The time zone in which the calculation is performed.
+ * @return The interval containing this date-time, or null if it cannot be determined.
+ */
+fun LocalDateTime.findInterval(
+    period: DateTimePeriod,
+    timeZone: TimeZone
+): OpenEndRange<LocalDateTime>? = findInterval(period, defaultAnchor(period), timeZone)
 
 /**
  * Finds the interval in the provided list of sorted intervals that contains this [LocalDateTime].
@@ -212,9 +377,9 @@ fun LocalDateTime.findInterval(
 ): OpenEndRange<LocalDateTime>? {
     val index = intervals.binarySearch { interval ->
         when {
-            this < interval.start -> -1       // Hledaný čas je vlevo od bucketu -> hledej vlevo (záporné číslo)
-            this >= interval.endExclusive -> 1  // Hledaný čas je vpravo od bucketu -> hledej vpravo (kladné číslo)
-            else -> 0                           // Trefa! To je náš bucket
+            this < interval.start -> 1          // Search target is before the interval -> look in the left half
+            this >= interval.endExclusive -> -1 // Search target is after the interval -> look in the right half
+            else -> 0                           // Match! This is the containing interval
         }
     }
 
@@ -237,24 +402,65 @@ fun LocalDateTime.findInterval(
  * @param duration The duration defining the grid size.
  * @param timeZone The time zone in which the calculation is performed.
  * @return The interval containing this date-time.
- * @throws IllegalArgumentException if [duration] is not positive.
+ * @throws IllegalArgumentException if [duration] is zero.
+ */
+fun LocalDateTime.findTimeInterval(
+    duration: Duration,
+    anchor: LocalDateTime,
+    timeZone: TimeZone
+): OpenEndRange<LocalDateTime> {
+
+    require(duration > Duration.ZERO) { "Duration must be positive" }
+
+    val absoluteDuration = duration.absoluteValue
+    val totalDurationMs = absoluteDuration.inWholeMilliseconds
+
+    val anchorMs = anchor.toInstant(timeZone).toEpochMilliseconds()
+    val currentMs = toInstant(timeZone).toEpochMilliseconds()
+
+    // Calculate relative offset from anchor
+    val diffMs = currentMs - anchorMs
+    val bucketOffsetMs = diffMs.floorDiv(totalDurationMs) * totalDurationMs
+    val bucketStartMs = anchorMs + bucketOffsetMs
+
+    val startLdt = Instant.fromEpochMilliseconds(bucketStartMs).toLocalDateTime(timeZone)
+    val endLdt = startLdt.plus(absoluteDuration, timeZone)
+
+    return startLdt..<endLdt
+}
+
+/**
+ * Finds the time-based interval of the specified [Duration] that contains this [LocalDateTime].
+ *
+ * Example:
+ * ```kotlin
+ * import kotlin.time.Duration.Companion.hours
+ *
+ * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
+ * val duration = 2.hours
+ * val tz = TimeZone.UTC
+ * val interval = ldt.findTimeInterval(duration, tz)
+ * ```
+ *
+ * @param duration The duration defining the grid size.
+ * @param timeZone The time zone in which the calculation is performed.
+ * @return The interval containing this date-time.
  */
 fun LocalDateTime.findTimeInterval(
     duration: Duration,
     timeZone: TimeZone
-): OpenEndRange<LocalDateTime> {
-    require(duration.isPositive()) { "Duration must be positive" }
+): OpenEndRange<LocalDateTime> = findTimeInterval(
+    duration = duration,
+    anchor = Instant.fromEpochMilliseconds(0).toLocalDateTime(timeZone),
+    timeZone = timeZone
+)
 
-    val totalDurationMs = duration.inWholeMilliseconds
-
-    val currentMs = toInstant(timeZone).toEpochMilliseconds()
-
-    val bucketStartMs = currentMs.floorDiv(totalDurationMs) * totalDurationMs
-
-    val startLdt = Instant.fromEpochMilliseconds(bucketStartMs).toLocalDateTime(timeZone)
-    val endLdt = startLdt.plus(duration, timeZone)
-
-    return startLdt..<endLdt
+internal fun LocalDateTime.defaultAnchor(period: DateTimePeriod): LocalDateTime {
+    return when {
+        period.years != 0 || period.months != 0 -> LocalDateTime(this.year, 1, 1, 0, 0, 0, 0)
+        period.days != 0 -> LocalDateTime(this.year, this.month, 1, 0, 0, 0, 0)
+        else -> LocalDateTime(this.year, this.month, this.day, 0, 0, 0, 0)
+    }
 }
 
 /**
@@ -270,12 +476,14 @@ fun LocalDateTime.findTimeInterval(
  *
  * @param period The period defining the interval grid.
  * @param timeZone The time zone in which the calculation is performed.
+ * @param anchor The start date-time anchor of the interval grid.
  * @return The floored [LocalDateTime].
  */
 fun LocalDateTime.floorTo(
     period: DateTimePeriod,
-    timeZone: TimeZone
-): LocalDateTime = findInterval(period, timeZone)?.start ?: this
+    timeZone: TimeZone,
+    anchor: LocalDateTime = defaultAnchor(period)
+): LocalDateTime = findInterval(period, anchor, timeZone)?.start ?: this
 
 /**
  * Rounds up (ceils) this [LocalDateTime] to the end (exclusive) of the interval defined by the specified [DateTimePeriod].
@@ -290,9 +498,63 @@ fun LocalDateTime.floorTo(
  *
  * @param period The period defining the interval grid.
  * @param timeZone The time zone in which the calculation is performed.
+ * @param anchor The start date-time anchor of the interval grid.
  * @return The ceiled [LocalDateTime].
  */
 fun LocalDateTime.ceilTo(
     period: DateTimePeriod,
-    timeZone: TimeZone
-) = findInterval(period, timeZone)?.endExclusive ?: this
+    timeZone: TimeZone,
+    anchor: LocalDateTime = defaultAnchor(period)
+): LocalDateTime = findInterval(period, anchor, timeZone)?.endExclusive ?: this
+
+/**
+ * Rounds this [LocalDateTime] to the nearest interval boundary of [DateTimePeriod] in the specified [TimeZone].
+ *
+ * Example:
+ * ```kotlin
+ * val ldt = LocalDateTime(2025, 4, 15, 12, 15)
+ * val period = DateTimePeriod(hours = 1)
+ * val tz = TimeZone.UTC
+ * val rounded = ldt.roundTo(period, tz)
+ * ```
+ *
+ * @param period The period defining the interval grid.
+ * @param timeZone The time zone in which the calculation is performed.
+ * @param anchor The start date-time anchor of the interval grid.
+ * @return The rounded [LocalDateTime].
+ */
+fun LocalDateTime.roundTo(
+    period: DateTimePeriod,
+    timeZone: TimeZone,
+    anchor: LocalDateTime = defaultAnchor(period)
+): LocalDateTime {
+    val interval = findInterval(period, anchor, timeZone) ?: return this
+
+    val distanceToStart = this.minus(interval.start)
+    val distanceToEnd = interval.endExclusive.minus(this)
+
+    return if (distanceToStart < distanceToEnd) {
+        interval.start
+    } else {
+        interval.endExclusive
+    }
+}
+
+/**
+ * Calculates the duration between this [LocalDateTime] and another [LocalDateTime] in UTC.
+ *
+ * Example:
+ * ```kotlin
+ * val start = LocalDateTime(2025, 4, 15, 10, 0)
+ * val end = LocalDateTime(2025, 4, 15, 12, 0)
+ * val duration = start.minus(end)
+ * ```
+ *
+ * @param other The other [LocalDateTime] to subtract.
+ * @return The [Duration] from this [LocalDateTime] to [other] (computed as other - this).
+ */
+fun LocalDateTime.minus(other: LocalDateTime): Duration {
+    val thisInstant = this.toInstant(TimeZone.UTC)
+    val otherInstant = other.toInstant(TimeZone.UTC)
+    return thisInstant - otherInstant
+}

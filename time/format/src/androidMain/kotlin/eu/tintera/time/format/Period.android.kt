@@ -20,15 +20,6 @@ internal actual fun nativePeriodFormat(
     val formatter = MeasureFormat.getInstance(locale, androidWidth)
 
     return formatter.formatMeasures(*items.map {
-        Measure(
-            it.value, when (it.unit) {
-                eu.tintera.time.format.MeasureUnit.YEARS -> MeasureUnit.YEAR
-                eu.tintera.time.format.MeasureUnit.MONTHS -> MeasureUnit.MONTH
-                eu.tintera.time.format.MeasureUnit.DAYS -> MeasureUnit.DAY
-                eu.tintera.time.format.MeasureUnit.HOURS -> MeasureUnit.HOUR
-                eu.tintera.time.format.MeasureUnit.MINUTES -> MeasureUnit.MINUTE
-                eu.tintera.time.format.MeasureUnit.SECOND -> MeasureUnit.SECOND
-            }
-        )
+        it.toMeasure()
     }.toTypedArray())
 }

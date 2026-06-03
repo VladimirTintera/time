@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.tasks.testing.Test
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -24,6 +25,7 @@ kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.JVM_11
         }
+
     }
 
     jvm()

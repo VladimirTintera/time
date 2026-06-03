@@ -7,15 +7,12 @@ actual typealias AppLocale = NSLocale
 
 actual val AppLocale.languageTag: String
     get() = NSLocale.canonicalLanguageIdentifierFromString(this.localeIdentifier)
-// ^ Tohle zaručí, že z "en_US" dostaneš standardní "en-US"
 
 actual val AppLocale.languageCode: String
-    get() = this.languageCode // nativní property NSLocale
+    get() = this.languageCode
 
 actual val AppLocale.regionCode: String
-    get() = this.countryCode ?: "" // nativní property NSLocale
-
-actual fun localeForLanguageTag(tag: String) : AppLocale = NSLocale(localeIdentifier = tag)
+    get() = this.countryCode ?: ""
 
 actual val currentLocale: AppLocale
     get() = NSLocale.currentLocale
@@ -31,3 +28,5 @@ actual fun availableLocales(): List<AppLocale> {
         NSLocale((id as NSString).toString())
     }
 }
+
+actual fun localeForLanguageTag(tag: String) : AppLocale = NSLocale(localeIdentifier = tag)

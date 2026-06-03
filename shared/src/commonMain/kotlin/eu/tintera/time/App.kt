@@ -1,63 +1,64 @@
 package eu.tintera.time
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import eu.tintera.locale.availableLocales
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
-import kotlin.time.Clock
-import kotlin.time.Duration.Companion.seconds
+import eu.tintera.locale.currentLocale
+import eu.tintera.locale.displayName
+import eu.tintera.time.format.context.withRegionalContext
 
+enum class Page {
+    FORMATING,
+    PLAYGROUND
+}
 
 @Composable
 @Preview
 fun App() {
-
     MaterialTheme {
-        SelectionContainer {
+        var page by remember { mutableStateOf(Page.FORMATING) }
+        var locale by remember { mutableStateOf(currentLocale) }
 
-            val scope = rememberCoroutineScope()
-            val time by remember {
-                flow {
-                    while (true) {
-                        emit(Clock.System.now())
-                        delay(0.5.seconds)
+        var localeSelection by remember { mutableStateOf(false) }
+        if (localeSelection) LocaleSelectionBottomSheet(
+            currentLocale = locale,
+            onDismissRequest = { localeSelection = false },
+            onLocaleChange = {
+                locale = it
+                localeSelection = false
+            }
+        )
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {},
+                    actions = {
+                        TextButton(onClick = { localeSelection = true }) {
+                            Text(locale.displayName)
+                        }
                     }
-                }.stateIn(scope, SharingStarted.WhileSubscribed(5000), Clock.System.now())
-            }.collectAsStateWithLifecycle()
+                )
+            },
+            bottomBar = {
+                NavigationBar {
+                    NavigationBarItem(
+                        selected = page == Page.FORMATING,
+                        onClick = { page = Page.FORMATING },
+                        icon = { Text("Showcase") },
+                    )
 
-            val locales = remember { availableLocales() }
-
-            Scaffold { padding ->
-                LazyVerticalGrid(
-                    modifier = Modifier.padding(padding).consumeWindowInsets(padding).fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    columns = GridCells.Adaptive(minSize = 300.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(locales) {
-                        LocaleItem(
-                            modifier = Modifier.fillMaxWidth(),
-                            locale = it,
-                            time = time
-                        )
-                    }
+                    NavigationBarItem(
+                        selected = page == Page.PLAYGROUND,
+                        onClick = { page = Page.PLAYGROUND },
+                        icon = { Text("Playground") },
+                    )
+                }
+            }
+        ) { padding ->
+            withRegionalContext(locale = locale) {
+                when (page) {
+                    Page.FORMATING -> FormatingPage(padding)
+                    Page.PLAYGROUND -> PlaygroundPage(padding)
                 }
             }
         }

@@ -38,11 +38,12 @@ fun DatePeriod.format(
         seconds = 0,
         nanoseconds = 0
     ),
-    calendar = format,
-    clock = null,
-    style = format.style,
-    locale = locale,
-    maxUnitsCount = format.maxUnitsCount
+    format = DateTimePeriodFormat {
+        calendar {
+            from(format)
+        }
+    },
+    locale = locale
 )
 
 /**
@@ -60,12 +61,12 @@ fun DatePeriod.format(
  * ```
  *
  * @param locale The [AppLocale] to use.
- * @param block The configuration block applied to the [DatePeriodFormatBuilder].
+ * @param block The configuration block applied to the [DatePeriodFormatScope].
  * @return The formatted period string.
  */
 fun DatePeriod.formatCalendar(
     locale: AppLocale,
-    block: DatePeriodFormatBuilder.() -> Unit
+    block: DatePeriodFormatScope.() -> Unit = DatePeriodFormatScope.defaultConfig
 ) = format(
     locale = locale,
     format = DatePeriodFormat(block)

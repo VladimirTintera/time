@@ -2,7 +2,7 @@ package eu.tintera.time.format.context
 
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.format.TimeFormat
-import eu.tintera.time.format.TimeFormatBuilder
+import eu.tintera.time.format.TimeFormatScope
 import eu.tintera.time.format.format
 import kotlinx.datetime.LocalTime
 
@@ -55,6 +55,6 @@ fun LocalTime.format(
  */
 context(locale: AppLocale)
 fun LocalTime.format(
-    block: TimeFormatBuilder.() -> Unit
+    block: TimeFormatScope<LocalTime>.() -> Unit = TimeFormatScope.defaultConfig()
 ): String = format(locale, block)
 

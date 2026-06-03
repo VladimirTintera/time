@@ -151,13 +151,32 @@ class LocalDateTimeModifierBuilder internal constructor(
      * ```
      *
      * @param time The local time duration to add.
-     * @param timeZone The time zone in which the calculation is performed. Defaults to the system default.
      */
-    fun plusTime(time: LocalTime, timeZone: TimeZone = TimeZone.currentSystemDefault()) {
-        val nextLdt = build().plus(time, timeZone)
+    fun plusTime(time: LocalTime) {
+        val nextLdt = build().plus(time, currentTimeZone)
         currentDate = nextLdt.date
         currentTime = nextLdt.time
     }
+
+    /**
+     * Adds the specified hours, minutes, seconds, and nanoseconds to the current date-time.
+     *
+     * Example:
+     * ```kotlin
+     * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
+     * val modified = ldt.modify(TimeZone.UTC) {
+     *     plusTime(hours = 2, minutes = 30)
+     * }
+     * ```
+     *
+     * @param hours The number of hours to add.
+     * @param minutes The number of minutes to add.
+     * @param seconds The number of seconds to add.
+     * @param nanoseconds The number of nanoseconds to add.
+     */
+    fun plusTime(hours: Int = 0, minutes: Int = 0, seconds: Int = 0, nanoseconds: Int = 0) = plus(
+        DateTimePeriod(hours = hours, minutes = minutes, seconds = seconds, nanoseconds = nanoseconds.toLong())
+    )
 
     /**
      * Adds the specified Kotlin [Duration] to the current date-time.
@@ -266,4 +285,4 @@ fun LocalDateTime.modify(
 ): LocalDateTime = LocalDateTimeModifierBuilder(
     initial = this,
     timeZone = timeZone
-).apply(block).build()
+).apply(block).build()

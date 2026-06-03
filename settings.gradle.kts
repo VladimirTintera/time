@@ -1,4 +1,4 @@
-rootProject.name = "Ecosystem"
+rootProject.name = "KMPTime"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

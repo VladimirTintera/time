@@ -34,7 +34,7 @@
 <div class="root">
     <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
 <a class="library-name--link" href="../../../../index.html" tabindex="1">
-                    Ecosystem
+                    KMPTime
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
@@ -76,7 +76,7 @@
                 <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
                     <div class="dropdown--header">
                             <span>
-                                    Ecosystem
+                                    KMPTime
                             </span>
                         <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
                             <i class="ui-kit-icon ui-kit-icon_cross"></i>
@@ -93,84 +93,24 @@
   <div class="breadcrumbs"><a href="../../index.html">format</a><span class="delimiter">/</span><a href="../index.html">eu.tintera.time.format</a><span class="delimiter">/</span><span class="current">TimeFormat</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Time</span><wbr><span><span>Format</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">TimeFormat</a></div><p class="paragraph">Represents a configuration for formatting times.</p><p class="paragraph">This interface defines which components (hour, minute, seconds, milliseconds, am/pm) should be included in the formatted output and their respective styles.</p><p class="paragraph">Example:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val format = TimeFormat {<br>    hour = HourFormat.Auto.Numeric<br>    minute = MinuteFormat.Padded<br>}</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><h4 class="tableheader">Inheritors</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-date-time-format/index.html">DateTimeFormat</a></div></span></div><div></div></div></div><div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-time-format-builder/index.html">TimeFormatBuilder</a></div></span></div><div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TimeFormat</a> : <a href="../-base-time-format/index.html">BaseTimeFormat</a><span class="token operator">&lt;</span><span data-unresolved-link="kotlinx.datetime/LocalTime///PointingToDeclaration/">LocalTime</span><span class="token operator">&gt; </span></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
-      <div data-togglable="PROPERTY">
-        <h2 class="tableheader">Properties</h2>
-        <div class="table"><a data-name="2062829851%2FProperties%2F1501674941" anchor-label="fractionalSecond" id="2062829851%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="1211296549%2FClasslikes%2F1501674941" anchor-label="Companion" id="1211296549%2FClasslikes%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
           <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="fractional-second.html"><span>fractional</span><wbr><span><span>Second</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2062829851%2FProperties%2F1501674941"></span>
+                  <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1211296549%2FClasslikes%2F1501674941"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="fractional-second.html">fractionalSecond</a><span class="token operator">: </span><a href="../-fractional-second-format/index.html">FractionalSecondFormat</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The format style for the fractional second component, or null if omitted.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1920413800%2FProperties%2F1501674941" anchor-label="hour" id="-1920413800%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="hour.html"><span><span>hour</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1920413800%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="hour.html">hour</a><span class="token operator">: </span><a href="../-hour-format/index.html">HourFormat</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The format style for the hour component, or null if omitted.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="791306664%2FProperties%2F1501674941" anchor-label="minute" id="791306664%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="minute.html"><span><span>minute</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="791306664%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="minute.html">minute</a><span class="token operator">: </span><a href="../-minute-format/index.html">MinuteFormat</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The format style for the minute component, or null if omitted.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-360363218%2FProperties%2F1501674941" anchor-label="periodStyle" id="-360363218%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="period-style.html"><span>period</span><wbr><span><span>Style</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-360363218%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="period-style.html">periodStyle</a><span class="token operator">: </span><a href="../-day-period-style/index.html">DayPeriodStyle</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Indicates whether to include the AM/PM marker in the formatted output.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-455626936%2FProperties%2F1501674941" anchor-label="second" id="-455626936%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="second.html"><span><span>second</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-455626936%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="second.html">second</a><span class="token operator">: </span><a href="../-second-format/index.html">SecondFormat</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The format style for the second component, or null if omitted.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a></div></div></div>
                 </div>
               </div>
             </div>

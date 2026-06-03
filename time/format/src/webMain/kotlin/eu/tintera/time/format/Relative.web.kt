@@ -7,11 +7,15 @@ import kotlin.js.toJsString
 internal actual fun nativeRelativeTimeFormat(
     measurable: Measurable?,
     style: FormatStyle,
+    display: RelativeDisplay,
     locale: AppLocale
 ): String = RelativeTimeFormat(
     locales = locale.toJsString(),
     options = jsObject {
-        numeric = RelativeTimeFormatNumeric.auto
+        numeric = when(display) {
+            RelativeDisplay.Idiomatic -> RelativeTimeFormatNumeric.auto
+            RelativeDisplay.Numeric -> RelativeTimeFormatNumeric.always
+        }
         this.style = when (style) {
             FormatStyle.Full -> RelativeTimeFormatStyle.long
             FormatStyle.Short -> RelativeTimeFormatStyle.short
@@ -26,7 +30,8 @@ internal actual fun nativeRelativeTimeFormat(
         MeasureUnit.DAYS -> RelativeTimeFormatUnit.days
         MeasureUnit.HOURS -> RelativeTimeFormatUnit.hour
         MeasureUnit.MINUTES -> RelativeTimeFormatUnit.minute
-        MeasureUnit.SECOND -> RelativeTimeFormatUnit.seconds
+        MeasureUnit.SECONDS -> RelativeTimeFormatUnit.seconds
         null -> RelativeTimeFormatUnit.seconds
+        MeasureUnit.FRACTIONAL_SECONDS -> throw UnsupportedOperationException("Unsupported unit: ${measurable.unit}")
     }
 )

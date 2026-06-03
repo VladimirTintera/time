@@ -1,8 +1,10 @@
 package eu.tintera.time.core
 
 import kotlinx.datetime.LocalTime
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.nanoseconds
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Extracts the duration of this [LocalTime] since the start of the day (00:00:00) as a Kotlin [kotlin.time.Duration].
@@ -17,7 +19,4 @@ import kotlin.time.toDuration
  * ```
  */
 val LocalTime.duration
-    get() = hour.toDuration(DurationUnit.HOURS) +
-            minute.toDuration(DurationUnit.MINUTES) +
-            second.toDuration(DurationUnit.SECONDS) +
-            nanosecond.toDuration(DurationUnit.NANOSECONDS)
+    get() = hour.hours + minute.minutes + second.seconds + nanosecond.nanoseconds

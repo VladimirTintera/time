@@ -31,25 +31,25 @@ fun LocalDateTime.modify(
 ): LocalDateTime = modify(timeZone, block)
 
 /**
- * Adds the duration of [time] to the current date-time within the builder.
+ * Modifies this [LocalDateTime] using the [LocalDateTimeModifierBuilder] DSL as an invoke operator.
  *
- * This function is context-aware and automatically uses the implicit [TimeZone] context
- * to perform the calculation.
+ * This function is context-aware and automatically uses the implicit [TimeZone] context.
  *
  * Example:
  * ```kotlin
  * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
  * with(TimeZone.UTC) {
- *     val result = ldt.modify {
- *         plusTime(LocalTime(1, 30))
+ *     val result = ldt {
+ *         plusDays(2)
  *     }
  * }
  * ```
  *
- * @param time The local time duration to add.
+ * @param block The builder block.
+ * @return The modified [LocalDateTime].
  */
 context(timeZone: TimeZone)
-fun LocalDateTimeModifierBuilder.plusTime(time: LocalTime) {
-    plusTime(time, timeZone)
-}
+operator fun LocalDateTime.invoke(
+    block: LocalDateTimeModifierBuilder.() -> Unit
+): LocalDateTime = modify(timeZone, block)
 

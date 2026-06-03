@@ -58,7 +58,7 @@ fun Duration.format(
  */
 context(locale: AppLocale)
 fun Duration.format(
-    block: DurationFormatBuilder.() -> Unit
+    block: DurationFormatScope.() -> Unit = DurationFormatScope.defaultConfig
 ): String = format(locale, block)
 
 /**
@@ -115,6 +115,6 @@ fun Duration.formatDigital(
  */
 context(locale: AppLocale)
 fun Duration.formatDigital(
-    block: DurationDigitalFormatBuilder.() -> Unit
+    block: DurationDigitalFormatScope.() -> Unit = DurationDigitalFormatScope.defaultConfig
 ): String = formatDigital(locale, block)
 

@@ -11,6 +11,7 @@ import platform.Foundation.*
 internal actual fun nativeRelativeTimeFormat(
     measurable: Measurable?,
     style: FormatStyle,
+    display: RelativeDisplay,
     locale: AppLocale
 ): String {
 
@@ -23,7 +24,8 @@ internal actual fun nativeRelativeTimeFormat(
             MeasureUnit.DAYS -> components.day = measurable.value.convert()
             MeasureUnit.HOURS -> components.hour = measurable.value.convert()
             MeasureUnit.MINUTES -> components.minute = measurable.value.convert()
-            MeasureUnit.SECOND -> components.second = measurable.value.convert()
+            MeasureUnit.SECONDS -> components.second = measurable.value.convert()
+            MeasureUnit.FRACTIONAL_SECONDS -> components.nanosecond = (measurable.value * 1_000_000).convert()
         }
     } else components.second = 0.convert()
 
@@ -35,7 +37,10 @@ internal actual fun nativeRelativeTimeFormat(
             FormatStyle.Narrow -> NSRelativeDateTimeFormatterUnitsStyleAbbreviated
         }
 
-        dateTimeStyle = NSRelativeDateTimeFormatterStyleNamed
+        dateTimeStyle = when (display) {
+            RelativeDisplay.Idiomatic -> NSRelativeDateTimeFormatterStyleNamed
+            RelativeDisplay.Numeric -> NSRelativeDateTimeFormatterStyleNumeric
+        }
 
     }
 

@@ -1,7 +1,9 @@
 package eu.tintera.time.format
 
 import eu.tintera.locale.AppLocale
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlin.time.Instant
@@ -30,9 +32,10 @@ fun LocalDateTime.format(
     locale: AppLocale
 ): String = platformDateTimeFormat(
     date = this,
-    dateFormat = format,
-    timeFormat = format,
+    format = format,
     locale = locale,
+    dateRequired = false,
+    timeRequired = false
 )
 
 
@@ -59,7 +62,7 @@ fun LocalDateTime.format(
  */
 fun LocalDateTime.format(
     locale: AppLocale,
-    block: DateTimeFormatBuilder.() -> Unit
+    block: DateTimeFormatScope<LocalDateTime, LocalDate, LocalTime>.() -> Unit = DateTimeFormatScope.defaultConfig()
 ) = format(
     format = DateTimeFormat(block),
     locale = locale
@@ -132,7 +135,7 @@ fun LocalDateTime.formatRelative(
     now: LocalDateTime,
     timeZone: TimeZone,
     locale: AppLocale,
-    block: RelativeDateTimeFormatBuilder.() -> Unit
+    block: RelativeDateTimeFormatScope.() -> Unit = RelativeDateTimeFormatScope.defaultConfig
 ): String = platformRelativeTimeFormat(
     target = this.toInstant(timeZone),
     now = now.toInstant(timeZone),
@@ -173,7 +176,7 @@ fun LocalDateTime.formatRelative(
  */
 fun LocalDateTime.formatInterval(
     to: LocalDateTime,
-    format: DateTimeFormat,
+    format: DateTimeIntervalFormat,
     locale: AppLocale,
     timeZone: TimeZone,
     onSameDate: SameDayCombiner = defaultSameDayCombiner(),
@@ -231,15 +234,107 @@ fun LocalDateTime.formatInterval(
     onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onDifferentDate: DifferentDateTimeCombiner = defaultDifferentDateTimeCombiner(),
-    block: DateTimeFormatBuilder.() -> Unit
+    block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
 ) = formatInterval(
     from = this.toInstant(timeZone),
     to = to.toInstant(timeZone),
-    format = DateTimeFormat(block),
+    format = DateTimeIntervalFormat(block),
     locale = locale,
     timeZone = timeZone,
     onSameDate = onSameDate,
     onSameMonth = onSameMonth,
     onSameYear = onSameYear,
     onDifferentDate = onDifferentDate,
+)
+
+/**
+ * Formats this range of [LocalDateTime] into a localized interval string.
+ *
+ * Example:
+ * ```kotlin
+ * val start = LocalDateTime(2025, 4, 15, 10, 0)
+ * val end = LocalDateTime(2025, 4, 15, 12, 0)
+ * val range = start..<end
+ * val format = DateTimeFormat { time { short() } }
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = range.format(
+ *     locale = myLocale,
+ *     timeZone = TimeZone.UTC,
+ *     format = format
+ * )
+ * // formatted will be "10:00 AM – 12:00 PM" (depending on locale)
+ * ```
+ *
+ * @param locale The [AppLocale] to use for formatting.
+ * @param timeZone The time zone to use.
+ * @param format The format to use for formatting individual date-times.
+ * @param onSameDate The combiner logic when both date-times fall on the same date.
+ * @param onSameMonth The combiner logic when both date-times fall in the same month of the same year.
+ * @param onSameYear The combiner logic when both date-times fall in the same year.
+ * @param onDifferentDate The combiner logic when date-times fall on different dates.
+ * @return The formatted localized interval string.
+ */
+fun OpenEndRange<LocalDateTime>.format(
+    locale: AppLocale,
+    timeZone: TimeZone,
+    format: DateTimeIntervalFormat,
+    onSameDate: SameDayCombiner = defaultSameDayCombiner(),
+    onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
+    onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),
+    onDifferentDate: DifferentDateTimeCombiner = defaultDifferentDateTimeCombiner()
+) = start.formatInterval(
+    to = endExclusive,
+    format = format,
+    locale = locale,
+    timeZone = timeZone,
+    onSameDate = onSameDate,
+    onSameMonth = onSameMonth,
+    onSameYear = onSameYear,
+    onDifferentDate = onDifferentDate
+)
+
+/**
+ * Formats this range of [LocalDateTime] into a localized interval string using a DSL-configured format.
+ *
+ * Example:
+ * ```kotlin
+ * val start = LocalDateTime(2025, 4, 15, 10, 0)
+ * val end = LocalDateTime(2025, 4, 15, 12, 0)
+ * val range = start..<end
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = range.format(
+ *     locale = myLocale,
+ *     timeZone = TimeZone.UTC
+ * ) {
+ *     time { short() }
+ * }
+ * // formatted will be "10:00 AM – 12:00 PM" (depending on locale)
+ * ```
+ *
+ * @param locale The [AppLocale] to use for formatting.
+ * @param timeZone The time zone to use.
+ * @param onSameDate The combiner logic when both date-times fall on the same date.
+ * @param onSameMonth The combiner logic when both date-times fall in the same month of the same year.
+ * @param onSameYear The combiner logic when both date-times fall in the same year.
+ * @param onDifferentDate The combiner logic when date-times fall on different dates.
+ * @param block The builder block to configure the date-time format.
+ * @return The formatted localized interval string.
+ */
+fun OpenEndRange<LocalDateTime>.format(
+    locale: AppLocale,
+    timeZone: TimeZone,
+    onSameDate: SameDayCombiner = defaultSameDayCombiner(),
+    onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
+    onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),
+    onDifferentDate: DifferentDateTimeCombiner = defaultDifferentDateTimeCombiner(),
+    block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
+) = start.formatInterval(
+    to = endExclusive,
+    format = DateTimeIntervalFormat(block),
+    locale = locale,
+    timeZone = timeZone,
+    onSameDate = onSameDate,
+    onSameMonth = onSameMonth,
+    onSameYear = onSameYear,
+    onDifferentDate = onDifferentDate
 )

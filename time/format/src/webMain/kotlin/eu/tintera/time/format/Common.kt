@@ -8,9 +8,9 @@ internal fun <T : JsAny> jsObject(): T = js("({})")
 
 internal fun <T : JsAny> jsObject(block: T.() -> Unit): T = jsObject<T>().apply(block)
 
-internal fun dateTimeFormatOptions(
-    timeFormat: TimeFormat?,
-    dateFormat: DateFormat?,
+internal fun <D : Any, T : Any> dateTimeFormatOptions(
+    timeFormat: TimeFormatScope<T>?,
+    dateFormat: DateFormatScope<D>?,
     timeZone: String
 ): DateTimeFormatOptions = jsObject {
     when (dateFormat?.year) {

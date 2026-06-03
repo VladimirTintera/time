@@ -36,4 +36,28 @@ class DateTimePeriodExtTest {
         assertEquals(0, datePeriod.days)
         assertEquals(0.seconds, period.timeDuration)
     }
+
+    @Test
+    fun testPeriodBuilders() {
+        assertEquals(DateTimePeriod(years = 3), 3.periodYears)
+        assertEquals(DateTimePeriod(months = 6), 6.periodMonths)
+        assertEquals(DateTimePeriod(days = 10), 10.periodDays)
+        assertEquals(DateTimePeriod(hours = 4), 4.periodHours)
+        assertEquals(DateTimePeriod(minutes = 30), 30.periodMinutes)
+        assertEquals(DateTimePeriod(seconds = 45), 45.periodSeconds)
+        assertEquals(DateTimePeriod(nanoseconds = 500), 500L.periodNanoseconds)
+    }
+
+    @Test
+    fun testUnaryMinus() {
+        val period = DateTimePeriod(years = 1, months = 2, days = 3, hours = 4, minutes = 5, seconds = 6, nanoseconds = 7)
+        val negative = -period
+        assertEquals(-1, negative.years)
+        assertEquals(-2, negative.months)
+        assertEquals(-3, negative.days)
+        assertEquals(-4, negative.hours)
+        assertEquals(-5, negative.minutes)
+        assertEquals(-6, negative.seconds)
+        assertEquals(-7, negative.nanoseconds)
+    }
 }

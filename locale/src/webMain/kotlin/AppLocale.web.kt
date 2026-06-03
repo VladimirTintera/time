@@ -24,7 +24,7 @@ actual val AppLocale.regionCode: String
 actual fun localeForLanguageTag(tag: String): AppLocale = tag
 
 actual val currentLocale: AppLocale
-    get() = navigator.language
+    get() = runCatching { navigator.language }.getOrElse { "en-US" }
 
 private val webSupportedLocales: List<String> = listOf(
     "af", "am", "ar", "as", "az", "be", "bg", "bn", "br", "bs",
@@ -40,8 +40,6 @@ private val webSupportedLocales: List<String> = listOf(
 )
 
 actual fun availableLocales(): List<AppLocale> {
-    // 👑 Pro produkční knihovnu: Vrátíme zakešovaný seznam podporovaných světových jazyků.
-    // Vývojář na webu tak dostane konzistentní seznam pro své UI komponenty.
     return webSupportedLocales
 }
 

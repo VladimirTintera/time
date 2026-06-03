@@ -53,12 +53,12 @@ fun Duration.format(
  * ```
  *
  * @param locale The [AppLocale] to use.
- * @param block The configuration block applied to the [DurationFormatBuilder].
+ * @param block The configuration block applied to the [DurationFormatScope].
  * @return The formatted duration string.
  */
 fun Duration.format(
     locale: AppLocale,
-    block: DurationFormatBuilder.() -> Unit
+    block: DurationFormatScope.() -> Unit = DurationFormatScope.defaultConfig
 ): String = format(
     format = DurationFormat(block),
     locale = locale
@@ -114,12 +114,12 @@ fun Duration.formatDigital(
  * ```
  *
  * @param locale The [AppLocale] to use.
- * @param block The configuration block applied to the [DurationDigitalFormatBuilder].
+ * @param block The configuration block applied to the [DurationDigitalFormatScope].
  * @return The formatted digital duration string.
  */
 fun Duration.formatDigital(
     locale: AppLocale,
-    block: DurationDigitalFormatBuilder.() -> Unit
+    block: DurationDigitalFormatScope.() -> Unit = DurationDigitalFormatScope.defaultConfig
 ): String = digitalFormat(
     duration = this,
     format = DurationDigitalFormat(block),
@@ -132,12 +132,15 @@ private fun digitalFormat(
     locale: AppLocale
 ): String {
 
-    if (format.day == null && format.hour == null && format.minute == null && format.second == null)
+    val scope = DurationDigitalFormatScope(duration, locale)
+    format.block(scope)
+
+    if (scope.day == null && scope.hour == null && scope.minute == null && scope.second == null)
         throw EmptyFormatConfigurationException("Duration format cannot be empty. At least one duration component must be configured.")
 
     return duration.toComponents { days, hours, minutes, seconds, nanoseconds ->
         buildList {
-            format.day?.takeIf { days > 0 }?.also { dayStyle ->
+            scope.day?.takeIf { days > 0 }?.also { dayStyle ->
                 val formattedDays = duration.format(locale) {
                     style = dayStyle
                     this.days = UnitVisibility.Required
@@ -149,13 +152,14 @@ private fun digitalFormat(
 
             add(
                 time.format(locale) {
-                    hour = format.hour
-                    minute = format.minute
-                    second = format.second
-                    fractionalSecond = format.fractionalSecond
+                    hour = scope.hour
+                    minute = scope.minute
+                    second = scope.second
+                    fractionalSecond = scope.fractionalSecond
+                    periodStyle = DayPeriodStyle.None
                 }
             )
-        }.joinToString(separator = format.separator)
+        }.joinToString(separator = scope.separator)
     }
 }
 
@@ -165,21 +169,46 @@ internal fun platformDurationFormat(
     locale: AppLocale
 ): String {
 
-    if (format.days == null && format.hours == null && format.minutes == null && format.seconds == null)
+    val scope = DurationFormatScope(
+        value = duration,
+        locale = locale,
+    )
+
+    format.block(scope)
+
+    if (scope.days == null && scope.hours == null && scope.minutes == null && scope.seconds == null)
         throw EmptyFormatConfigurationException("Duration format cannot be empty. At least one duration component must be configured.")
 
+    val measurables = duration.toComponents { days, hours, minutes, seconds, nanoseconds ->
+        val millis = nanoseconds / 1_000_000
+        buildList {
+            scope.days.ifAvailable({ days != 0L }) { add(Measurable(MeasureUnit.DAYS, days.toInt())) }
+            scope.hours.ifAvailable({ hours != 0 }) { add(Measurable(MeasureUnit.HOURS, hours)) }
+            scope.minutes.ifAvailable({ minutes != 0 }) { add(Measurable(MeasureUnit.MINUTES, minutes)) }
+            scope.seconds.ifAvailable({ seconds != 0 }) { add(Measurable(MeasureUnit.SECONDS, seconds)) }
+            scope.fractionalSeconds.ifAvailable({ millis != 0 }) {
+                add(
+                    Measurable(
+                        MeasureUnit.FRACTIONAL_SECONDS,
+                        millis
+                    )
+                )
+            }
+        }
+    }
+
     return nativeDurationFormat(
-        duration = duration,
-        format = format,
+        measurables = measurables,
+        style = scope.style,
         locale = locale
-    )
+    ).joinToString(", ")
 }
 
 internal expect fun nativeDurationFormat(
-    duration: Duration,
-    format: DurationFormat,
+    measurables: List<Measurable>,
+    style: FormatStyle,
     locale: AppLocale
-): String
+): List<String>
 
 internal fun <T> UnitVisibility?.ifAvailable(isAutoValid: () -> Boolean, action: () -> T) {
     val isValid = when (this) {

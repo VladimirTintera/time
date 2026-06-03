@@ -7,14 +7,14 @@ import kotlin.time.Duration
 
 @OptIn(UnsafeNumber::class)
 internal actual fun nativeDurationFormat(
-    duration: Duration,
-    format: DurationFormat,
+    measurables: List<Measurable>,
+    style: FormatStyle,
     locale: AppLocale
-): String {
+): List<String> {
 
     val formatter = NSMeasurementFormatter().apply {
         this.locale = locale
-        unitStyle = when (format.style) {
+        unitStyle = when (style) {
             FormatStyle.Full -> NSFormattingUnitStyleLong
             FormatStyle.Short -> NSFormattingUnitStyleMedium
             FormatStyle.Narrow -> NSFormattingUnitStyleShort
@@ -23,13 +23,13 @@ internal actual fun nativeDurationFormat(
         unitOptions = NSMeasurementFormatterUnitOptionsProvidedUnit
     }
 
-    val parts = buildList {
-        duration.toComponents { days, hours, minutes, seconds, nanoseconds ->
-            val millis = nanoseconds / 1_000_000
-
-            format.days.ifAvailable({ days > 0 }) {
+    val parts = measurables.mapNotNull {
+        when(it.unit) {
+            MeasureUnit.YEARS -> throw UnsupportedOperationException("Unsupported unit: ${it.unit}")
+            MeasureUnit.MONTHS -> throw UnsupportedOperationException("Unsupported unit: ${it.unit}")
+            MeasureUnit.DAYS -> {
                 val dayFormatter = NSDateComponentsFormatter().apply {
-                    unitsStyle = when (format.style) {
+                    unitsStyle = when (style) {
                         FormatStyle.Full -> NSDateComponentsFormatterUnitsStyleFull
                         FormatStyle.Short -> NSDateComponentsFormatterUnitsStyleShort
                         FormatStyle.Narrow -> NSDateComponentsFormatterUnitsStyleAbbreviated
@@ -40,30 +40,27 @@ internal actual fun nativeDurationFormat(
                     }
                 }
                 // Vyrobí např. "1 den", "3 dny", "5 dní" nebo "1 d." podle zvoleného stylu a locale
-                dayFormatter.stringFromTimeInterval(days * 86400.0)?.also {
-                    add(it)
-                }
+                dayFormatter.stringFromTimeInterval(it.value * 86400.0)
             }
-            format.hours.ifAvailable({ hours > 0 }) {
-                val measurement = NSMeasurement(hours.toDouble(), NSUnitDuration.hours())
-                add(formatter.stringFromMeasurement(measurement))
+            MeasureUnit.HOURS -> {
+                val measurement = NSMeasurement(it.value.toDouble(), NSUnitDuration.hours())
+                formatter.stringFromMeasurement(measurement)
             }
-            format.minutes.ifAvailable({ minutes > 0 }) {
-                val measurement = NSMeasurement(minutes.toDouble(), NSUnitDuration.minutes())
-                add(formatter.stringFromMeasurement(measurement))
+            MeasureUnit.MINUTES -> {
+                val measurement = NSMeasurement(it.value.toDouble(), NSUnitDuration.minutes())
+                formatter.stringFromMeasurement(measurement)
             }
-            format.seconds.ifAvailable({ seconds > 0 }) {
-                val measurement = NSMeasurement(seconds.toDouble(), NSUnitDuration.seconds())
-                add(formatter.stringFromMeasurement(measurement))
+            MeasureUnit.SECONDS -> {
+                val measurement = NSMeasurement(it.value.toDouble(), NSUnitDuration.seconds())
+                formatter.stringFromMeasurement(measurement)
             }
-            format.fractionalSeconds.ifAvailable({ millis > 0 }) {
-                val measurement = NSMeasurement(millis.toDouble(), NSUnitDuration.milliseconds())
-                add(formatter.stringFromMeasurement(measurement))
+            MeasureUnit.FRACTIONAL_SECONDS -> {
+                val measurement = NSMeasurement(it.value.toDouble(), NSUnitDuration.milliseconds())
+                formatter.stringFromMeasurement(measurement)
             }
         }
     }
 
-    return NSListFormatter().apply {
-        this.locale = locale
-    }.stringFromItems(parts) ?: ""
+
+    return parts
 }

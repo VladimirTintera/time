@@ -58,5 +58,9 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+
+        webTest.dependencies {
+            implementation(npm("@js-joda/timezone", "2.25.1"))
+        }
     }
 }

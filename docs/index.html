@@ -36,7 +36,7 @@
 <div class="root">
     <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
             <a class="library-name--link" href="index.html" tabindex="1">
-                    Ecosystem
+                    KMPTime
             </a>
         <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
                 type="button">Toggle table of contents
@@ -61,7 +61,7 @@
                     data-role="dropdown-listbox" aria-label="Table of contents">
                     <div class="dropdown--header">
                             <span>
-                                    Ecosystem
+                                    KMPTime
                             </span>
                         <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
                             <i class="ui-kit-icon ui-kit-icon_cross"></i>
@@ -74,12 +74,13 @@
         </nav>
         <div id="resizer" class="resizer" data-item-type="BAR"></div>
         <div id="main" data-item-type="SECTION" role="main">
-<div class="main-content" id="content" pageIds="Ecosystem::.ext/allModules///PointingToDeclaration//0">
+<div class="main-content" id="content" pageIds="KMPTime::.ext/allModules///PointingToDeclaration//0">
   <div class="breadcrumbs"></div>
   <div class="cover ">
     <div class="cover ">
       <h1 class="">Time Library</h1>
       <p class="paragraph">A premium Kotlin Multiplatform library for elegant, type-safe, and locale-aware date, time, interval, relative time, duration, and period formatting. Built directly on top of <code class="lang-kotlin">kotlinx-datetime</code>, it offers flexible formatting DSLs and native platform performance.</p>
+      <p class="paragraph">📖 <strong>Full API Documentation</strong>: <a href="https://vladimirtintera.github.io/time/">vladimirtintera.github.io/time</a></p>
 
       <h2 class="">Core Philosophy</h2>
       <p class="paragraph">This library is designed to be <strong>lightweight</strong> and performant across multiple platforms by leveraging native platform capabilities:</p>
@@ -133,29 +134,29 @@
           </thead>
           <tbody>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:locale</strong></code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@63cf0686 strong lang-kotlin"><strong>:locale</strong></code></td>
               <td>Native platform locale abstraction.</td>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">AppLocale</code> (JVM: <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">java.util.Locale</code>, Android: <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">android.icu.util.ULocale</code>, Apple: <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">NSLocale</code>, Web: <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">String</code>), <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">currentLocale</code>, <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">availableLocales()</code>, <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">localeForLanguageTag(tag)</code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">AppLocale</code> (JVM: <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">java.util.Locale</code>, Android: <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">android.icu.util.ULocale</code>, Apple: <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">NSLocale</code>, Web: <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">String</code>), <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">currentLocale</code>, <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">availableLocales()</code>, <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">localeForLanguageTag(tag)</code></td>
             </tr>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:time:core</strong></code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@63cf0686 strong lang-kotlin"><strong>:time:core</strong></code></td>
               <td>Calendar calculations and sequence utilities.</td>
-              <td>timezone-aware extensions, sequence generation (<code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">generateSequence</code>, <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">slice</code>), aligns (<code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">floorTo</code>, <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">ceilTo</code>), and the <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">modify {}</code> builder DSL.</td>
+              <td>timezone-aware extensions, sequence generation (<code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">generateSequence</code>, <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">slice</code>), aligns (<code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">floorTo</code>, <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">ceilTo</code>), and the <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">modify {}</code> builder DSL.</td>
             </tr>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:time:core-context</strong></code></td>
-              <td>Context-aware version of <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">:time:core</code> arithmetic.</td>
-              <td>Context-parameter functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">context(timeZone: TimeZone)</code>.</td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@63cf0686 strong lang-kotlin"><strong>:time:core-context</strong></code></td>
+              <td>Context-aware version of <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">:time:core</code> arithmetic.</td>
+              <td>Context-parameter functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">context(timeZone: TimeZone)</code>.</td>
             </tr>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:time:format</strong></code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@63cf0686 strong lang-kotlin"><strong>:time:format</strong></code></td>
               <td>Formatting engine and configuration DSLs.</td>
               <td>DSL formats for date/time, interval formatting, relative formatting, duration formatting, and period formatting.</td>
             </tr>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@29dbd678 strong lang-kotlin"><strong>:time:format-context</strong></code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@63cf0686 strong lang-kotlin"><strong>:time:format-context</strong></code></td>
               <td>Context-aware formatting wrappers.</td>
-              <td>Context-parameter formatting functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">context(locale: AppLocale)</code> or <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">context(locale: AppLocale, timeZone: TimeZone)</code>. Includes the <code class="org.jetbrains.dokka.pages.commenttable@29dbd678 lang-kotlin">withRegionalContext</code> scope helper.</td>
+              <td>Context-parameter formatting functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">context(locale: AppLocale)</code> or <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">context(locale: AppLocale, timeZone: TimeZone)</code>. Includes the <code class="org.jetbrains.dokka.pages.commenttable@63cf0686 lang-kotlin">withRegionalContext</code> scope helper.</td>
             </tr>
           </tbody>
         </table>
@@ -222,7 +223,7 @@
       <h3 class="">3. Interval Formatting</h3>
       <p class="paragraph">Format intervals intelligently. The library automatically omits redundant information (like repeating the year or month if both dates fall in the same month/year).</p>
       <div class="sample-container">
-        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.LocalDateTime<br>import kotlinx.datetime.TimeZone<br><br>val start = LocalDateTime(2026, 5, 19, 14, 0)<br>val end = LocalDateTime(2026, 5, 20, 16, 30)<br>val defaultLocale = currentLocale<br>val defaultTimeZone = TimeZone.currentSystemDefault()<br><br>// Standard interval formatting<br>val intervalString = start.formatInterval(<br>    to = end,<br>    locale = defaultLocale,<br>    timeZone = defaultTimeZone<br>) {<br>    date {<br>        day = DayFormat.Numeric<br>        month = MonthFormat.Name.Full<br>        year = YearFormat.FourDigits<br>        weekDay = WeekDayFormat.FullName<br>    }<br>} // e.g., &quot;Tuesday 19 – Wednesday 20 May 2026&quot;</code></pre>
+        <pre><code class="block lang-kotlin" theme="idea">import eu.tintera.locale.currentLocale<br>import eu.tintera.time.format.*<br>import kotlinx.datetime.LocalDateTime<br>import kotlinx.datetime.TimeZone<br><br>val start = LocalDateTime(2026, 5, 19, 14, 0)<br>val end = LocalDateTime(2026, 5, 20, 16, 30)<br>val defaultLocale = currentLocale<br>val defaultTimeZone = TimeZone.currentSystemDefault()<br><br>// Standard interval formatting<br>val intervalString = start.formatInterval(<br>    to = end,<br>    locale = defaultLocale,<br>    timeZone = defaultTimeZone<br>) {<br>    date {<br>        day = DayFormat.Numeric<br>        month = MonthFormat.Name.Full<br>        year = YearFormat.FourDigits<br>        weekDay = WeekDayFormat.FullName<br>    }<br>} // e.g., &quot;Tuesday 19 – Wednesday 20 May 2026&quot;<br><br>// Formatting an OpenEndRange directly<br>val range = start..&lt;end<br>val rangeFormatted = range.format(<br>    locale = defaultLocale,<br>    timeZone = defaultTimeZone<br>) {<br>    date {<br>        day = DayFormat.Numeric<br>        month = MonthFormat.Name.Full<br>        year = YearFormat.FourDigits<br>        weekDay = WeekDayFormat.FullName<br>    }<br>}</code></pre>
 <span class="copy-tooltip">
           <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
 <span class="copy-icon"></span></span></div>
@@ -284,7 +285,7 @@
 <span class="copy-icon"></span></span></div>
 
       <h2 class="">Detailed DSL Reference</h2>
-      <h3 class="">Date Format Config (<code class="lang-kotlin">DateFormatBuilder</code>)</h3>
+      <h3 class="">Date Format Config (<code class="lang-kotlin">DateFormatScope</code>)</h3>
       <ul>
         <li>
           <p class="paragraph"><code class="lang-kotlin">weekDay</code>: <code class="lang-kotlin">WeekDayFormat</code> (<code class="lang-kotlin">FullName</code> e.g., &quot;Monday&quot; or <code class="lang-kotlin">ShortName</code> e.g., &quot;Mon&quot;)</p>
@@ -310,7 +311,7 @@
           <p class="paragraph">Predefined styles: <code class="lang-kotlin">short()</code>, <code class="lang-kotlin">medium()</code>, <code class="lang-kotlin">long()</code>, <code class="lang-kotlin">full()</code>.</p>
         </li>
       </ul>
-      <h3 class="">Time Format Config (<code class="lang-kotlin">TimeFormatBuilder</code>)</h3>
+      <h3 class="">Time Format Config (<code class="lang-kotlin">TimeFormatScope</code>)</h3>
       <ul>
         <li>
           <p class="paragraph"><code class="lang-kotlin">hour</code>: <code class="lang-kotlin">HourFormat</code></p>
@@ -342,7 +343,7 @@
           <p class="paragraph">Predefined styles: <code class="lang-kotlin">short()</code>, <code class="lang-kotlin">full()</code>.</p>
         </li>
       </ul>
-      <h3 class="">Relative DateTime Config (<code class="lang-kotlin">RelativeDateTimeFormatBuilder</code>)</h3>
+      <h3 class="">Relative DateTime Config (<code class="lang-kotlin">RelativeDateTimeFormatScope</code>)</h3>
       <ul>
         <li>
           <p class="paragraph"><code class="lang-kotlin">style</code>: <code class="lang-kotlin">FormatStyle</code> (<code class="lang-kotlin">Full</code>, <code class="lang-kotlin">Short</code>, <code class="lang-kotlin">Narrow</code>)</p>
@@ -351,7 +352,7 @@
           <p class="paragraph">Unit threshold configuration functions: <code class="lang-kotlin">years(min: Int?)</code>, <code class="lang-kotlin">months(min: Int?)</code>, <code class="lang-kotlin">days(min: Int?)</code>, <code class="lang-kotlin">hours(min: Int?)</code>, <code class="lang-kotlin">minutes(min: Int?)</code>, <code class="lang-kotlin">seconds(min: Int?)</code>.</p>
         </li>
       </ul>
-      <h3 class="">Duration Config (<code class="lang-kotlin">DurationFormatBuilder</code>)</h3>
+      <h3 class="">Duration Config (<code class="lang-kotlin">DurationFormatScope</code>)</h3>
       <ul>
         <li>
           <p class="paragraph"><code class="lang-kotlin">style</code>: <code class="lang-kotlin">FormatStyle</code> (<code class="lang-kotlin">Full</code>, <code class="lang-kotlin">Short</code>, <code class="lang-kotlin">Narrow</code>)</p>
@@ -363,7 +364,7 @@
           <p class="paragraph">Predefined styles: <code class="lang-kotlin">short()</code>, <code class="lang-kotlin">full()</code>.</p>
         </li>
       </ul>
-      <h3 class="">Duration Digital Config (<code class="lang-kotlin">DurationDigitalFormatBuilder</code>)</h3>
+      <h3 class="">Duration Digital Config (<code class="lang-kotlin">DurationDigitalFormatScope</code>)</h3>
       <ul>
         <li>
           <p class="paragraph"><code class="lang-kotlin">day</code>: <code class="lang-kotlin">FormatStyle?</code> (textual width style for day component)</p>
@@ -387,7 +388,7 @@
           <p class="paragraph">Predefined style: <code class="lang-kotlin">stopwatch()</code>.</p>
         </li>
       </ul>
-      <h3 class="">DatePeriod Config (<code class="lang-kotlin">DatePeriodFormatBuilder</code>)</h3>
+      <h3 class="">DatePeriod Config (<code class="lang-kotlin">DatePeriodFormatScope</code>)</h3>
       <ul>
         <li>
           <p class="paragraph"><code class="lang-kotlin">style</code>: <code class="lang-kotlin">FormatStyle</code></p>
@@ -399,7 +400,7 @@
           <p class="paragraph"><code class="lang-kotlin">years</code>, <code class="lang-kotlin">months</code>, <code class="lang-kotlin">days</code>: <code class="lang-kotlin">UnitVisibility</code> (<code class="lang-kotlin">Auto</code> or <code class="lang-kotlin">Required</code>)</p>
         </li>
       </ul>
-      <h3 class="">DateTimePeriod Config (<code class="lang-kotlin">DateTimePeriodFormatBuilder</code>)</h3>
+      <h3 class="">DateTimePeriod Config (<code class="lang-kotlin">DateTimePeriodFormatScope</code>)</h3>
       <ul>
         <li>
           <p class="paragraph"><code class="lang-kotlin">style</code>: <code class="lang-kotlin">FormatStyle</code></p>

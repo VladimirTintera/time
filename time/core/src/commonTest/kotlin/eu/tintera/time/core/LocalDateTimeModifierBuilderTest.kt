@@ -80,4 +80,13 @@ class LocalDateTimeModifierBuilderTest {
         // Since duration addition uses UTC, 12:00 + 5 hours = 17:00
         assertEquals(LocalDateTime(2023, 5, 10, 17, 0, 0, 0), modified)
     }
+
+    @Test
+    fun testPlusTimeOverload() {
+        val initial = LocalDateTime(2023, 5, 10, 12, 0, 0, 0)
+        val modified = initial.modify(TimeZone.UTC) {
+            plusTime(hours = 2, minutes = 15, seconds = 30)
+        }
+        assertEquals(LocalDateTime(2023, 5, 10, 14, 15, 30, 0), modified)
+    }
 }

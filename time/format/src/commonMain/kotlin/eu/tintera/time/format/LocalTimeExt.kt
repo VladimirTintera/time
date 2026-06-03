@@ -40,8 +40,11 @@ fun LocalTime.format(
         nanosecond = nanosecond
     ),
     locale = locale,
-    timeFormat = format,
-    dateFormat = null
+    format = DateTimeFormat {
+        time { from(format) }
+    },
+    dateRequired = false,
+    timeRequired = true
 )
 
 /**
@@ -66,7 +69,7 @@ fun LocalTime.format(
  */
 fun LocalTime.format(
     locale: AppLocale,
-    block: TimeFormatBuilder.() -> Unit
+    block: TimeFormatScope<LocalTime>.() -> Unit = TimeFormatScope.defaultConfig()
 ) = format(
     locale = locale,
     format = TimeFormat(block = block)

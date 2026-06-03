@@ -89,7 +89,7 @@ class FormatContextTest {
 
         with(locale) {
             with(tz) {
-                val formatted = formatInterval(from, to, DateTimeFormat {
+                val formatted = formatInterval(from, to, DateTimeIntervalFormat {
                     time { short() }
                 })
                 assertTrue(formatted.isNotEmpty())
@@ -153,5 +153,25 @@ class FormatContextTest {
             }
         }
         assertTrue(result.isNotEmpty())
+    }
+
+    @Test
+    fun testOpenEndRangeLocalDateTimeFormat() {
+        val start = LocalDateTime(2023, 5, 15, 14, 30)
+        val end = LocalDateTime(2023, 5, 15, 16, 30)
+        val range = start..<end
+        with(locale) {
+            with(tz) {
+                val formatted = range.format {
+                    time { short() }
+                }
+                assertTrue(formatted.isNotEmpty())
+
+                val formattedExplicit = range.format(DateTimeIntervalFormat {
+                    time { short() }
+                })
+                assertEquals(formatted, formattedExplicit)
+            }
+        }
     }
 }

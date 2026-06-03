@@ -37,8 +37,11 @@ fun LocalDate.format(
         hour = 0, minute = 0, second = 0, nanosecond = 0
     ),
     locale = locale,
-    dateFormat = format,
-    timeFormat = null
+    format = DateTimeFormat {
+        date { from(format) }
+    },
+    timeRequired = false,
+    dateRequired = true
 )
 
 /**
@@ -65,7 +68,7 @@ fun LocalDate.format(
  */
 fun LocalDate.format(
     locale: AppLocale,
-    block: DateFormatBuilder.() -> Unit
+    block: DateFormatScope<LocalDate>.() -> Unit = DateFormatScope.defaultConfig()
 ) = format(
     format = DateFormat(block),
     locale = locale
@@ -160,7 +163,7 @@ fun LocalDate.formatWeekDayName(
  */
 fun LocalDate.formatInterval(
     to: LocalDate,
-    format: DateFormat,
+    format: DateIntervalFormat,
     locale: AppLocale,
     timeZone: TimeZone,
     onSameDate: SameDayCombiner = defaultSameDayCombiner(),
@@ -180,8 +183,9 @@ fun LocalDate.formatInterval(
         day = to.day,
         hour = 0, minute = 0, second = 0, nanosecond = 0
     ).toInstant(timeZone),
-    dateFormat = format,
-    timeFormat = null,
+    format = DateTimeIntervalFormat {
+        date { from(format) }
+    },
     locale = locale,
     timeZone = timeZone,
     onSameDate = onSameDate,
@@ -230,10 +234,10 @@ fun LocalDate.formatInterval(
     onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onDifferentDate: DifferentDateTimeCombiner = defaultDifferentDateTimeCombiner(),
-    block: DateFormatBuilder.() -> Unit
+    block: DateFormatScope<OpenEndRange<LocalDate>>.() -> Unit = DateFormatScope.defaultConfig()
 ) = formatInterval(
     to = to,
-    format = DateFormat(block),
+    format = DateIntervalFormat(block),
     locale = locale,
     timeZone = timeZone,
     onSameDate = onSameDate,

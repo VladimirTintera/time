@@ -2,6 +2,9 @@ package eu.tintera.time.format.context
 
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.format.*
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlin.time.Instant
 
@@ -55,7 +58,7 @@ fun Instant.format(
  */
 context(locale: AppLocale, timeZone: TimeZone)
 fun Instant.format(
-    block: DateTimeFormatBuilder.() -> Unit
+    block: DateTimeFormatScope<LocalDateTime, LocalDate, LocalTime>.() -> Unit = DateTimeFormatScope.defaultConfig()
 ): String = format(timeZone, locale, block)
 
 /**
@@ -108,7 +111,7 @@ fun Instant.formatRelative(
 context(locale: AppLocale, timeZone: TimeZone)
 fun Instant.formatRelative(
     now: Instant,
-    block: RelativeDateTimeFormatBuilder.() -> Unit
+    block: RelativeDateTimeFormatScope.() -> Unit = RelativeDateTimeFormatScope.defaultConfig
 ): String = formatRelative(now, timeZone, locale, block)
 
 /**
@@ -135,7 +138,7 @@ fun Instant.formatRelative(
 context(locale: AppLocale, timeZone: TimeZone)
 fun Instant.formatInterval(
     to: Instant,
-    format: DateTimeFormat
+    format: DateTimeIntervalFormat
 ): String = formatInterval(to, format, timeZone, locale)
 
 /**
@@ -161,6 +164,28 @@ fun Instant.formatInterval(
 context(locale: AppLocale, timeZone: TimeZone)
 fun Instant.formatInterval(
     to: Instant,
-    block: DateTimeFormatBuilder.() -> Unit
+    block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
 ): String = formatInterval(to, timeZone, locale, block)
+
+context(locale: AppLocale, timeZone: TimeZone)
+fun OpenEndRange<Instant>.format(
+    format: DateTimeIntervalFormat,
+) = formatInterval(
+    from = this.start,
+    to = this.endExclusive,
+    format = format,
+    timeZone = timeZone,
+    locale = locale,
+)
+
+context(locale: AppLocale, timeZone: TimeZone)
+fun OpenEndRange<Instant>.format(
+    block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
+) = formatInterval(
+    from = this.start,
+    to = this.endExclusive,
+    format = DateTimeIntervalFormat(block),
+    timeZone = timeZone,
+    locale = locale,
+)
 

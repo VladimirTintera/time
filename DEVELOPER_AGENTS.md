@@ -1,46 +1,54 @@
 # Developer Agents Setup
 
-This repository incorporates automated AI agents designed to help maintain documentation, tests, and the project's README. The instructions for these agents are stored in the `.agents/` directory as Markdown documents.
+This repository incorporates a single, consolidated AI agent designed to help maintain documentation, tests, context-receiver wrappers, and the project's README. The instructions for this agent are stored in the `.agents/` directory.
 
-## Available Agents
+## Consolidated Agent: Time Maintainer
 
-1. **Documentation Agent** ([documentation_agent.md](file:///Users/vladimirtintera/Develop/time-dev/.agents/documentation_agent.md))
-   - **Role**: Automatically generates and updates KDocs in English for all public classes, members, properties, and functions.
-   - **Goal**: Keep all public APIs 100% documented with clear, active-voice descriptions, parameter explanations, return types, and throws.
+The **Time Maintainer Agent** ([time_maintainer.md](file:///Users/vladimirtintera/Develop/time-dev/.agents/time_maintainer.md)) consolidates all repository maintenance tasks. Having a single agent prevent conflicts, improves context utilization, and ensures that documentation, tests, and context receivers remain fully synchronized.
 
-2. **README Agent** ([readme_agent.md](file:///Users/vladimirtintera/Develop/time-dev/.agents/readme_agent.md))
-   - **Role**: Maintains and regenerates the project's main `README.md`.
-   - **Goal**: Keep the documentation and usage examples up-to-date and compileable by cross-referencing real library APIs.
+### Core Skills
 
-3. **Testing Agent** ([testing_agent.md](file:///Users/vladimirtintera/Develop/time-dev/.agents/testing_agent.md))
+1. **KDoc Documentation Automator**
+   - **Role**: Automatically generates and updates KDocs in English for all public Kotlin declarations.
+   - **Goal**: Ensure all public APIs are documented with clear, active-voice descriptions, parameter explanations, return types, and compileable usage examples.
+
+2. **README Maintainer**
+   - **Role**: Maintains and updates the project's main `README.md`.
+   - **Goal**: Keep all README examples, Gradle configurations, and module descriptions up-to-date and syntactically correct.
+
+3. **Test Coverage Engineer**
    - **Role**: Manages and creates unit tests under `commonTest`.
-   - **Goal**: Guarantee that all public functions are covered by multiplatform unit tests using the standard `kotlin.test` framework.
+   - **Goal**: Guarantee that all public APIs are covered by multiplatform unit tests using the standard `kotlin.test` framework.
 
-4. **Context Integration Agent** ([context_agent.md](file:///Users/vladimirtintera/Develop/time-dev/.agents/context_agent.md))
-   - **Role**: Automatically generates context-receiver wrappers in the context-aware modules for public functions dependent on regional parameters (`AppLocale`, `TimeZone`).
-   - **Goal**: Keep the `:time:core-context` and `:time:format-context` modules in sync with `:time:core` and `:time:format` public APIs.
+4. **Context Integrator**
+   - **Role**: Scans standard codebase modules for configuration-dependent public functions (using `AppLocale` or `TimeZone`) and ensures their context-receiver wrappers are generated and maintained in the context-aware modules.
 
 ---
 
-## How to Run the Agents
+## How to Run the Agent
 
 ### 1. In Antigravity / Gemini Code Assistant Sessions
-You can invoke these agents directly in an active coding assistant session.
-- **Documentation**: Ask the assistant to invoke the Documentation Agent using the instructions in `.agents/documentation_agent.md` to document the codebase.
-- **Testing**: Ask the assistant to invoke the Testing Agent using `.agents/testing_agent.md` to scan the library and write missing unit tests.
-- **README**: Ask the assistant to invoke the README Agent using `.agents/readme_agent.md` to update the `README.md`.
+You can invoke the consolidated agent directly in an active coding assistant session by utilizing the subagent type:
+- **TypeName**: `time_maintainer`
+- **Role**: `Time Maintainer`
+
+#### Example Prompt to Run All Tasks:
+> "Run the `time_maintainer` agent to scan the codebase, verify that all public functions are documented with correct KDocs, ensure all context receiver wrappers are present and documented, and verify that the README examples match the current APIs."
+
+#### Example Prompt to Run a Single Skill (e.g. Test Coverage):
+> "Run the `time_maintainer` agent with the **Test Coverage Engineer** skill to inspect the `:time:core` module and add unit tests for any untested public calculations."
 
 ### 2. In Cursor or Cline
-If you use Cursor or Cline, you can link these markdown files as rules:
-- In Cursor, configure your rules settings to point to `.agents/` or copy the contents into `.cursorrules` / `.cursor/rules`.
+If you use Cursor or Cline, you can link the markdown file as a rule:
+- In Cursor, configure your settings to point to `.agents/time_maintainer.md` or copy its contents into `.cursorrules` / `.cursor/rules`.
 - In Cline, copy the instructions into `.clinerules`.
 
 ---
 
-## Testing Setup
-All library modules have been configured with the `commonTest` source set. You can run all multiplatform tests across modules using the Gradle command:
+## Verification Setup
+You can run all multiplatform tests across modules using the Gradle command:
 ```bash
-./gradlew allTests
+./gradlew jvmTest
 ```
 Or build the project to verify configuration:
 ```bash

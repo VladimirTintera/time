@@ -20,4 +20,4 @@ actual val currentLocale: AppLocale
     get() = Locale.getDefault()
 actual fun availableLocales(): List<AppLocale> = Locale.getAvailableLocales().toList()
 
-actual fun localeForLanguageTag(tag: String): AppLocale = Locale.forLanguageTag(tag)
+actual fun localeForLanguageTag(tag: String): AppLocale = Locale.forLanguageTag(tag.replace("_", "-"))

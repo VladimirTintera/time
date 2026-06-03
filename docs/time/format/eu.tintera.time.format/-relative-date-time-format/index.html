@@ -34,7 +34,7 @@
 <div class="root">
     <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
 <a class="library-name--link" href="../../../../index.html" tabindex="1">
-                    Ecosystem
+                    KMPTime
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
@@ -76,7 +76,7 @@
                 <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
                     <div class="dropdown--header">
                             <span>
-                                    Ecosystem
+                                    KMPTime
                             </span>
                         <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
                             <i class="ui-kit-icon ui-kit-icon_cross"></i>
@@ -93,114 +93,24 @@
   <div class="breadcrumbs"><a href="../../index.html">format</a><span class="delimiter">/</span><a href="../index.html">eu.tintera.time.format</a><span class="delimiter">/</span><span class="current">RelativeDateTimeFormat</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Relative</span><wbr><span>Date</span><wbr><span>Time</span><wbr><span><span>Format</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">RelativeDateTimeFormat</a></div><p class="paragraph">Configuration for formatting relative date-time differences (e.g., "3 days ago", "in 2 hours").</p><p class="paragraph">Each unit can have an optional <a href="../-unit-threshold/index.html">UnitThreshold</a> specifying when it should start being used.</p><p class="paragraph">Example:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val format = RelativeDateTimeFormat {<br>    style = FormatStyle.Full<br>    days(2)<br>}</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><h4 class="tableheader">Inheritors</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><a href="../-relative-date-time-format-builder/index.html">RelativeDateTimeFormatBuilder</a></div></span></div><div></div></div></div></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">RelativeDateTimeFormat</a></div><p class="paragraph">Configuration for formatting relative date-time differences (e.g., "3 days ago", "in 2 hours").</p><p class="paragraph">Each unit can have an optional <a href="../-unit-threshold/index.html">UnitThreshold</a> specifying when it should start being used.</p><p class="paragraph">Example:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val format = RelativeDateTimeFormat {<br>    style = FormatStyle.Full<br>    days(2)<br>}</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
-      <div data-togglable="PROPERTY">
-        <h2 class="tableheader">Properties</h2>
-        <div class="table"><a data-name="522991679%2FProperties%2F1501674941" anchor-label="days" id="522991679%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="2047566763%2FClasslikes%2F1501674941" anchor-label="Companion" id="2047566763%2FClasslikes%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
           <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
-                  <div><a href="days.html"><span><span>days</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="522991679%2FProperties%2F1501674941"></span>
+                  <div><a href="-companion/index.html"><span><span>Companion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2047566763%2FClasslikes%2F1501674941"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="days.html">days</a><span class="token operator">: </span><a href="../-unit-threshold/index.html">UnitThreshold</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Threshold for formatting differences in days. If null, days are not used.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1815213493%2FProperties%2F1501674941" anchor-label="hours" id="1815213493%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="hours.html"><span><span>hours</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1815213493%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="hours.html">hours</a><span class="token operator">: </span><a href="../-unit-threshold/index.html">UnitThreshold</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Threshold for formatting differences in hours. If null, hours are not used.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1141234725%2FProperties%2F1501674941" anchor-label="minutes" id="1141234725%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="minutes.html"><span><span>minutes</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1141234725%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="minutes.html">minutes</a><span class="token operator">: </span><a href="../-unit-threshold/index.html">UnitThreshold</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Threshold for formatting differences in minutes. If null, minutes are not used.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="703260643%2FProperties%2F1501674941" anchor-label="months" id="703260643%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="months.html"><span><span>months</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="703260643%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="months.html">months</a><span class="token operator">: </span><a href="../-unit-threshold/index.html">UnitThreshold</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Threshold for formatting differences in months. If null, months are not used.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1140998789%2FProperties%2F1501674941" anchor-label="seconds" id="1140998789%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="seconds.html"><span><span>seconds</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1140998789%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="seconds.html">seconds</a><span class="token operator">: </span><a href="../-unit-threshold/index.html">UnitThreshold</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Threshold for formatting differences in seconds. If null, seconds are not used.</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="-1817708205%2FProperties%2F1501674941" anchor-label="style" id="-1817708205%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="style.html"><span><span>style</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1817708205%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="style.html">style</a><span class="token operator">: </span><a href="../-format-style/index.html">FormatStyle</a></div><div class="brief "><p class="paragraph">The style to use for formatting the unit names (full, short, narrow).</p></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="171301582%2FProperties%2F1501674941" anchor-label="years" id="171301582%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
-          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="years.html"><span><span>years</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="171301582%2FProperties%2F1501674941"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="years.html">years</a><span class="token operator">: </span><a href="../-unit-threshold/index.html">UnitThreshold</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Threshold for formatting differences in years. If null, years are not used.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">object </span><a href="-companion/index.html">Companion</a></div></div></div>
                 </div>
               </div>
             </div>

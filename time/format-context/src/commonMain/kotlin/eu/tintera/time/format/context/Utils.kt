@@ -68,7 +68,6 @@ fun DayOfWeek.formatName(
  * }
  * ```
  *
- * @param locale The [AppLocale] to resolve the decimal separator for.
  * @return The decimal separator string (e.g., "." or ",").
  */
 context(locale: AppLocale)

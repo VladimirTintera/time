@@ -66,5 +66,9 @@ kotlin {
         jvmMain.dependencies {
             implementation(libs.icu4j)
         }
+
+        webTest.dependencies {
+            implementation(npm("@js-joda/timezone", "2.25.1"))
+        }
     }
 }

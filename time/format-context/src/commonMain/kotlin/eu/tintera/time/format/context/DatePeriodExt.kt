@@ -2,7 +2,7 @@ package eu.tintera.time.format.context
 
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.format.DatePeriodFormat
-import eu.tintera.time.format.DatePeriodFormatBuilder
+import eu.tintera.time.format.DatePeriodFormatScope
 import eu.tintera.time.format.format
 import eu.tintera.time.format.formatCalendar
 import kotlinx.datetime.DatePeriod
@@ -55,6 +55,6 @@ fun DatePeriod.format(
  */
 context(locale: AppLocale)
 fun DatePeriod.formatCalendar(
-    block: DatePeriodFormatBuilder.() -> Unit
+    block: DatePeriodFormatScope.() -> Unit = DatePeriodFormatScope.defaultConfig
 ): String = formatCalendar(locale, block)
 
