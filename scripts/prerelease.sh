@@ -92,24 +92,51 @@ else
     git branch -D sync-release
 fi
 
+# Načtení verze z gradle.properties
+VERSION_PROP=$(grep "^version=" gradle.properties | cut -d'=' -f2)
+RELEASE_VERSION=${VERSION_PROP%-SNAPSHOT}
+
 echo ""
 echo "========================================================================="
 echo "🎉 PRERELEASE FÁZE BYLA ÚSPĚŠNĚ DOKONČENA!"
 echo "========================================================================="
 echo "Kód a vygenerovaná dokumentace byly úspěšně zrcadleny do public repozitáře."
 echo ""
-echo "Pro dokončení celého RELEASE procesu můžeš provést následující kroky:"
-echo "1. Ověř, že web demo funguje a dokumentace se zobrazuje správně:"
-echo "   - Demo: https://vladimirtintera.github.io/time/demo/"
-echo "   - Dokumentace: https://vladimirtintera.github.io/time/"
-echo ""
-echo "2. Vytvoř a odešli git tag přímo z tohoto adresáře:"
-echo "   git fetch public"
-echo "   git tag -a v1.0.0 public/main -m \"Release v1.0.0\""
-echo "   git push public v1.0.0"
-echo "   (Nahraď 'v1.0.0' požadovanou verzí)"
-echo ""
-echo "3. Vytvoř oficiální GitHub Release pro stažení a zobrazení v seznamu releasů:"
-echo "   Otevři URL: https://github.com/VladimirTintera/time/releases/new?tag=v1.0.0"
+
+# 8. Automatické tagování a push
+echo -n "❓ Chceš automaticky vytvořit a odeslat git tag 'v$RELEASE_VERSION' do public repozitáře? [y/N]: "
+read -r choice
+if [[ "$choice" =~ ^[Yy]$ ]]; then
+    echo "🏷️ Vytvářím a odesílám git tag 'v$RELEASE_VERSION'..."
+    git fetch public
+    # Odstraníme lokální tag, pokud by náhodou existoval z dřívějška
+    git tag -d "v$RELEASE_VERSION" 2>/dev/null || true
+    git tag -a "v$RELEASE_VERSION" public/main -m "Release v$RELEASE_VERSION"
+    git push public "v$RELEASE_VERSION"
+    echo "✅ Tag 'v$RELEASE_VERSION' byl úspěšně vytvořen a odeslán do public repozitáře."
+    
+    # 9. Pokus o vytvoření GitHub Release pomocí gh CLI
+    echo ""
+    if command -v gh &> /dev/null; then
+        echo "🌐 Detekován GitHub CLI (gh). Pokouším se vytvořit GitHub Release..."
+        # Získáme posledních 10 commitů pro jednoduchý changelog
+        CHANGELOG=$(git log --oneline -n 10 public/main)
+        if gh release create "v$RELEASE_VERSION" --repo VladimirTintera/time --title "Release v$RELEASE_VERSION" --notes "$CHANGELOG"; then
+            echo "✅ GitHub Release 'v$RELEASE_VERSION' byl úspěšně vytvořen!"
+        else
+            echo "❌ Nepodařilo se vytvořit GitHub Release přes CLI (možná chybí přihlášení 'gh auth login')."
+            echo "Odkaz pro ruční vytvoření:"
+            echo "👉 https://github.com/VladimirTintera/time/releases/new?tag=v$RELEASE_VERSION"
+        fi
+    else
+        echo "ℹ️ Pokud si nainstaluješ GitHub CLI (brew install gh && gh auth login), příště se vytvoří i GitHub Release automaticky."
+        echo "Odkaz pro ruční vytvoření Release:"
+        echo "👉 https://github.com/VladimirTintera/time/releases/new?tag=v$RELEASE_VERSION"
+    fi
+else
+    echo "⏭️ Vytvoření tagu přeskočeno."
+    echo "Odkaz pro ruční vytvoření Release:"
+    echo "👉 https://github.com/VladimirTintera/time/releases/new?tag=v$RELEASE_VERSION"
+fi
 echo "========================================================================="
 echo ""
