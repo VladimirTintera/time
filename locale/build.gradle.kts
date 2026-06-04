@@ -8,6 +8,9 @@ plugins {
     alias(libs.plugins.dokka)
 }
 
+group = "eu.tintera.locale"
+version = rootProject.version
+
 kotlin {
 
     compilerOptions {
@@ -59,3 +62,5 @@ kotlin {
         }
     }
 }
+
+apply(from = rootProject.file("gradle/publish.gradle.kts"))
