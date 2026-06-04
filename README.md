@@ -54,12 +54,12 @@ kotlin {
         commonMain.dependencies {
             // Core formatting and locale module
             implementation("eu.tintera.locale:locale:x.y.z")
-            implementation("eu.tintera.time:core:x.y.z")
-            implementation("eu.tintera.time:format:x.y.z")
+            implementation("eu.tintera.time:time-core:x.y.z")
+            implementation("eu.tintera.time:time-format:x.y.z")
             
             // Optional: Context-aware modules (requires Kotlin 2.2+)
-            implementation("eu.tintera.time:core-context:x.y.z")
-            implementation("eu.tintera.time:format-context:x.y.z")
+            implementation("eu.tintera.time:time-core-context:x.y.z")
+            implementation("eu.tintera.time:time-format-context:x.y.z")
         }
     }
 }

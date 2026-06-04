@@ -55,7 +55,7 @@ Your goal is to maintain the root [README.md](file:///Users/vladimirtintera/Deve
 
 ### Rules & Steps:
 1. **API Verification**: Check the actual Kotlin files to verify class names, package names, modules, and signatures before writing examples in the README.
-2. **Setup Instructions**: Keep the installation guide, modules table, and dependency declarations accurate.
+2. **Setup Instructions**: Keep the installation guide, modules table, and dependency declarations accurate. Specifically, ensure that correct Maven coordinates are used: `eu.tintera.locale:locale`, `eu.tintera.time:time-core`, `eu.tintera.time:time-format`, `eu.tintera.time:time-core-context`, and `eu.tintera.time:time-format-context`.
 3. **Usage Examples**: Provide realistic, copy-pasteable, and compileable examples for date/time formatting, interval formatting, relative time, stopwatch formats, calendar arithmetic, and context-receiver use cases.
 4. **Experimental Flags**: Clearly document the requirement to enable `-Xcontext-parameters` in `build.gradle.kts` for context-receiver modules.
 5. **API Documentation Link**: Ensure that the README contains a prominent link to the full generated API documentation hosted at `https://vladimirtintera.github.io/time/`.
