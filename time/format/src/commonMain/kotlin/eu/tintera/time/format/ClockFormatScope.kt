@@ -45,7 +45,7 @@ open class ClockFormatScope internal constructor() {
     internal fun fullAuto() = full(UnitVisibility.Auto)
     internal fun fullRequired() = full(UnitVisibility.Required)
 
-    internal fun isEmpty() = hours == null && minutes == null && seconds == null
+    fun isEmpty() = hours == null && minutes == null && seconds == null
 
     companion object {
         /**

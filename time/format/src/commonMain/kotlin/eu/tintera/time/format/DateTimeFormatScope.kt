@@ -27,7 +27,7 @@ class DateTimeFormatScope<T : Any, TDate : Any, TTime : Any> internal constructo
         dateTimeFormat.block(this)
     }
 
-    internal fun cldrSkeleton(): String = buildString {
+    fun cldrSkeleton(): String = buildString {
         dateFormatScope.cldrSkeleton().takeIf { it.isNotEmpty() }?.also { append(it) }
         timeFormatScope.cldrSkeleton().takeIf { it.isNotEmpty() }?.also { append(it) }
     }

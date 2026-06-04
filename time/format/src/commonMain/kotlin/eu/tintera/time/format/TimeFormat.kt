@@ -4,18 +4,50 @@ import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
 import kotlinx.datetime.LocalTime
 
+/**
+ * Encapsulates a formatting configuration for time values.
+ *
+ * Example:
+ * ```kotlin
+ * val format = TimeFormat {
+ *     hour = HourFormat.Auto.Numeric
+ *     minute = MinuteFormat.Padded
+ * }
+ * ```
+ *
+ * @param block The configuration block applied to the [TimeFormatScope] of [LocalTime].
+ */
 class TimeFormat internal constructor(
     block: TimeFormatScope<LocalTime>.() -> Unit
 ) : BaseTimeFormat<LocalTime>(block) {
     companion object {
+        /**
+         * Creates a [TimeFormat] using the specified configuration block.
+         *
+         * Example:
+         * ```kotlin
+         * val format = TimeFormat {
+         *     short()
+         * }
+         * ```
+         *
+         * @param block The configuration block applied to the [TimeFormatScope] of [LocalTime].
+         * @return A new [BaseTimeFormat] instance.
+         */
         operator fun invoke(
             block: TimeFormatScope<LocalTime>.() -> Unit = TimeFormatScope.defaultConfig()
         ): BaseTimeFormat<LocalTime> = TimeFormat(block)
     }
 }
 
+/**
+ * Base configuration class for localized time formatting configurations.
+ *
+ * @param T The type of value being formatted.
+ * @param block The configuration block applied to [TimeFormatScope].
+ */
 abstract class BaseTimeFormat<T : Any> internal constructor(
-    internal val block: TimeFormatScope<T>.() -> Unit
+    val block: TimeFormatScope<T>.() -> Unit
 )
 
 
@@ -110,7 +142,7 @@ class TimeFormatScope<T : Any> internal constructor(
         second = SecondFormat.Padded
     }
 
-    internal fun cldrSkeleton(): String = buildString {
+    fun cldrSkeleton(): String = buildString {
 
         when (periodStyle) {
             DayPeriodStyle.Required -> {
@@ -143,7 +175,7 @@ class TimeFormatScope<T : Any> internal constructor(
         }
     }
 
-    internal fun isEmpty() = hour == null && minute == null && second == null
+    fun isEmpty() = hour == null && minute == null && second == null
 
     companion object {
         /**

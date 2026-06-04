@@ -33,7 +33,7 @@ class DatePeriodFormatScope internal constructor(
 
     fun fullRequired() = full(UnitVisibility.Required)
 
-    internal fun isEmpty() = years == null && months == null && days == null
+    fun isEmpty() = years == null && months == null && days == null
 
 
     companion object {

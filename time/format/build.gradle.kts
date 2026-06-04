@@ -54,8 +54,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.kotlinx.datetime)
-            implementation(projects.locale)
-            implementation(projects.time.core)
+            api(projects.locale)
+            api(projects.time.core)
         }
 
         commonTest.dependencies {

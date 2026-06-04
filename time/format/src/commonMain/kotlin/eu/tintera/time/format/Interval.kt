@@ -146,6 +146,36 @@ fun defaultDifferentDateTimeCombiner() = DifferentDateTimeCombiner { interval, _
     interval.format()
 }
 
+/**
+ * Formats a time interval between two instants into a localized string using combiners for different date/time scenarios.
+ *
+ * Example:
+ * ```kotlin
+ * val start = Instant.parse("2024-01-01T10:00:00Z")
+ * val end = Instant.parse("2024-01-01T12:00:00Z")
+ * val format = DateTimeIntervalFormat { time { short() } }
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = formatInterval(
+ *     from = start,
+ *     to = end,
+ *     format = format,
+ *     locale = myLocale,
+ *     timeZone = TimeZone.UTC
+ * )
+ * // formatted will be "10:00 AM – 12:00 PM"
+ * ```
+ *
+ * @param from The start instant of the interval.
+ * @param to The end instant of the interval.
+ * @param format The format to use for formatting individual date-times.
+ * @param locale The [AppLocale] to use.
+ * @param timeZone The time zone in which the interval is formatted.
+ * @param onSameDate The combiner logic when both instants fall on the same date.
+ * @param onSameMonth The combiner logic when both instants fall in the same month of the same year.
+ * @param onSameYear The combiner logic when both instants fall in the same year.
+ * @param onDifferentDate The combiner logic when instants fall on different dates.
+ * @return The formatted localized interval string.
+ */
 fun formatInterval(
     from: Instant,
     to: Instant,

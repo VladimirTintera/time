@@ -18,7 +18,7 @@ import kotlinx.datetime.LocalDateTime
  * ```
  */
 class RelativeDateTimeFormat internal constructor(
-    internal val block: RelativeDateTimeFormatScope.() -> Unit = RelativeDateTimeFormatScope.defaultConfig
+    val block: RelativeDateTimeFormatScope.() -> Unit = RelativeDateTimeFormatScope.defaultConfig
 ) {
    companion object {
        operator fun invoke(

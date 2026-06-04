@@ -11,7 +11,7 @@ package eu.tintera.time.format
  * ```
  */
 class DurationDigitalFormat internal constructor(
-    internal val block: DurationDigitalFormatScope.() -> Unit
+    val block: DurationDigitalFormatScope.() -> Unit
 ) {
     companion object {
         operator fun invoke(

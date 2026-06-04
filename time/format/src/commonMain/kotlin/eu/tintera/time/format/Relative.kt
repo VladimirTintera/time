@@ -12,11 +12,19 @@ import kotlin.math.roundToInt
 import kotlin.time.DurationUnit
 import kotlin.time.Instant
 
+/**
+ * Holds target and reference date-time values used during relative date-time formatting.
+ *
+ * @property target The target date-time to represent.
+ * @property now The reference "now" date-time.
+ */
 data class RelativeValues(
     val target: LocalDateTime,
     val now: LocalDateTime
 ) {
+    /** True if [target] is before [now]. */
     val isPast: Boolean get() = target < now
+    /** True if [target] is after [now]. */
     val isFuture: Boolean get() = target > now
 }
 

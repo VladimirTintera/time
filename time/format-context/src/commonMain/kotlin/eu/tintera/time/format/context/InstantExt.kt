@@ -167,6 +167,27 @@ fun Instant.formatInterval(
     block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
 ): String = formatInterval(to, timeZone, locale, block)
 
+/**
+ * Formats this range of [Instant] into a localized interval string.
+ *
+ * This function is context-aware and automatically uses the implicit [AppLocale] and
+ * [TimeZone] contexts to resolve formatting.
+ *
+ * Example:
+ * ```kotlin
+ * val start = Instant.parse("2024-01-01T10:00:00Z")
+ * val end = Instant.parse("2024-01-01T12:00:00Z")
+ * val range = start..<end
+ * val format = DateTimeIntervalFormat { time { short() } }
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = withRegionalContext(TimeZone.UTC, myLocale) {
+ *     range.format(format)
+ * }
+ * ```
+ *
+ * @param format The [DateTimeIntervalFormat] configuration to apply.
+ * @return The formatted interval string.
+ */
 context(locale: AppLocale, timeZone: TimeZone)
 fun OpenEndRange<Instant>.format(
     format: DateTimeIntervalFormat,
@@ -178,6 +199,28 @@ fun OpenEndRange<Instant>.format(
     locale = locale,
 )
 
+/**
+ * Formats this range of [Instant] into a localized interval string using a DSL-configured format.
+ *
+ * This function is context-aware and automatically uses the implicit [AppLocale] and
+ * [TimeZone] contexts to resolve formatting.
+ *
+ * Example:
+ * ```kotlin
+ * val start = Instant.parse("2024-01-01T10:00:00Z")
+ * val end = Instant.parse("2024-01-01T12:00:00Z")
+ * val range = start..<end
+ * val myLocale = localeForLanguageTag("en-US")
+ * val formatted = withRegionalContext(TimeZone.UTC, myLocale) {
+ *     range.format {
+ *         time { short() }
+ *     }
+ * }
+ * ```
+ *
+ * @param block The DSL block for configuring the [DateTimeIntervalFormat].
+ * @return The formatted interval string.
+ */
 context(locale: AppLocale, timeZone: TimeZone)
 fun OpenEndRange<Instant>.format(
     block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()

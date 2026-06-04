@@ -61,8 +61,8 @@ Your goal is to draft clean, professional release notes based on the commits in 
    git log --oneline -n 15
    ```
 2. **Categorize and Clean**: Group changes into standard categories:
-   - 🚀 **Features** (Novinky)
-   - 🐛 **Bug Fixes** (Opravy chyb)
-   - 📝 **Documentation** (Dokumentace)
-   - ⚙️ **Refactoring & Maintenance** (Úklid a údržba)
-3. **Format**: Present the drafted changelog in English (or Czech as preferred by the developer) in a markdown code block, ready to be copy-pasted into the GitHub Release description.
+   - 🚀 **Features**
+   - 🐛 **Bug Fixes**
+   - 📝 **Documentation**
+   - ⚙️ **Refactoring & Maintenance**
+3. **Format**: Present the drafted changelog in English in a markdown code block, ready to be copy-pasted into the GitHub Release description.

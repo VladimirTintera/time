@@ -278,17 +278,19 @@ fun OpenEndRange<LocalDateTime>.slice(
 }
 
 /**
- * Finds the interval in which this [LocalDateTime] lies, according to the specified [DateTimePeriod].
+ * Finds the interval in which this [LocalDateTime] lies, according to the specified [DateTimePeriod] and [anchor] point.
  *
  * Example:
  * ```kotlin
  * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
  * val period = DateTimePeriod(hours = 2)
+ * val anchor = LocalDateTime(2025, 4, 15, 10, 0)
  * val tz = TimeZone.UTC
- * val interval = ldt.findInterval(period, tz)
+ * val interval = ldt.findInterval(period, anchor, tz)
  * ```
  *
  * @param period The period defining the interval grid.
+ * @param anchor The start date-time anchor of the interval grid.
  * @param timeZone The time zone in which the calculation is performed.
  * @return The interval containing this date-time, or null if it cannot be determined.
  */
@@ -387,7 +389,7 @@ fun LocalDateTime.findInterval(
 }
 
 /**
- * Finds the time-based interval of the specified [Duration] that contains this [LocalDateTime].
+ * Finds the time-based interval of the specified [Duration] and [anchor] point that contains this [LocalDateTime].
  *
  * Example:
  * ```kotlin
@@ -395,11 +397,13 @@ fun LocalDateTime.findInterval(
  *
  * val ldt = LocalDateTime(2025, 4, 15, 12, 0)
  * val duration = 2.hours
+ * val anchor = LocalDateTime(2025, 4, 15, 10, 0)
  * val tz = TimeZone.UTC
- * val interval = ldt.findTimeInterval(duration, tz)
+ * val interval = ldt.findTimeInterval(duration, anchor, tz)
  * ```
  *
  * @param duration The duration defining the grid size.
+ * @param anchor The start date-time anchor of the interval grid.
  * @param timeZone The time zone in which the calculation is performed.
  * @return The interval containing this date-time.
  * @throws IllegalArgumentException if [duration] is zero.

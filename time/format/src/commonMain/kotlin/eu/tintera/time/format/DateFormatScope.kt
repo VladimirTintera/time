@@ -115,9 +115,9 @@ class DateFormatScope<T : Any> internal constructor(
         weekDay = WeekDayFormat.FullName // Tohle dělá "Full" skutečným Fullem
     }
 
-    internal fun isEmpty() = weekDay == null && day == null && month == null && year == null
+    fun isEmpty() = weekDay == null && day == null && month == null && year == null
 
-    internal fun cldrSkeleton() = buildString {
+    fun cldrSkeleton() = buildString {
         weekDay?.let { append(it.pattern) }
         day?.let { append(it.pattern) }
         month?.let { append(it.pattern) }
