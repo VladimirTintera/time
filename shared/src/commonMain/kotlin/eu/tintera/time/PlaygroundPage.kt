@@ -1,25 +1,26 @@
 package eu.tintera.time
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import eu.tintera.locale.*
-import eu.tintera.time.core.*
+import eu.tintera.locale.AppLocale
+import eu.tintera.locale.displayName
+import eu.tintera.locale.languageTag
+import eu.tintera.locale.localeForLanguageTag
+import eu.tintera.time.core.SequenceDirection
 import eu.tintera.time.core.context.*
+import eu.tintera.time.core.periodDays
 import eu.tintera.time.format.*
 import eu.tintera.time.format.context.*
 import kotlinx.datetime.*
 import kotlin.time.Clock
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -88,7 +89,7 @@ fun DateTimePickerButton(
         }
     }
 
-    Row(
+    FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -116,7 +117,7 @@ fun DateTimePickerCard(
     onDateTimeChange: (LocalDateTime) -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
         )
@@ -181,13 +182,17 @@ fun CopyableCodeCard(
     code: String
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.2f)
         )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text("Kotlin DSL code:", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
+            Text(
+                "Kotlin DSL code:",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
             Spacer(modifier = Modifier.height(4.dp))
             SelectionContainer {
                 Text(
@@ -195,6 +200,53 @@ fun CopyableCodeCard(
                     style = MaterialTheme.typography.bodySmall,
                     fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
                 )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropdownSelector(
+    label: String,
+    value: String,
+    options: List<String>,
+    onValueChange: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        if (label.isNotEmpty()) {
+            Text(label, style = MaterialTheme.typography.bodyMedium)
+        }
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = it }
+        ) {
+            OutlinedTextField(
+                value = value,
+                onValueChange = {},
+                readOnly = true,
+                modifier = Modifier.width(160.dp).menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, true),
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                textStyle = MaterialTheme.typography.bodyMedium
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                options.forEach { option ->
+                    DropdownMenuItem(
+                        text = { Text(option) },
+                        onClick = {
+                            onValueChange(option)
+                            expanded = false
+                        }
+                    )
+                }
             }
         }
     }
@@ -222,7 +274,7 @@ fun FormattingPlayground() {
     var customMinute by remember { mutableStateOf("Padded") }
     var customSecond by remember { mutableStateOf("Padded") }
     var customFractionalSecond by remember { mutableStateOf("None") }
-    var customPeriodStyle by remember { mutableStateOf("Auto") }
+    var customPeriodStyle by remember { mutableStateOf("None") }
 
     val formattedResult = remember(
         dateTime, dateStyle, customWeekday, customDay, customMonth, customYear,
@@ -335,7 +387,7 @@ fun FormattingPlayground() {
                     if (customMinute != "None") append("        minute = MinuteFormat.$customMinute\n")
                     if (customSecond != "None") append("        second = SecondFormat.$customSecond\n")
                     if (customFractionalSecond != "None") append("        fractionalSecond = FractionalSecondFormat.$customFractionalSecond\n")
-                    if (customPeriodStyle != "Auto") append("        periodStyle = DayPeriodStyle.$customPeriodStyle\n")
+                    if (customPeriodStyle != "None") append("        periodStyle = DayPeriodStyle.$customPeriodStyle\n")
                 }
             }
             append("    }\n")
@@ -343,136 +395,165 @@ fun FormattingPlayground() {
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 340.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        DateTimePickerCard("Select input Date and Time", dateTime) { dateTime = it }
+        item {
+            DateTimePickerCard("Select input Date and Time", dateTime) { dateTime = it }
+        }
 
         // Live Output Panel
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-                Text("Formatted output:", style = MaterialTheme.typography.titleMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-                SelectionContainer {
-                    Text(
-                        text = formattedResult,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+        item {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+                )
+            ) {
+                Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+                    Text("Formatted output:", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SelectionContainer {
+                        Text(
+                            text = formattedResult,
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
         }
 
         // Date Controls Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Date format settings", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf("Full", "Long", "Medium", "Short", "Custom").forEach { style ->
-                        FilterChip(
-                            selected = dateStyle == style,
-                            onClick = { dateStyle = style },
-                            label = { Text(style) }
-                        )
-                    }
-                }
+        item {
+            Card(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Date format settings",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
 
-                if (dateStyle == "Custom") {
-                    HorizontalDivider()
-                    Text("Custom date details:", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
-                    
-                    DropdownSelector(label = "Weekday", value = customWeekday, options = listOf("None", "FullName", "ShortName")) { customWeekday = it }
-                    DropdownSelector(label = "Day", value = customDay, options = listOf("None", "Numeric", "Padded")) { customDay = it }
-                    DropdownSelector(label = "Month", value = customMonth, options = listOf("None", "Name.Full", "Name.Short", "Digital.Numeric", "Digital.Padded")) { customMonth = it }
-                    DropdownSelector(label = "Year", value = customYear, options = listOf("None", "FourDigits", "TwoDigits")) { customYear = it }
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        listOf("Full", "Long", "Medium", "Short", "Custom").forEach { style ->
+                            FilterChip(
+                                selected = dateStyle == style,
+                                onClick = { dateStyle = style },
+                                label = { Text(style, style = MaterialTheme.typography.labelSmall) }
+                            )
+                        }
+                    }
+
+                    if (dateStyle == "Custom") {
+                        HorizontalDivider()
+                        Text(
+                            "Custom date details:",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+
+                        DropdownSelector(
+                            label = "Weekday",
+                            value = customWeekday,
+                            options = listOf("None", "FullName", "ShortName")
+                        ) { customWeekday = it }
+                        DropdownSelector(
+                            label = "Day",
+                            value = customDay,
+                            options = listOf("None", "Numeric", "Padded")
+                        ) { customDay = it }
+                        DropdownSelector(
+                            label = "Month",
+                            value = customMonth,
+                            options = listOf("None", "Name.Full", "Name.Short", "Digital.Numeric", "Digital.Padded")
+                        ) { customMonth = it }
+                        DropdownSelector(
+                            label = "Year",
+                            value = customYear,
+                            options = listOf("None", "FourDigits", "TwoDigits")
+                        ) { customYear = it }
+                    }
                 }
             }
         }
 
         // Time Controls Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Time format settings", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+        item {
+            Card(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Time format settings",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
 
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf("Full", "Short", "Custom").forEach { style ->
-                        FilterChip(
-                            selected = timeStyle == style,
-                            onClick = { timeStyle = style },
-                            label = { Text(style) }
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        listOf("Full", "Short", "Custom").forEach { style ->
+                            FilterChip(
+                                selected = timeStyle == style,
+                                onClick = { timeStyle = style },
+                                label = { Text(style, style = MaterialTheme.typography.labelSmall) }
+                            )
+                        }
+                    }
+
+                    if (timeStyle == "Custom") {
+                        HorizontalDivider()
+                        Text(
+                            "Custom time details:",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary
                         )
+
+                        DropdownSelector(
+                            label = "Hour",
+                            value = customHour,
+                            options = listOf(
+                                "None",
+                                "Auto.Numeric",
+                                "Auto.Padded",
+                                "Digital24h.Numeric",
+                                "Digital24h.Padded",
+                                "Digital12.Numeric",
+                                "Digital12.Padded"
+                            )
+                        ) { customHour = it }
+                        DropdownSelector(
+                            label = "Minute",
+                            value = customMinute,
+                            options = listOf("None", "Numeric", "Padded")
+                        ) { customMinute = it }
+                        DropdownSelector(
+                            label = "Second",
+                            value = customSecond,
+                            options = listOf("None", "Numeric", "Padded")
+                        ) { customSecond = it }
+                        DropdownSelector(
+                            label = "Fractional Second",
+                            value = customFractionalSecond,
+                            options = listOf("None", "OneDigits", "TwoDigits", "ThreeDigits")
+                        ) { customFractionalSecond = it }
+                        DropdownSelector(
+                            label = "AM/PM (Period)",
+                            value = customPeriodStyle,
+                            options = listOf("None", "Required")
+                        ) { customPeriodStyle = it }
                     }
                 }
-
-                if (timeStyle == "Custom") {
-                    HorizontalDivider()
-                    Text("Custom time details:", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
-
-                    DropdownSelector(label = "Hour", value = customHour, options = listOf("None", "Auto.Numeric", "Auto.Padded", "Digital24h.Numeric", "Digital24h.Padded", "Digital12.Numeric", "Digital12.Padded")) { customHour = it }
-                    DropdownSelector(label = "Minute", value = customMinute, options = listOf("None", "Numeric", "Padded")) { customMinute = it }
-                    DropdownSelector(label = "Second", value = customSecond, options = listOf("None", "Numeric", "Padded")) { customSecond = it }
-                    DropdownSelector(label = "Fractional Second", value = customFractionalSecond, options = listOf("None", "OneDigits", "TwoDigits", "ThreeDigits")) { customFractionalSecond = it }
-                    DropdownSelector(label = "AM/PM (Period)", value = customPeriodStyle, options = listOf("Auto", "None", "Required")) { customPeriodStyle = it }
-                }
             }
         }
 
-        CopyableCodeCard(generatedCode)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DropdownSelector(
-    label: String,
-    value: String,
-    options: List<String>,
-    onValueChange: (String) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        if (label.isNotEmpty()) {
-            Text(label, style = MaterialTheme.typography.bodyMedium)
-        }
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = it }
-        ) {
-            OutlinedTextField(
-                value = value,
-                onValueChange = {},
-                readOnly = true,
-                modifier = Modifier.width(160.dp).menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, true),
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                textStyle = MaterialTheme.typography.bodyMedium
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                options.forEach { option ->
-                    DropdownMenuItem(
-                        text = { Text(option) },
-                        onClick = {
-                            onValueChange(option)
-                            expanded = false
-                        }
-                    )
-                }
-            }
+        item {
+            CopyableCodeCard(generatedCode)
         }
     }
 }
@@ -543,73 +624,101 @@ fun IntervalsPlayground() {
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 340.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Interval range", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                
-                DateTimePickerButton("Start:", startDateTime, { startDateTime = it })
-                DateTimePickerButton("End:  ", endDateTime, { endDateTime = it })
+        item {
+            Card {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Interval range",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-                
-                Text("Interval presets:", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = {
-                        endDateTime = startDateTime.plus(2.hours)
-                    }) { Text("Same day (+2h)") }
+                    DateTimePickerButton("Start:", startDateTime, { startDateTime = it })
+                    DateTimePickerButton("End:  ", endDateTime, { endDateTime = it })
 
-                    Button(onClick = {
-                        endDateTime = startDateTime.plus(5.periodDays)
-                    }) { Text("Same month (+5d)") }
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
-                    Button(onClick = {
-                        endDateTime = startDateTime.plus(DateTimePeriod(years = 1, months = 2))
-                    }) { Text("Different years (+1y 2m)") }
+                    Text(
+                        "Interval presets:",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Button(onClick = {
+                            endDateTime = startDateTime.plus(2.hours)
+                        }) { Text("Same day (+2h)") }
+
+                        Button(onClick = {
+                            endDateTime = startDateTime.plus(5.periodDays)
+                        }) { Text("Same month (+5d)") }
+
+                        Button(onClick = {
+                            endDateTime = startDateTime.plus(DateTimePeriod(years = 1, months = 2))
+                        }) { Text("Different years (+1y 2m)") }
+                    }
                 }
             }
         }
 
         // Live Output Panel
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-                Text("Formatted interval:", style = MaterialTheme.typography.titleMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-                SelectionContainer {
-                    Text(
-                        text = formattedInterval,
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+        item {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+                )
+            ) {
+                Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+                    Text("Formatted interval:", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SelectionContainer {
+                        Text(
+                            text = formattedInterval,
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
         }
 
         // Configuration Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Interval settings", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                
-                DropdownSelector(label = "Date Style", value = dateStyle, options = listOf("Full", "Long", "Medium", "Short")) { dateStyle = it }
-                DropdownSelector(label = "Time Style", value = timeStyle, options = listOf("Full", "Short", "None")) { timeStyle = it }
-                
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Custom behavior for same month (onSameMonth)", style = MaterialTheme.typography.bodyMedium)
-                    Switch(checked = useCustomCombiner, onCheckedChange = { useCustomCombiner = it })
+        item {
+            Card {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Interval settings",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    DropdownSelector(
+                        label = "Date Style",
+                        value = dateStyle,
+                        options = listOf("Full", "Long", "Medium", "Short")
+                    ) { dateStyle = it }
+                    DropdownSelector(
+                        label = "Time Style",
+                        value = timeStyle,
+                        options = listOf("Full", "Short", "None")
+                    ) { timeStyle = it }
+
+                    FlowRow(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            "Custom behavior for same month (onSameMonth)",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                        Switch(checked = useCustomCombiner, onCheckedChange = { useCustomCombiner = it })
+                    }
                 }
             }
         }
@@ -678,97 +787,140 @@ fun CoreCalculationsPlayground() {
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 340.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        DateTimePickerCard("Input time for calculations and rounding", dateTime) { dateTime = it }
+        item {
+            DateTimePickerCard("Input time for calculations and rounding", dateTime) { dateTime = it }
+        }
 
         // DateTimePeriod Editor
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Step (DateTimePeriod)", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                Text("Interval grid configuration for rounding and generation.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Spacer(modifier = Modifier.height(4.dp))
-                
-                PeriodStepper("Years", pYears) { pYears = it }
-                PeriodStepper("Months", pMonths) { pMonths = it }
-                PeriodStepper("Days", pDays) { pDays = it }
-                PeriodStepper("Hours", pHours) { pHours = it }
-                PeriodStepper("Minutes", pMinutes) { pMinutes = it }
-                PeriodStepper("Seconds", pSeconds) { pSeconds = it }
+        item {
+            Card(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "Step (DateTimePeriod)",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        "Interval grid configuration for rounding and generation.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    PeriodStepper("Years", pYears) { pYears = it }
+                    PeriodStepper("Months", pMonths) { pMonths = it }
+                    PeriodStepper("Days", pDays) { pDays = it }
+                    PeriodStepper("Hours", pHours) { pHours = it }
+                    PeriodStepper("Minutes", pMinutes) { pMinutes = it }
+                    PeriodStepper("Seconds", pSeconds) { pSeconds = it }
+                }
             }
         }
 
         // Calculation Results Card
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Alignment to step grid:", style = MaterialTheme.typography.titleMedium)
-                
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp), modifier = Modifier.fillMaxWidth()) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Floored (down)", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                        Text(floored.format { date { medium() }; time { short() } }, style = MaterialTheme.typography.bodyLarge)
-                    }
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Rounded (nearest)", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
-                        Text(rounded.format { date { medium() }; time { short() } }, style = MaterialTheme.typography.bodyLarge)
-                    }
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("Ceiled (up)", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                        Text(ceiled.format { date { medium() }; time { short() } }, style = MaterialTheme.typography.bodyLarge)
+        item {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                ),
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text("Alignment to step grid:", style = MaterialTheme.typography.titleMedium)
+
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Column {
+                            Text(
+                                "Floored (down)",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                            Text(
+                                floored.format { date { medium() }; time { short() } },
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                        Column {
+                            Text(
+                                "Rounded (nearest)",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                rounded.format { date { medium() }; time { short() } },
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+                        Column {
+                            Text(
+                                "Ceiled (up)",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.secondary
+                            )
+                            Text(
+                                ceiled.format { date { medium() }; time { short() } },
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
                     }
                 }
             }
         }
 
         // Sequences Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Interval sequence (generateSequence)", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                    Row {
-                        FilterChip(
-                            selected = direction == SequenceDirection.Forward,
-                            onClick = { direction = SequenceDirection.Forward },
-                            label = { Text("Forward") }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        FilterChip(
-                            selected = direction == SequenceDirection.Backward,
-                            onClick = { direction = SequenceDirection.Backward },
-                            label = { Text("Backward") }
-                        )
-                    }
-                }
-
-                if (sequenceList.isEmpty()) {
-                    Text("Invalid or zero period step.", color = MaterialTheme.colorScheme.error)
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.heightIn(max = 300.dp).fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+        item {
+            Card {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(sequenceList) { range ->
-                            val startStr = range.start.format { date { short() }; time { short() } }
-                            val endStr = range.endExclusive.format { date { short() }; time { short() } }
-                            val relativeStr = range.start.formatRelative(dateTime) { style = FormatStyle.Full; full() }
-                            
-                            ListItem(
-                                headlineContent = { Text("$startStr – $endStr") },
-                                supportingContent = { Text("Start: $relativeStr") }
+                        Text(
+                            "Interval sequence (generateSequence)",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        FlowRow {
+                            FilterChip(
+                                selected = direction == SequenceDirection.Forward,
+                                onClick = { direction = SequenceDirection.Forward },
+                                label = { Text("Forward") }
                             )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            FilterChip(
+                                selected = direction == SequenceDirection.Backward,
+                                onClick = { direction = SequenceDirection.Backward },
+                                label = { Text("Backward") }
+                            )
+                        }
+                    }
+
+                    if (sequenceList.isEmpty()) {
+                        Text("Invalid or zero period step.", color = MaterialTheme.colorScheme.error)
+                    } else {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            sequenceList.forEach { range ->
+                                val startStr = range.start.format { date { short() }; time { short() } }
+                                val endStr = range.endExclusive.format { date { short() }; time { short() } }
+                                val relativeStr = range.start.formatRelative(dateTime) {
+                                    style = FormatStyle.Full
+                                    full()
+                                }
+
+                                ListItem(
+                                    headlineContent = { Text("$startStr – $endStr") },
+                                    supportingContent = { Text("Start: $relativeStr") }
+                                )
+                            }
                         }
                     }
                 }
@@ -798,9 +950,24 @@ fun DurationPeriodPlayground() {
     }
 
     // Textual duration styles
-    val durTextFull = remember(duration) { duration.format { style = FormatStyle.Full; days = UnitVisibility.Auto; hours = UnitVisibility.Auto; minutes = UnitVisibility.Auto; seconds = UnitVisibility.Auto } }
-    val durTextShort = remember(duration) { duration.format { style = FormatStyle.Short; days = UnitVisibility.Auto; hours = UnitVisibility.Auto; minutes = UnitVisibility.Auto } }
-    val durTextNarrow = remember(duration) { duration.format { style = FormatStyle.Narrow; days = UnitVisibility.Auto; hours = UnitVisibility.Auto; minutes = UnitVisibility.Auto } }
+    val durTextFull = remember(duration) {
+        duration.format {
+            style = FormatStyle.Full; days = UnitVisibility.Auto; hours = UnitVisibility.Auto; minutes =
+            UnitVisibility.Auto; seconds = UnitVisibility.Auto
+        }
+    }
+    val durTextShort = remember(duration) {
+        duration.format {
+            style = FormatStyle.Short; days = UnitVisibility.Auto; hours = UnitVisibility.Auto; minutes =
+            UnitVisibility.Auto
+        }
+    }
+    val durTextNarrow = remember(duration) {
+        duration.format {
+            style = FormatStyle.Narrow; days = UnitVisibility.Auto; hours = UnitVisibility.Auto; minutes =
+            UnitVisibility.Auto
+        }
+    }
 
     // Digital duration style
     val durDigitalStopwatch = remember(duration) { duration.formatDigital { stopwatch() } }
@@ -848,69 +1015,117 @@ fun DurationPeriodPlayground() {
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 340.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // Kotlin Duration Config Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Kotlin Duration", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    OutlinedTextField(
-                        value = durValue.toString(),
-                        onValueChange = { durValue = it.toLongOrNull() ?: 0L },
-                        label = { Text("Amount") },
-                        modifier = Modifier.weight(1.5f),
-                        singleLine = true
+        item {
+            Card(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Kotlin Duration",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
                     )
-                    
-                    Box(modifier = Modifier.weight(1.5f)) {
-                        DropdownSelector(label = "", value = durUnit.name, options = DurationUnitType.entries.map { it.name }) {
-                            durUnit = DurationUnitType.valueOf(it)
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        OutlinedTextField(
+                            value = durValue.toString(),
+                            onValueChange = { durValue = it.toLongOrNull() ?: 0L },
+                            label = { Text("Amount") },
+                            modifier = Modifier.weight(1.5f),
+                            singleLine = true
+                        )
+
+                        Box(modifier = Modifier.weight(1.5f)) {
+                            DropdownSelector(
+                                label = "",
+                                value = durUnit.name,
+                                options = DurationUnitType.entries.map { it.name }) {
+                                durUnit = DurationUnitType.valueOf(it)
+                            }
                         }
                     }
+
+                    HorizontalDivider()
+
+                    Text(
+                        "Textual format (Kotlin Duration):",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Text("Full:   $durTextFull", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
+                    Text("Short:  $durTextShort", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
+                    Text("Narrow: $durTextNarrow", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
+
+                    HorizontalDivider()
+
+                    Text(
+                        "Digital format (Clock / Stopwatch):",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Text(
+                        "Stopwatch: $durDigitalStopwatch",
+                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                    )
+                    Text(
+                        "Custom:    $durDigitalCustom",
+                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                    )
                 }
-                
-                HorizontalDivider()
-                
-                Text("Textual format (Kotlin Duration):", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                Text("Full:   $durTextFull", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
-                Text("Short:  $durTextShort", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
-                Text("Narrow: $durTextNarrow", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
-
-                HorizontalDivider()
-
-                Text("Digital format (Clock / Stopwatch):", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                Text("Stopwatch: $durDigitalStopwatch", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
-                Text("Custom:    $durDigitalCustom", fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace)
             }
         }
 
         // Periods Config Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("DatePeriod & DateTimePeriod", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                
-                PeriodStepper("Years", pYears) { pYears = it }
-                PeriodStepper("Months", pMonths) { pMonths = it }
-                PeriodStepper("Days", pDays) { pDays = it }
-                PeriodStepper("Hours", pHours) { pHours = it }
-                PeriodStepper("Minutes", pMinutes) { pMinutes = it }
-                
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-                
-                Text("Formatted DatePeriod (Calendar):", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                Text(formattedCalendarPeriod, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
+        item {
+            Card(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "DatePeriod & DateTimePeriod",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
 
-                Spacer(modifier = Modifier.height(4.dp))
+                    PeriodStepper("Years", pYears) { pYears = it }
+                    PeriodStepper("Months", pMonths) { pMonths = it }
+                    PeriodStepper("Days", pDays) { pDays = it }
+                    PeriodStepper("Hours", pHours) { pHours = it }
+                    PeriodStepper("Minutes", pMinutes) { pMinutes = it }
 
-                Text("Formatted DateTimePeriod (Combined):", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                Text(formattedDateTimePeriod, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
+                    Text(
+                        "Formatted DatePeriod (Calendar):",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Text(
+                        formattedCalendarPeriod,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        "Formatted DateTimePeriod (Combined):",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Text(
+                        formattedDateTimePeriod,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
     }
@@ -920,6 +1135,47 @@ fun DurationPeriodPlayground() {
 // PLAYGROUND 5: RELATIVE TIME PLAYGROUND
 // ==========================================
 
+@Composable
+fun RelativeUnitRow(
+    label: String,
+    enabled: Boolean,
+    onEnabledChange: (Boolean) -> Unit,
+    minValue: Int,
+    onMinValueChange: (Int) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(checked = enabled, onCheckedChange = onEnabledChange)
+            Text(label, style = MaterialTheme.typography.bodyMedium)
+        }
+        if (enabled) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Text(
+                    "Min threshold:",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                OutlinedTextField(
+                    value = minValue.toString(),
+                    onValueChange = { newValue ->
+                        newValue.toIntOrNull()?.also { onMinValueChange(it) }
+                    },
+                    modifier = Modifier.width(64.dp),
+                    singleLine = true,
+                    textStyle = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
+    }
+}
+
 context(locale: AppLocale, timeZone: TimeZone)
 @Composable
 fun RelativeTimePlayground() {
@@ -927,116 +1183,147 @@ fun RelativeTimePlayground() {
     var targetDateTime by remember { mutableStateOf((Clock.System.now() - 5.minutes).toLocalDateTime(timeZone)) }
 
     var style by remember { mutableStateOf(FormatStyle.Full) }
-    
-    // Threshold toggles
-    var enableYears by remember { mutableStateOf(true) }
-    var enableMonths by remember { mutableStateOf(true) }
-    var enableDays by remember { mutableStateOf(true) }
-    var enableHours by remember { mutableStateOf(true) }
-    var enableMinutes by remember { mutableStateOf(true) }
-    var enableSeconds by remember { mutableStateOf(true) }
 
-    val relativeString = remember(baseline, targetDateTime, style, enableYears, enableMonths, enableDays, enableHours, enableMinutes, enableSeconds) {
+    // Threshold configurations (Unit -> (Enabled, MinValue))
+    var enableYears by remember { mutableStateOf(true) }
+    var minYears by remember { mutableStateOf(1) }
+
+    var enableMonths by remember { mutableStateOf(true) }
+    var minMonths by remember { mutableStateOf(1) }
+
+    var enableDays by remember { mutableStateOf(true) }
+    var minDays by remember { mutableStateOf(1) }
+
+    var enableHours by remember { mutableStateOf(true) }
+    var minHours by remember { mutableStateOf(1) }
+
+    var enableMinutes by remember { mutableStateOf(true) }
+    var minMinutes by remember { mutableStateOf(1) }
+
+    var enableSeconds by remember { mutableStateOf(true) }
+    var minSeconds by remember { mutableStateOf(1) }
+
+    val relativeString = remember(
+        baseline, targetDateTime, style,
+        enableYears, minYears, enableMonths, minMonths, enableDays, minDays,
+        enableHours, minHours, enableMinutes, minMinutes, enableSeconds, minSeconds
+    ) {
         try {
             targetDateTime.formatRelative(baseline) {
                 this.style = style
-                if (enableYears) years() else years(null)
-                if (enableMonths) months() else months(null)
-                if (enableDays) days() else days(null)
-                if (enableHours) hours() else hours(null)
-                if (enableMinutes) minutes() else minutes(null)
-                if (enableSeconds) seconds() else seconds(null)
+                years(if (enableYears) minYears else null)
+                months(if (enableMonths) minMonths else null)
+                days(if (enableDays) minDays else null)
+                hours(if (enableHours) minHours else null)
+                minutes(if (enableMinutes) minMinutes else null)
+                seconds(if (enableSeconds) minSeconds else null)
             }
         } catch (e: Exception) {
             "Relative time error: ${e.message}"
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 340.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Input values", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                DateTimePickerButton("Baseline (Now):", baseline, { baseline = it })
-                DateTimePickerButton("Target (Goal): ", targetDateTime, { targetDateTime = it })
+        item {
+            Card {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Input values",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    DateTimePickerButton("Baseline (Now):", baseline, { baseline = it })
+                    DateTimePickerButton("Target (Goal): ", targetDateTime, { targetDateTime = it })
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-                
-                Text("Target presets:", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.secondary)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Button(onClick = { targetDateTime = baseline.plus(-3.seconds) }) { Text("-3 seconds") }
-                    Button(onClick = { targetDateTime = baseline.plus(-5.minutes) }) { Text("-5 minutes") }
-                    Button(onClick = { targetDateTime = baseline.plus(2.hours) }) { Text("+2 hours") }
-                    Button(onClick = { targetDateTime = baseline.plus(-1000.days) }) { Text("-1000 days") }
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+
+                    Text(
+                        "Target presets:",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Button(onClick = { targetDateTime = baseline.plus(-3.seconds) }) { Text("-3 seconds") }
+                        Button(onClick = { targetDateTime = baseline.plus(-5.minutes) }) { Text("-5 minutes") }
+                        Button(onClick = { targetDateTime = baseline.plus(2.hours) }) { Text("+2 hours") }
+                        Button(onClick = { targetDateTime = baseline.plus(-1000.days) }) { Text("-1000 days") }
+                    }
                 }
             }
         }
 
         // Live Output Panel
-        Card(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
-                Text("Relative representation:", style = MaterialTheme.typography.titleMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-                SelectionContainer {
-                    Text(
-                        text = relativeString,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+        item {
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
+                )
+            ) {
+                Column(modifier = Modifier.padding(16.dp).fillMaxWidth()) {
+                    Text("Relative representation:", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SelectionContainer {
+                        Text(
+                            text = relativeString,
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
         }
 
         // Threshold Options Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Threshold configuration", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                
-                DropdownSelector(label = "Relative Style", value = style.name, options = FormatStyle.entries.map { it.name }) {
-                    style = FormatStyle.valueOf(it)
-                }
-                
-                HorizontalDivider()
-                
-                Text("Enable time units for relative calculation:", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = enableYears, onCheckedChange = { enableYears = it })
-                            Text("Years")
-                        }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = enableMonths, onCheckedChange = { enableMonths = it })
-                            Text("Months")
-                        }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = enableDays, onCheckedChange = { enableDays = it })
-                            Text("Days")
-                        }
+        item {
+            Card {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Threshold configuration",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    DropdownSelector(
+                        label = "Relative Style",
+                        value = style.name,
+                        options = FormatStyle.entries.map { it.name }) {
+                        style = FormatStyle.valueOf(it)
                     }
-                    Column {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = enableHours, onCheckedChange = { enableHours = it })
-                            Text("Hours")
-                        }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = enableMinutes, onCheckedChange = { enableMinutes = it })
-                            Text("Minutes")
-                        }
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Checkbox(checked = enableSeconds, onCheckedChange = { enableSeconds = it })
-                            Text("Seconds")
-                        }
+
+                    HorizontalDivider()
+
+                    Text(
+                        "Time unit threshold configurations:",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        RelativeUnitRow("Years", enableYears, { enableYears = it }, minYears, { minYears = it })
+                        RelativeUnitRow("Months", enableMonths, { enableMonths = it }, minMonths, { minMonths = it })
+                        RelativeUnitRow("Days", enableDays, { enableDays = it }, minDays, { minDays = it })
+                        RelativeUnitRow("Hours", enableHours, { enableHours = it }, minHours, { minHours = it })
+                        RelativeUnitRow(
+                            "Minutes",
+                            enableMinutes,
+                            { enableMinutes = it },
+                            minMinutes,
+                            { minMinutes = it })
+                        RelativeUnitRow(
+                            "Seconds",
+                            enableSeconds,
+                            { enableSeconds = it },
+                            minSeconds,
+                            { minSeconds = it })
                     }
                 }
             }
@@ -1071,90 +1358,133 @@ fun SystemComparisonPlayground() {
         )
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 340.dp),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // System Config Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("System parameters (selected Locale)", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                Text("First day of week: ${firstDay.name}", style = MaterialTheme.typography.bodyLarge)
-                Text("Decimal separator: '$decimalSeparator'", style = MaterialTheme.typography.bodyLarge)
+        item {
+            Card(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        "System parameters (selected Locale)",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text("First day of week: ${firstDay.name}", style = MaterialTheme.typography.bodyLarge)
+                    Text("Decimal separator: '$decimalSeparator'", style = MaterialTheme.typography.bodyLarge)
+                }
             }
         }
 
         // Localized Month/Day Names Card
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("Localized names", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                
-                Text("Months:", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    availableMonths.forEach { m ->
-                        SuggestionChip(onClick = {}, label = { Text(m.formatName(format = MonthFormat.Name.Full)) })
+        item {
+            Card(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        "Localized names",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    Text(
+                        "Months:",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        availableMonths.forEach { m ->
+                            SuggestionChip(onClick = {}, label = { Text(m.formatName(format = MonthFormat.Name.Full)) })
+                        }
                     }
-                }
 
-                HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
 
-                Text("Days of week:", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.secondary)
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    availableWeekdays.forEach { d ->
-                        SuggestionChip(onClick = {}, label = { Text(d.formatName(format = WeekDayFormat.FullName)) })
+                    Text(
+                        "Days of week:",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        availableWeekdays.forEach { d ->
+                            SuggestionChip(
+                                onClick = {},
+                                label = { Text(d.formatName(format = WeekDayFormat.FullName)) })
+                        }
                     }
                 }
             }
         }
 
         // Locale Comparison Grid
-        Card {
-            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Locale comparison grid", style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
-                    Button(onClick = { compareTime = Clock.System.now() }) { Text("Update time") }
-                }
-                
-                Text("Compare formatting of the selected moment across various language locales.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    comparisonLocales.forEach { appLoc ->
-                        withRegionalContext(timeZone = timeZone, locale = appLoc) {
-                            val formattedDt = compareTime.toLocalDateTime(timeZone).format {
-                                date { full() }
-                                time { short() }
-                            }
-                            val formattedRel = (compareTime - 1.5.hours).formatRelative(compareTime) {
-                                style = FormatStyle.Full
-                                full()
-                            }
-                            
-                            Card(
-                                colors = CardDefaults.cardColors(
-                                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-                                ),
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Column(modifier = Modifier.padding(12.dp)) {
-                                    Text(text = "${appLoc.displayName} (${appLoc.languageTag})", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.secondary)
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Text(text = "Date & Time: $formattedDt", style = MaterialTheme.typography.bodyMedium)
-                                    Text(text = "1.5 hours ago: $formattedRel", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        item {
+            Card {
+                Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            "Locale comparison grid",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        Button(onClick = { compareTime = Clock.System.now() }) { Text("Update time") }
+                    }
+
+                    Text(
+                        "Compare formatting of the selected moment across various language locales.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        comparisonLocales.forEach { appLoc ->
+                            withRegionalContext(timeZone = timeZone, locale = appLoc) {
+                                val formattedDt = compareTime.toLocalDateTime(timeZone).format {
+                                    date { full() }
+                                    time { short() }
+                                }
+                                val formattedRel = (compareTime - 1.5.hours).formatRelative(compareTime) {
+                                    style = FormatStyle.Full
+                                    full()
+                                }
+
+                                Card(
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                                    ),
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Column(modifier = Modifier.padding(12.dp)) {
+                                        Text(
+                                            text = "${appLoc.displayName} (${appLoc.languageTag})",
+                                            style = MaterialTheme.typography.titleSmall,
+                                            color = MaterialTheme.colorScheme.secondary
+                                        )
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            text = "Date & Time: $formattedDt",
+                                            style = MaterialTheme.typography.bodyMedium
+                                        )
+                                        Text(
+                                            text = "1.5 hours ago: $formattedRel",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                 }
                             }
                         }

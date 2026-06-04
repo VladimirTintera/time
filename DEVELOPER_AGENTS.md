@@ -25,23 +25,41 @@ The **Time Maintainer Agent** ([time_maintainer.md](file:///Users/vladimirtinter
 
 ---
 
-## How to Run the Agent
+## Release Agent: Time Releaser
+
+The **Release Agent** ([release_agent.md](file:///Users/vladimirtintera/Develop/time-dev/.agents/release_agent.md)) automates and guides the process of publishing releases from the development repository to the public repository.
+
+### Core Skills
+
+1. **Prerelease Validator & Builder**
+   - **Role**: Runs tests, builds the JS web application, builds Dokka documentation, and stages files.
+   - **Goal**: Ensure the project compiles and passes all checks before syncing changes.
+2. **Interactive Release Guide**
+   - **Role**: Guides the developer step-by-step through tagging and GitHub release creation.
+   - **Goal**: Make the release process foolproof and easily repeatable.
+3. **Changelog Planner**
+   - **Role**: Drafts categorized release notes based on the git history since the last release tag.
+
+---
+
+## How to Run the Agents
 
 ### 1. In Antigravity / Gemini Code Assistant Sessions
-You can invoke the consolidated agent directly in an active coding assistant session by utilizing the subagent type:
+You can invoke the agents directly in an active coding assistant session by utilizing their subagent TypeName:
+
+#### Time Maintainer:
 - **TypeName**: `time_maintainer`
 - **Role**: `Time Maintainer`
+- **Example Prompt**: *"Run the `time_maintainer` agent to scan the codebase, verify KDocs, check context receivers, and verify README examples."*
 
-#### Example Prompt to Run All Tasks:
-> "Run the `time_maintainer` agent to scan the codebase, verify that all public functions are documented with correct KDocs, ensure all context receiver wrappers are present and documented, and verify that the README examples match the current APIs."
-
-#### Example Prompt to Run a Single Skill (e.g. Test Coverage):
-> "Run the `time_maintainer` agent with the **Test Coverage Engineer** skill to inspect the `:time:core` module and add unit tests for any untested public calculations."
+#### Release Agent:
+- **TypeName**: `release_agent`
+- **Role**: `Release Agent`
+- **Example Prompt**: *"Run the `release_agent` to start the prerelease validation and squash-sync to the public repository. Use commit message 'Release v1.0.0'."*
 
 ### 2. In Cursor or Cline
-If you use Cursor or Cline, you can link the markdown file as a rule:
-- In Cursor, configure your settings to point to `.agents/time_maintainer.md` or copy its contents into `.cursorrules` / `.cursor/rules`.
-- In Cline, copy the instructions into `.clinerules`.
+If you use Cursor or Cline, you can link the markdown files as rules:
+- Point to `.agents/time_maintainer.md` and `.agents/release_agent.md` in your settings.
 
 ---
 
