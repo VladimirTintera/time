@@ -20,7 +20,7 @@ import kotlinx.datetime.isoDayNumber
  *
  * @return The [DayOfWeek] representing the first day of the week.
  */
-expect fun getFirstDayOfWeek(): DayOfWeek
+expect fun getFirstDayOfWeek(locale: AppLocale): DayOfWeek
 
 /**
  * Formats the name of this [kotlinx.datetime.Month] into a localized string.

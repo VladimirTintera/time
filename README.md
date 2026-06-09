@@ -430,9 +430,7 @@ val locale = currentLocale
 val monthName = Month.APRIL.formatName(locale = locale, format = MonthFormat.Name.Full) // "April"
 val dayName = DayOfWeek.MONDAY.formatName(locale = locale, format = WeekDayFormat.ShortName) // "Mon"
 val separator = getDecimalSeparator(locale = locale) // "." or ","
-
-// Platform-aware first day of the week (no locale parameter required)
-val firstDay = getFirstDayOfWeek() // e.g., DayOfWeek.SUNDAY or DayOfWeek.MONDAY
+val firstDay = getFirstDayOfWeek(locale = locale) // e.g., DayOfWeek.SUNDAY or DayOfWeek.MONDAY
 ```
 
 Under `withRegionalContext` (using `:time:format-context`):
@@ -443,6 +441,7 @@ withRegionalContext(locale = locale) {
     val monthName = Month.APRIL.formatName() // implicit locale
     val dayName = DayOfWeek.MONDAY.formatName(WeekDayFormat.ShortName) // implicit locale
     val separator = getDecimalSeparator() // implicit locale
+    val firstDay = getFirstDayOfWeek() // implicit locale
 }
 ```
 

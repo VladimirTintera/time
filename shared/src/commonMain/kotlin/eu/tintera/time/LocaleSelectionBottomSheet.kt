@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import eu.tintera.locale.AppLocale
 import eu.tintera.locale.availableLocales
@@ -54,6 +55,9 @@ fun LocaleSelectionBottomSheet(
         ) {
             items(filteredLocales) { locale ->
                 ListItem(
+                    colors = ListItemDefaults.colors(
+                        containerColor = Color.Transparent
+                    ),
                     modifier = Modifier.clickable { onLocaleChange(locale) },
                     leadingContent = {
                         if (locale == currentLocale) {

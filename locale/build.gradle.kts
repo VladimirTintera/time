@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.dokka)
+    id("eu.tintera.publish")
 }
 
 group = "eu.tintera.locale"
@@ -62,5 +63,3 @@ kotlin {
         }
     }
 }
-
-apply(from = rootProject.file("gradle/publish.gradle.kts"))

@@ -25,7 +25,7 @@ enum class AppTab(val title: String) {
 @Preview
 fun App() {
     MaterialTheme(
-        colorScheme = darkColorScheme() // Let's use a sleek dark mode by default for premium aesthetics
+        colorScheme = darkColorScheme()
     ) {
         var activeTab by remember { mutableStateOf(AppTab.FORMATTING) }
         var locale by remember { mutableStateOf(currentLocale) }
@@ -110,10 +110,12 @@ fun App() {
                 }
 
                 // Tab layout for navigation between playgrounds
-                ScrollableTabRow(
+                SecondaryScrollableTabRow(
                     selectedTabIndex = activeTab.ordinal,
-                    edgePadding = 16.dp,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    containerColor = TabRowDefaults.primaryContainerColor,
+                    contentColor = TabRowDefaults.primaryContentColor,
+                    edgePadding = 16.dp
                 ) {
                     AppTab.entries.forEach { tab ->
                         Tab(

@@ -5,6 +5,7 @@ import eu.tintera.time.format.MonthFormat
 import eu.tintera.time.format.WeekDayFormat
 import eu.tintera.time.format.formatName
 import eu.tintera.time.format.getDecimalSeparator
+import eu.tintera.time.format.getFirstDayOfWeek
 import kotlinx.datetime.DayOfWeek
 import kotlinx.datetime.Month
 
@@ -72,4 +73,24 @@ fun DayOfWeek.formatName(
  */
 context(locale: AppLocale)
 fun getDecimalSeparator(): String = getDecimalSeparator(locale)
+
+/**
+ * Returns the first day of the week based on the active locale.
+ *
+ * This function is context-aware and automatically uses the implicit [AppLocale] context
+ * to determine the first day of the week.
+ *
+ * Example:
+ * ```kotlin
+ * val myLocale = localeForLanguageTag("en-US")
+ * val firstDay = with(myLocale) {
+ *     getFirstDayOfWeek()
+ * }
+ * ```
+ *
+ * @return The [DayOfWeek] representing the first day of the week.
+ */
+context(locale: AppLocale)
+fun getFirstDayOfWeek(): DayOfWeek = getFirstDayOfWeek(locale)
+
 

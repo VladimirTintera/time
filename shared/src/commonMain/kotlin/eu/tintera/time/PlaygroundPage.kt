@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import eu.tintera.locale.AppLocale
+import eu.tintera.locale.currentLocale
 import eu.tintera.locale.displayName
 import eu.tintera.locale.languageTag
 import eu.tintera.locale.localeForLanguageTag
@@ -26,6 +27,8 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
+
+enum class DurationUnitType { Minutes, Hours, Days, Seconds }
 
 // ==========================================
 // HELPERS
@@ -1341,7 +1344,7 @@ fun SystemComparisonPlayground() {
     var compareTime by remember { mutableStateOf(Clock.System.now()) }
 
     // Recompute some variables in background
-    val firstDay = remember { getFirstDayOfWeek() }
+    val firstDay = remember { getFirstDayOfWeek(currentLocale) }
     val decimalSeparator = remember { getDecimalSeparator() }
 
     val availableMonths = remember { Month.entries }

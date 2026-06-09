@@ -1,16 +1,17 @@
 package eu.tintera.time.format.context
 
-import eu.tintera.locale.AppLocale
 import eu.tintera.locale.localeForLanguageTag
-import eu.tintera.time.format.*
+import eu.tintera.time.format.DateTimeIntervalFormat
+import eu.tintera.time.format.MonthFormat
+import eu.tintera.time.format.UnitVisibility
+import eu.tintera.time.format.WeekDayFormat
 import kotlinx.datetime.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 class FormatContextTest {
 
@@ -141,6 +142,7 @@ class FormatContextTest {
             assertTrue(Month.JANUARY.formatName().isNotEmpty())
             assertTrue(DayOfWeek.MONDAY.formatName().isNotEmpty())
             assertTrue(getDecimalSeparator().isNotEmpty())
+            assertTrue(getFirstDayOfWeek() is DayOfWeek)
         }
     }
 

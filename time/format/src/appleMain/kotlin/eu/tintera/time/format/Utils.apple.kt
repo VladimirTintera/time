@@ -7,8 +7,11 @@ import platform.Foundation.NSCalendar
 import platform.Foundation.NSLocaleDecimalSeparator
 
 @OptIn(UnsafeNumber::class)
-actual fun getFirstDayOfWeek(): DayOfWeek {
-    val firstWeekday = NSCalendar.currentCalendar.firstWeekday.toInt()
+actual fun getFirstDayOfWeek(locale: AppLocale): DayOfWeek {
+
+    val firstWeekday = (NSCalendar.currentCalendar.copy() as NSCalendar).apply {
+        this.locale = locale
+    }.firstWeekday.toInt()
 
     val isoDayNumber = if (firstWeekday == 1) 7 else firstWeekday - 1
 

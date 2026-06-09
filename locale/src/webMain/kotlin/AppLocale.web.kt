@@ -36,7 +36,8 @@ private val webSupportedLocales: List<String> = listOf(
     "lv", "mk", "ml", "mn", "mr", "ms", "my", "nb", "ne", "nl",
     "nl-BE", "nn", "or", "pa", "pl", "ps", "pt", "pt-BR", "pt-PT", "ro",
     "ru", "si", "sk", "sl", "sq", "sr", "sv", "sw", "ta", "te",
-    "th", "tk", "tr", "uk", "ur", "uz", "vi", "zh", "zh-Hans", "zh-Hant", "zu"
+    "th", "tk", "tr", "uk", "ur",
+    "uz", "vi", "zh", "zh-Hans", "zh-Hant", "zu"
 )
 
 actual fun availableLocales(): List<AppLocale> {

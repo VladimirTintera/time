@@ -226,7 +226,7 @@ class FormattersAndExtensionsTest {
 
     @Test
     fun testGetFirstDayOfWeek() {
-        val firstDay = getFirstDayOfWeek()
+        val firstDay = getFirstDayOfWeek(locale)
         assertNotNull(firstDay)
     }
 

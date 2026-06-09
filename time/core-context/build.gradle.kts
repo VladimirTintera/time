@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.dokka)
+    id("eu.tintera.publish")
 }
 
 group = "eu.tintera.time"
@@ -67,5 +67,3 @@ kotlin {
         }
     }
 }
-
-apply(from = rootProject.file("gradle/publish.gradle.kts"))

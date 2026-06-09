@@ -6,8 +6,8 @@ import kotlinx.datetime.DayOfWeek
 import java.time.temporal.WeekFields
 import java.util.*
 
-actual fun getFirstDayOfWeek(): DayOfWeek {
-    val javaDayOfWeek = WeekFields.of(Locale.getDefault()).firstDayOfWeek
+actual fun getFirstDayOfWeek(locale: AppLocale): DayOfWeek {
+    val javaDayOfWeek = WeekFields.of(locale).firstDayOfWeek
     return DayOfWeek(javaDayOfWeek.value)
 }
 
