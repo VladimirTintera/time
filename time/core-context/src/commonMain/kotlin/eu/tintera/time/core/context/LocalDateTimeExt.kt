@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlin.time.Duration
+import kotlin.js.JsName
 
 /**
  * Returns a new [LocalDateTime] with the given [DateTimePeriod] added to this [LocalDateTime].
@@ -25,6 +26,7 @@ import kotlin.time.Duration
  * @return A [LocalDateTime] representing the sum.
  */
 context(timeZone: TimeZone)
+@JsName("plusPeriodContext")
 operator fun LocalDateTime.plus(period: DateTimePeriod): LocalDateTime =
     plus(period, timeZone)
 
@@ -46,6 +48,7 @@ operator fun LocalDateTime.plus(period: DateTimePeriod): LocalDateTime =
  * @return A [LocalDateTime] representing the sum.
  */
 context(timeZone: TimeZone)
+@JsName("plusTimeContext")
 operator fun LocalDateTime.plus(time: LocalTime): LocalDateTime =
     plus(time, timeZone)
 
@@ -69,6 +72,7 @@ operator fun LocalDateTime.plus(time: LocalTime): LocalDateTime =
  * @return A [LocalDateTime] representing the sum.
  */
 context(timeZone: TimeZone)
+@JsName("plusDurationContext")
 operator fun LocalDateTime.plus(duration: Duration): LocalDateTime =
     plus(duration, timeZone)
 
@@ -91,6 +95,7 @@ operator fun LocalDateTime.plus(duration: Duration): LocalDateTime =
  * @throws IllegalArgumentException if the [period] does not move time forward.
  */
 context(timeZone: TimeZone)
+@JsName("generateSequencePeriodContext")
 fun LocalDateTime.generateSequence(
     period: DateTimePeriod,
 ): Sequence<OpenEndRange<LocalDateTime>> = generateSequence(period, timeZone)
@@ -115,6 +120,7 @@ fun LocalDateTime.generateSequence(
  * @throws IllegalArgumentException if the [period] is not positive.
  */
 context(timeZone: TimeZone)
+@JsName("generateSequenceDirectionPeriodContext")
 fun LocalDateTime.generateSequence(
     direction: SequenceDirection,
     period: DateTimePeriod
@@ -140,6 +146,7 @@ fun LocalDateTime.generateSequence(
  * @return A sequence of sliced intervals.
  */
 context(timeZone: TimeZone)
+@JsName("slicePeriodContext")
 infix fun OpenEndRange<LocalDateTime>.slice(
     period: DateTimePeriod
 ): Sequence<OpenEndRange<LocalDateTime>> =
@@ -163,6 +170,7 @@ infix fun OpenEndRange<LocalDateTime>.slice(
  * @return The interval containing this date-time, or null if it cannot be determined.
  */
 context(timeZone: TimeZone)
+@JsName("findIntervalPeriodContext")
 fun LocalDateTime.findInterval(
     period: DateTimePeriod
 ): OpenEndRange<LocalDateTime>? =
@@ -188,6 +196,7 @@ fun LocalDateTime.findInterval(
  * @return The interval containing this date-time, or null if it cannot be determined.
  */
 context(timeZone: TimeZone)
+@JsName("findIntervalPeriodAnchorContext")
 fun LocalDateTime.findInterval(
     period: DateTimePeriod,
     anchor: LocalDateTime
@@ -215,6 +224,7 @@ fun LocalDateTime.findInterval(
  * @throws IllegalArgumentException if [duration] is not positive.
  */
 context(timeZone: TimeZone)
+@JsName("findTimeIntervalDurationContext")
 fun LocalDateTime.findTimeInterval(
     duration: Duration
 ): OpenEndRange<LocalDateTime> = findTimeInterval(duration, timeZone)
@@ -241,6 +251,7 @@ fun LocalDateTime.findTimeInterval(
  * @return The interval containing this date-time.
  */
 context(timeZone: TimeZone)
+@JsName("findTimeIntervalDurationAnchorContext")
 fun LocalDateTime.findTimeInterval(
     duration: Duration,
     anchor: LocalDateTime
@@ -264,6 +275,7 @@ fun LocalDateTime.findTimeInterval(
  * @return The floored [LocalDateTime].
  */
 context(timeZone: TimeZone)
+@JsName("floorToPeriodContext")
 fun LocalDateTime.floorTo(period: DateTimePeriod): LocalDateTime = floorTo(period, timeZone)
 
 /**
@@ -286,6 +298,7 @@ fun LocalDateTime.floorTo(period: DateTimePeriod): LocalDateTime = floorTo(perio
  * @return The floored [LocalDateTime].
  */
 context(timeZone: TimeZone)
+@JsName("floorToPeriodAnchorContext")
 fun LocalDateTime.floorTo(
     period: DateTimePeriod,
     anchor: LocalDateTime
@@ -309,6 +322,7 @@ fun LocalDateTime.floorTo(
  * @return The ceiled [LocalDateTime].
  */
 context(timeZone: TimeZone)
+@JsName("ceilToPeriodContext")
 fun LocalDateTime.ceilTo(period: DateTimePeriod): LocalDateTime = ceilTo(period, timeZone)
 
 /**
@@ -331,6 +345,7 @@ fun LocalDateTime.ceilTo(period: DateTimePeriod): LocalDateTime = ceilTo(period,
  * @return The ceiled [LocalDateTime].
  */
 context(timeZone: TimeZone)
+@JsName("ceilToPeriodAnchorContext")
 fun LocalDateTime.ceilTo(
     period: DateTimePeriod,
     anchor: LocalDateTime
@@ -354,6 +369,7 @@ fun LocalDateTime.ceilTo(
  * @return A [LocalDateTime] representing the difference.
  */
 context(timeZone: TimeZone)
+@JsName("minusPeriodContext")
 operator fun LocalDateTime.minus(period: DateTimePeriod): LocalDateTime =
     minus(period, timeZone)
 
@@ -375,6 +391,7 @@ operator fun LocalDateTime.minus(period: DateTimePeriod): LocalDateTime =
  * @return The rounded [LocalDateTime].
  */
 context(timeZone: TimeZone)
+@JsName("roundToPeriodContext")
 fun LocalDateTime.roundTo(period: DateTimePeriod): LocalDateTime = roundTo(period, timeZone)
 
 /**
@@ -397,6 +414,7 @@ fun LocalDateTime.roundTo(period: DateTimePeriod): LocalDateTime = roundTo(perio
  * @return The rounded [LocalDateTime].
  */
 context(timeZone: TimeZone)
+@JsName("roundToPeriodAnchorContext")
 fun LocalDateTime.roundTo(
     period: DateTimePeriod,
     anchor: LocalDateTime

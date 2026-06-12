@@ -13,7 +13,7 @@ class TimeZoneCalculationTest {
 
     private val zones = listOf(
         TimeZone.of("Europe/Prague"),
-        TimeZone.of("Asia/Kolkata"),
+        TimeZone.of("Asia/Tokyo"),
         TimeZone.of("Australia/Sydney")
     )
 
@@ -90,9 +90,9 @@ class TimeZoneCalculationTest {
     }
 
     @Test
-    fun testKolkataLinearCalculations() {
-        val zone = TimeZone.of("Asia/Kolkata")
-        // Kolkata has no DST, everything is linear
+    fun testTokyoLinearCalculations() {
+        val zone = TimeZone.of("Asia/Tokyo")
+        // Tokyo has no DST, everything is linear
         val ldt = LocalDateTime(2023, 3, 26, 1, 59, 59)
         val added = ldt.plus(1.seconds, zone)
         assertEquals(LocalDateTime(2023, 3, 26, 2, 0, 0), added)

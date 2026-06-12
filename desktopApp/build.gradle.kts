@@ -6,6 +6,10 @@ plugins {
     alias(libs.plugins.composeCompiler)
 }
 
+kotlin {
+    jvmToolchain(11)
+}
+
 dependencies {
     implementation(projects.shared)
 

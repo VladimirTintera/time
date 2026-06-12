@@ -5,6 +5,8 @@ import eu.tintera.time.core.modify
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlin.js.JsName
+
 
 /**
  * Modifies this [LocalDateTime] using the [LocalDateTimeModifierBuilder] DSL.
@@ -26,6 +28,7 @@ import kotlinx.datetime.TimeZone
  * @return The modified [LocalDateTime].
  */
 context(timeZone: TimeZone)
+@JsName("modifyContext")
 fun LocalDateTime.modify(
     block: LocalDateTimeModifierBuilder.() -> Unit
 ): LocalDateTime = modify(timeZone, block)
@@ -49,7 +52,9 @@ fun LocalDateTime.modify(
  * @return The modified [LocalDateTime].
  */
 context(timeZone: TimeZone)
+@JsName("invokeContext")
 operator fun LocalDateTime.invoke(
     block: LocalDateTimeModifierBuilder.() -> Unit
 ): LocalDateTime = modify(timeZone, block)
+
 

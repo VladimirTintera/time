@@ -9,6 +9,7 @@ import java.util.Properties
 plugins {
     id("maven-publish")
     signing
+    id("com.gradleup.nmcp")
 }
 
 val projectName = project.name
@@ -80,15 +81,6 @@ configure<PublishingExtension> {
 
     repositories {
         maven {
-            name = "mavenCentral"
-            url = URI("https://central.sonatype.com/api/v1/publisher/deployments/maven/")
-
-            credentials {
-                username = findPropertyOrLocal("mavenCentralUsername")
-                password = findPropertyOrLocal("mavenCentralPassword")
-            }
-        }
-        maven {
             name = "localRepo"
             url = URI("file://${rootProject.rootDir.absolutePath}/build/local-repo")
         }
@@ -100,11 +92,13 @@ configure<SigningExtension> {
     val hasSigningKey = !signingKey.isNullOrEmpty()
 
     if (hasSigningKey) {
-        useInMemoryPgpKeys(
-            findPropertyOrLocal("signing.keyId"),
-            signingKey,
-            findPropertyOrLocal("signing.password")
-        )
+        val keyId = findPropertyOrLocal("signing.keyId")
+        val password = findPropertyOrLocal("signing.password")
+        if (!keyId.isNullOrEmpty()) {
+            useInMemoryPgpKeys(keyId, signingKey, password)
+        } else {
+            useInMemoryPgpKeys(signingKey, password)
+        }
         // Podepíše všechny publikace, které v projektu existují
         sign(extensions.getByType<PublishingExtension>().publications)
     }

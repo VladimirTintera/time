@@ -1,3 +1,5 @@
+@file:OptIn(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeCacheApi::class)
+
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -9,6 +11,7 @@ plugins {
 }
 
 kotlin {
+    jvmToolchain(11)
 
     compilerOptions {
         freeCompilerArgs.addAll(
@@ -28,6 +31,17 @@ kotlin {
             isStatic = true
         }
     }
+
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().configureEach {
+        binaries.configureEach {
+            freeCompilerArgs += "-Xoverride-konan-properties=minVersion.ios=18.0"
+            disableNativeCache(
+                org.jetbrains.kotlin.gradle.plugin.mpp.DisableCacheInKotlinVersion.`2_3_21`,
+                "Workaround for UIUtilities/UIViewLayoutRegion linker error on iOS simulator",
+                uri("https://github.com/VladimirTintera/time/issues")
+            )
+        }
+    }
     
     jvm()
     
@@ -44,10 +58,6 @@ kotlin {
        namespace = "eu.tintera.time.shared"
        compileSdk = libs.versions.android.compileSdk.get().toInt()
        minSdk = libs.versions.android.minSdk.get().toInt()
-    
-       compilerOptions {
-           jvmTarget = JvmTarget.JVM_11
-       }
        androidResources {
            enable = true
        }

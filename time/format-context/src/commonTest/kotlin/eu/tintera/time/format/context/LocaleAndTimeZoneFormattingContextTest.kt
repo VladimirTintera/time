@@ -15,7 +15,7 @@ class LocaleAndTimeZoneFormattingContextTest {
     private val locales = listOf(localeForLanguageTag("cs"), localeForLanguageTag("en"))
     private val zones = listOf(
         TimeZone.of("Europe/Prague"),
-        TimeZone.of("Asia/Kolkata"),
+        TimeZone.of("Asia/Tokyo"),
         TimeZone.of("Australia/Sydney")
     )
 
@@ -43,13 +43,13 @@ class LocaleAndTimeZoneFormattingContextTest {
                         if (locale.languageTag.startsWith("cs")) {
                             when (zone.id) {
                                 "Europe/Prague" -> assertEquals("1.1.20231:00", formatted)
-                                "Asia/Kolkata" -> assertEquals("1.1.20235:30", formatted)
+                                "Asia/Tokyo" -> assertEquals("1.1.20239:00", formatted)
                                 "Australia/Sydney" -> assertEquals("1.1.202311:00", formatted)
                             }
                         } else {
                             when (zone.id) {
                                 "Europe/Prague" -> assertEquals("1/1/2023,1:00AM", formatted)
-                                "Asia/Kolkata" -> assertEquals("1/1/2023,5:30AM", formatted)
+                                "Asia/Tokyo" -> assertEquals("1/1/2023,9:00AM", formatted)
                                 "Australia/Sydney" -> assertEquals("1/1/2023,11:00AM", formatted)
                             }
                         }
@@ -98,13 +98,13 @@ class LocaleAndTimeZoneFormattingContextTest {
                         if (locale.languageTag.startsWith("cs")) {
                             when (zone.id) {
                                 "Europe/Prague" -> assertEquals("1.1.20231:00-3:00", formatted)
-                                "Asia/Kolkata" -> assertEquals("1.1.20235:30-7:30", formatted)
+                                "Asia/Tokyo" -> assertEquals("1.1.20239:00-11:00", formatted)
                                 "Australia/Sydney" -> assertEquals("1.1.202311:00-13:00", formatted)
                             }
                         } else {
                             when (zone.id) {
                                 "Europe/Prague" -> assertEquals("1/1/2023,1:00-3:00AM", formatted)
-                                "Asia/Kolkata" -> assertEquals("1/1/2023,5:30-7:30AM", formatted)
+                                "Asia/Tokyo" -> assertEquals("1/1/2023,9:00-11:00AM", formatted)
                                 "Australia/Sydney" -> assertEquals("1/1/2023,11:00AM-1:00PM", formatted)
                             }
                         }

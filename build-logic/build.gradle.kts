@@ -8,6 +8,8 @@ val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 dependencies {
     val agpVersion = libs.findVersion("agp").get().requiredVersion
     val kotlinVersion = libs.findVersion("kotlin").get().requiredVersion
+    val nmcpVersion = libs.findVersion("nmcp").get().requiredVersion
     implementation("com.android.tools.build:gradle:$agpVersion")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+    implementation("com.gradleup.nmcp:nmcp:$nmcpVersion")
 }

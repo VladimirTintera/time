@@ -34,13 +34,13 @@ jobs:
 
       # Spuštění verifikačních testů
       - name: Run verification tests
-        run: ./gradlew check
+        run: ./gradlew clean check --no-build-cache
 
       # Jeden společný krok pro publish do lokálu i na vzdálený server
       # Opraveny názvy ENV proměnných, aby přesně odpovídaly tvé logice v Gradle
       - name: Publish to Local and Maven Central
         run: |
-          ./gradlew publishAllPublicationsToLocalRepoRepository publishAllPublicationsToMavenCentralRepository -Pversion=${{ steps.get_version.outputs.version }}
+          ./gradlew publishAllPublicationsToLocalRepoRepository publishAggregationToCentralPortal -Pversion=${{ steps.get_version.outputs.version }} --no-build-cache
         env:
           MAVENCENTRALUSERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
           MAVENCENTRALPASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
@@ -55,9 +55,17 @@ jobs:
           zip -r ../local-repo-release.zip .
           cd ../..
 
-      # Upload ZIPu do GitHub Artifacts
+      # Upload the ZIP to GitHub Actions artifacts so you can download it
       - name: Upload Release ZIP to GitHub Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: local-repo-release-${{ steps.get_version.outputs.version }}
+          name: local-repo-release
           path: build/local-repo-release.zip
+
+      # Upload test reports on failure or success to help debug failing tests
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-test-reports
+          path: "**/build/reports/tests/"

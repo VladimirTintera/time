@@ -21,5 +21,8 @@ import kotlin.time.Instant
  *
  * @return A [LocalDateTime] representation of this instant in the contextual time zone.
  */
+import kotlin.js.JsName
+
 context(timeZone: TimeZone)
+@JsName("toLocalDateTimeContext")
 fun Instant.toLocalDateTime(): LocalDateTime = toLocalDateTime(timeZone)

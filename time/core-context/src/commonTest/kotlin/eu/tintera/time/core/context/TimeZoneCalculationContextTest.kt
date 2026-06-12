@@ -13,7 +13,7 @@ class TimeZoneCalculationContextTest {
 
     private val zones = listOf(
         TimeZone.of("Europe/Prague"),
-        TimeZone.of("Asia/Kolkata"),
+        TimeZone.of("Asia/Tokyo"),
         TimeZone.of("Australia/Sydney")
     )
 

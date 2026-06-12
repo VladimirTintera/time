@@ -12,6 +12,7 @@ group = "eu.tintera.time"
 version = rootProject.version
 
 kotlin {
+    jvmToolchain(11)
 
     compilerOptions {
         freeCompilerArgs.addAll(
@@ -24,10 +25,6 @@ kotlin {
         namespace = "eu.tintera.time.format"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
-
-        compilerOptions {
-            jvmTarget = JvmTarget.JVM_11
-        }
     }
 
     jvm()

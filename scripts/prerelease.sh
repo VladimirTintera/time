@@ -23,7 +23,7 @@ fi
 
 # 2. Spuštění testů
 echo "🧪 Spouštím unit testy..."
-./gradlew check
+./gradlew clean check
 
 # 3. Generování Dokka dokumentace
 echo "📚 Generuji Dokka HTML dokumentaci..."
