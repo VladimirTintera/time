@@ -3,6 +3,7 @@ package eu.tintera.time.format
 import eu.tintera.locale.AppLocale
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
 
 /**
  * Formats this [LocalTime] into a string representation using the specified format.
@@ -26,9 +27,23 @@ import kotlinx.datetime.LocalTime
  * @param locale The [AppLocale] to use for formatting.
  * @return The formatted time string.
  */
+@Deprecated(
+    message = "Use the overload that explicitly requires a TimeZone, which is needed for contextual evaluation inside the format scope.",
+    replaceWith = ReplaceWith("this.format(format, locale, TimeZone.currentSystemDefault())", "import kotlinx.datetime.TimeZone")
+)
 fun LocalTime.format(
     format: TimeFormat,
     locale: AppLocale
+): String = format(
+    format = format,
+    locale = locale,
+    timeZone = TimeZone.currentSystemDefault()
+)
+
+fun LocalTime.format(
+    format: TimeFormat,
+    locale: AppLocale,
+    timeZone: TimeZone
 ): String = platformDateTimeFormat(
     date = LocalDateTime(
         year = 1970,
@@ -44,7 +59,8 @@ fun LocalTime.format(
         time { from(format) }
     },
     dateRequired = false,
-    timeRequired = true
+    timeRequired = true,
+    timeZone = timeZone
 )
 
 /**
@@ -67,10 +83,26 @@ fun LocalTime.format(
  * @param block The DSL block for configuring the [TimeFormat].
  * @return The formatted time string.
  */
+@Deprecated(
+    message = "Use the overload that explicitly requires a TimeZone, which is needed for contextual evaluation inside the format scope.",
+    replaceWith = ReplaceWith("this.format(locale, TimeZone.currentSystemDefault(), block)", "import kotlinx.datetime.TimeZone")
+)
 fun LocalTime.format(
     locale: AppLocale,
     block: TimeFormatScope<LocalTime>.() -> Unit = TimeFormatScope.defaultConfig()
 ) = format(
     locale = locale,
+    timeZone = TimeZone.currentSystemDefault(),
+    block = block
+)
+
+fun LocalTime.format(
+    locale: AppLocale,
+    timeZone: TimeZone,
+    block: TimeFormatScope<LocalTime>.() -> Unit = TimeFormatScope.defaultConfig()
+) = format(
+    locale = locale,
+    timeZone = timeZone,
     format = TimeFormat(block = block)
 )
+

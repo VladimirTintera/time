@@ -581,8 +581,8 @@ fun IntervalsPlayground() {
                 startDateTime.formatInterval(
                     to = endDateTime,
                     onSameMonth = { interval, start, end ->
-                        val startPart = start.format(interval.locale) { day = DayFormat.Numeric }.trim()
-                        val endPart = end.format(interval.locale) {
+                        val startPart = start.format(interval.locale, interval.timeZone) { day = DayFormat.Numeric }.trim()
+                        val endPart = end.format(interval.locale, interval.timeZone) {
                             medium()
                         }
                         "$startPart. – $endPart (Custom!)"

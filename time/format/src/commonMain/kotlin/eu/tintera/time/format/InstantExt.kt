@@ -36,7 +36,8 @@ fun Instant.format(
     locale = locale,
     format = format,
     dateRequired = false,
-    timeRequired = false
+    timeRequired = false,
+    timeZone = timeZone,
 )
 
 /**

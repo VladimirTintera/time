@@ -2,12 +2,13 @@ package eu.tintera.time.format
 
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
+import kotlinx.datetime.TimeZone
 import kotlin.time.Duration
 
 @TimeDslMarker
 class DurationFormatScope internal constructor(
     override val value: Duration,
-    override val locale: AppLocale
+    override val locale: AppLocale,
 ): ClockFormatScope(), FormatScope<Duration> {
 
     /**

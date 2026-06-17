@@ -27,16 +27,32 @@ import kotlin.time.Instant
  * @param locale The [AppLocale] to use for formatting.
  * @return The formatted date-time string.
  */
+@Deprecated(
+    message = "Use the overload that explicitly requires a TimeZone, which is needed for contextual evaluation inside the format scope.",
+    replaceWith = ReplaceWith("this.format(format, locale, TimeZone.currentSystemDefault())", "import kotlinx.datetime.TimeZone")
+)
 fun LocalDateTime.format(
     format: DateTimeFormat,
     locale: AppLocale
+): String = format(
+    format = format,
+    locale = locale,
+    timeZone = TimeZone.currentSystemDefault()
+)
+
+fun LocalDateTime.format(
+    format: DateTimeFormat,
+    locale: AppLocale,
+    timeZone: TimeZone
 ): String = platformDateTimeFormat(
     date = this,
     format = format,
     locale = locale,
     dateRequired = false,
-    timeRequired = false
+    timeRequired = false,
+    timeZone = timeZone
 )
+
 
 
 /**
@@ -60,12 +76,27 @@ fun LocalDateTime.format(
  * @param block The DSL block for configuring the [DateTimeFormat].
  * @return The formatted date-time string.
  */
+@Deprecated(
+    message = "Use the overload that explicitly requires a TimeZone, which is needed for contextual evaluation inside the format scope.",
+    replaceWith = ReplaceWith("this.format(locale, TimeZone.currentSystemDefault(), block)", "import kotlinx.datetime.TimeZone")
+)
 fun LocalDateTime.format(
     locale: AppLocale,
     block: DateTimeFormatScope<LocalDateTime, LocalDate, LocalTime>.() -> Unit = DateTimeFormatScope.defaultConfig()
 ) = format(
     format = DateTimeFormat(block),
-    locale = locale
+    locale = locale,
+    timeZone = TimeZone.currentSystemDefault()
+)
+
+fun LocalDateTime.format(
+    locale: AppLocale,
+    timeZone: TimeZone,
+    block: DateTimeFormatScope<LocalDateTime, LocalDate, LocalTime>.() -> Unit = DateTimeFormatScope.defaultConfig()
+) = format(
+    format = DateTimeFormat(block),
+    locale = locale,
+    timeZone = timeZone
 )
 
 /**

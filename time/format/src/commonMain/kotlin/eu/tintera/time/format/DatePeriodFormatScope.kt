@@ -3,11 +3,12 @@ package eu.tintera.time.format
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
 import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.TimeZone
 
 @TimeDslMarker
 class DatePeriodFormatScope internal constructor(
     override val value: DatePeriod,
-    override val locale: AppLocale
+    override val locale: AppLocale,
 ) : FormatScope<DatePeriod> {
 
     var years: UnitVisibility? = null

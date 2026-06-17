@@ -26,9 +26,23 @@ import kotlinx.datetime.*
  * @param locale The [AppLocale] to use for formatting.
  * @return The formatted date string.
  */
+@Deprecated(
+    message = "Use the overload that explicitly requires a TimeZone, which is needed for contextual evaluation inside the format scope.",
+    replaceWith = ReplaceWith("this.format(format, locale, TimeZone.currentSystemDefault())", "import kotlinx.datetime.TimeZone")
+)
 fun LocalDate.format(
     format: DateFormat,
     locale: AppLocale
+): String = format(
+    format = format,
+    locale = locale,
+    timeZone = TimeZone.currentSystemDefault(),
+)
+
+fun LocalDate.format(
+    format: DateFormat,
+    locale: AppLocale,
+    timeZone: TimeZone
 ): String = platformDateTimeFormat(
     LocalDateTime(
         year = year,
@@ -41,9 +55,9 @@ fun LocalDate.format(
         date { from(format) }
     },
     timeRequired = false,
-    dateRequired = true
+    dateRequired = true,
+    timeZone = timeZone
 )
-
 /**
  * Formats this [LocalDate] into a string representation using a DSL-configured format.
  *
@@ -66,12 +80,27 @@ fun LocalDate.format(
  * @param block The DSL block for configuring the [DateFormat].
  * @return The formatted date string.
  */
+@Deprecated(
+    message = "Use the overload that explicitly requires a TimeZone, which is needed for contextual evaluation inside the format scope.",
+    replaceWith = ReplaceWith("this.format(locale, TimeZone.currentSystemDefault(), block)", "import kotlinx.datetime.TimeZone")
+)
 fun LocalDate.format(
     locale: AppLocale,
     block: DateFormatScope<LocalDate>.() -> Unit = DateFormatScope.defaultConfig()
 ) = format(
     format = DateFormat(block),
-    locale = locale
+    locale = locale,
+    timeZone = TimeZone.currentSystemDefault()
+)
+
+fun LocalDate.format(
+    locale: AppLocale,
+    timeZone: TimeZone,
+    block: DateFormatScope<LocalDate>.() -> Unit = DateFormatScope.defaultConfig()
+) = format(
+    format = DateFormat(block),
+    locale = locale,
+    timeZone = timeZone
 )
 
 /**
@@ -94,7 +123,7 @@ fun LocalDate.format(
 fun LocalDate.formatMonthName(
     format: MonthFormat.Name,
     locale: AppLocale
-): String = format(locale) {
+): String = format(locale, TimeZone.currentSystemDefault()) {
     day = null
     year = null
     weekDay = null
@@ -121,7 +150,7 @@ fun LocalDate.formatMonthName(
 fun LocalDate.formatWeekDayName(
     format: WeekDayFormat = WeekDayFormat.FullName,
     locale: AppLocale
-): String = format(locale = locale) {
+): String = format(locale = locale, timeZone = TimeZone.currentSystemDefault()) {
     day = null
     year = null
     month = null

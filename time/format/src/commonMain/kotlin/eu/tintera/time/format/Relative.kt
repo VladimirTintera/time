@@ -42,6 +42,7 @@ internal fun platformRelativeTimeFormat(
             now = now.toLocalDateTime(timeZone),
         ),
         locale = locale,
+        timeZone = timeZone,
     )
 
     format.block(scope)

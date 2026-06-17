@@ -8,8 +8,8 @@ import kotlinx.datetime.TimeZone
 /**
  * Formats this [LocalDate] into a string representation using the specified format.
  *
- * This function is context-aware and automatically uses the implicit [AppLocale] context
- * to resolve formatting.
+ * This function is context-aware and automatically uses the implicit [AppLocale] and
+ * [TimeZone] contexts to resolve formatting.
  *
  * Example:
  * ```kotlin
@@ -20,7 +20,7 @@ import kotlinx.datetime.TimeZone
  *     day = DayFormat.Numeric
  * }
  * val myLocale = localeForLanguageTag("en-US")
- * val formatted = with(myLocale) {
+ * val formatted = withRegionalContext(TimeZone.UTC, myLocale) {
  *     date.format(format)
  * }
  * ```
@@ -28,22 +28,22 @@ import kotlinx.datetime.TimeZone
  * @param format The format to use for string conversion.
  * @return The formatted localized string.
  */
-context(locale: AppLocale)
+context(locale: AppLocale, timeZone: TimeZone)
 fun LocalDate.format(
     format: DateFormat
-): String = format(format, locale)
+): String = format(format, locale, timeZone)
 
 /**
  * Formats this [LocalDate] into a string representation using a DSL-configured format.
  *
- * This function is context-aware and automatically uses the implicit [AppLocale] context
- * to resolve formatting.
+ * This function is context-aware and automatically uses the implicit [AppLocale] and
+ * [TimeZone] contexts to resolve formatting.
  *
  * Example:
  * ```kotlin
  * val date = LocalDate(2024, 1, 1)
  * val myLocale = localeForLanguageTag("en-US")
- * val formatted = with(myLocale) {
+ * val formatted = withRegionalContext(TimeZone.UTC, myLocale) {
  *     date.format {
  *         year = YearFormat.FourDigits
  *         month = MonthFormat.Name.Full
@@ -55,10 +55,12 @@ fun LocalDate.format(
  * @param block The builder block to configure the date format.
  * @return The formatted localized string.
  */
-context(locale: AppLocale)
+context(locale: AppLocale, timeZone: TimeZone)
 fun LocalDate.format(
-    block: DateFormatScope<LocalDate>.() -> Unit = DateFormatScope.defaultConfig()
-): String = format(locale, block)
+    block: context(AppLocale, TimeZone) DateFormatScope<LocalDate>.() -> Unit = { DateFormatScope.defaultConfig<LocalDate>().invoke(this) }
+): String = format(locale, timeZone) {
+    block()
+}
 
 /**
  * Formats this [LocalDate] to return just the localized name of its month.

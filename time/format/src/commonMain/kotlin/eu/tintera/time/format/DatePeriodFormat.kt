@@ -15,7 +15,7 @@ package eu.tintera.time.format
  * ```
  */
 class DatePeriodFormat(
-    val block: DatePeriodFormatScope.() -> Unit = DatePeriodFormatScope.defaultConfig
+    internal val block: DatePeriodFormatScope.() -> Unit = DatePeriodFormatScope.defaultConfig
 ) {
     companion object {
         /**

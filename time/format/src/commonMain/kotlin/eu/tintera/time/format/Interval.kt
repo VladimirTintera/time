@@ -268,6 +268,7 @@ internal fun platformIntervalFormat(
         date = start.date..<end.date,
         time = start.time..<end.time,
         locale = locale,
+        timeZone = timeZone
     )
 
     format.block(scope)

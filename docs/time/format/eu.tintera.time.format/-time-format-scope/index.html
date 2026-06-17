@@ -38,7 +38,7 @@
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
-        <div class="library-version" id="library-version">1.0.2
+        <div class="library-version" id="library-version">1.0.3
         </div>
         <div class="navigation-controls">
         <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
@@ -93,7 +93,7 @@
   <div class="breadcrumbs"><a href="../../index.html">format</a><span class="delimiter">/</span><a href="../index.html">eu.tintera.time.format</a><span class="delimiter">/</span><span class="current">TimeFormatScope</span></div>
   <div class="cover ">
     <h1 class="cover"><span>Time</span><wbr><span>Format</span><wbr><span><span>Scope</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TimeFormatScope</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span> : <a href="../-format-scope/index.html">FormatScope</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt; </span></div><p class="paragraph">Scope class for configuring <a href="../-time-format/index.html">TimeFormat</a> instances using a DSL.</p><p class="paragraph">This class provides a flexible way to configure a <a href="../-time-format/index.html">TimeFormat</a> by specifying the desired format for each time component. It also includes predefined styles for convenience.</p><p class="paragraph">Example:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val format = TimeFormat {<br>    hour = HourFormat.Auto.Numeric<br>    minute = MinuteFormat.Padded<br>}</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">TimeFormatScope</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span> : <a href="../-time-zoned-format-scope/index.html">TimeZonedFormatScope</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt; </span></div><p class="paragraph">Scope class for configuring <a href="../-time-format/index.html">TimeFormat</a> instances using a DSL.</p><p class="paragraph">This class provides a flexible way to configure a <a href="../-time-format/index.html">TimeFormat</a> by specifying the desired format for each time component. It also includes predefined styles for convenience.</p><p class="paragraph">Example:</p><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">val format = TimeFormat {<br>    hour = HourFormat.Auto.Numeric<br>    minute = MinuteFormat.Padded<br>}</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
@@ -205,6 +205,21 @@
               <div>
                 <div class="title">
                   <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">var </span><a href="second.html">second</a><span class="token operator">: </span><a href="../-second-format/index.html">SecondFormat</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">The format style for the second component, or null if omitted.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1890885285%2FProperties%2F1501674941" anchor-label="timeZone" id="-1890885285%2FProperties%2F1501674941" data-filterable-set=":time:format/commonMain"></a>
+          <div class="table-row table-row_content" data-filterable-current=":time:format/commonMain" data-filterable-set=":time:format/commonMain">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="time-zone.html"><span>time</span><wbr><span><span>Zone</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1890885285%2FProperties%2F1501674941"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":time:format/commonMain"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="time-zone.html">timeZone</a><span class="token operator">: </span><span data-unresolved-link="kotlinx.datetime/TimeZone///PointingToDeclaration/">TimeZone</span></div></div></div>
                 </div>
               </div>
             </div>

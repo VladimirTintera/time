@@ -58,8 +58,10 @@ fun Instant.format(
  */
 context(locale: AppLocale, timeZone: TimeZone)
 fun Instant.format(
-    block: DateTimeFormatScope<LocalDateTime, LocalDate, LocalTime>.() -> Unit = DateTimeFormatScope.defaultConfig()
-): String = format(timeZone, locale, block)
+    block: context(AppLocale, TimeZone) DateTimeFormatScope<LocalDateTime, LocalDate, LocalTime>.() -> Unit = { DateTimeFormatScope.defaultConfig<LocalDateTime, LocalDate, LocalTime>().invoke(this) }
+): String = format(timeZone, locale) {
+    block()
+}
 
 /**
  * Formats this [Instant] as a relative time string from another reference [Instant].
@@ -111,8 +113,10 @@ fun Instant.formatRelative(
 context(locale: AppLocale, timeZone: TimeZone)
 fun Instant.formatRelative(
     now: Instant,
-    block: RelativeDateTimeFormatScope.() -> Unit = RelativeDateTimeFormatScope.defaultConfig
-): String = formatRelative(now, timeZone, locale, block)
+    block: context(AppLocale, TimeZone) RelativeDateTimeFormatScope.() -> Unit = { RelativeDateTimeFormatScope.defaultConfig.invoke(this) }
+): String = formatRelative(now, timeZone, locale) {
+    block()
+}
 
 /**
  * Formats the interval between this [Instant] and another [Instant] as a string.
@@ -164,8 +168,10 @@ fun Instant.formatInterval(
 context(locale: AppLocale, timeZone: TimeZone)
 fun Instant.formatInterval(
     to: Instant,
-    block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
-): String = formatInterval(to, timeZone, locale, block)
+    block: context(AppLocale, TimeZone) DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = { DateTimeFormatScope.defaultConfig<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>().invoke(this) }
+): String = formatInterval(to, timeZone, locale) {
+    block()
+}
 
 /**
  * Formats this range of [Instant] into a localized interval string.
@@ -223,11 +229,11 @@ fun OpenEndRange<Instant>.format(
  */
 context(locale: AppLocale, timeZone: TimeZone)
 fun OpenEndRange<Instant>.format(
-    block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
+    block: context(AppLocale, TimeZone) DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = { DateTimeFormatScope.defaultConfig<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>().invoke(this) }
 ) = formatInterval(
     from = this.start,
     to = this.endExclusive,
-    format = DateTimeIntervalFormat(block),
+    format = DateTimeIntervalFormat { block() },
     timeZone = timeZone,
     locale = locale,
 )

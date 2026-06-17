@@ -2,12 +2,14 @@ package eu.tintera.time.format
 
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
+import kotlinx.datetime.TimeZone
 
 @TimeDslMarker
 class RelativeDateTimeFormatScope internal constructor(
     override val value: RelativeValues,
-    override val locale: AppLocale
-) : FormatScope<RelativeValues> {
+    override val locale: AppLocale,
+    override val timeZone: TimeZone
+) : TimeZonedFormatScope<RelativeValues> {
     /** The style to use for formatting. Defaults to [FormatStyle.Full]. */
     var style: FormatStyle = FormatStyle.Full
 

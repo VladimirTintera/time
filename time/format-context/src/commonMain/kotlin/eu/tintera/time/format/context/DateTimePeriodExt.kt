@@ -56,6 +56,8 @@ fun DateTimePeriod.format(
  */
 context(locale: AppLocale)
 fun DateTimePeriod.format(
-    block: DateTimePeriodFormatScope.() -> Unit = DateTimePeriodFormatScope.defaultConfig
-): String = format(locale, block)
+    block: context(AppLocale) DateTimePeriodFormatScope.() -> Unit = { DateTimePeriodFormatScope.defaultConfig.invoke(this) }
+): String = format(locale) {
+    block()
+}
 

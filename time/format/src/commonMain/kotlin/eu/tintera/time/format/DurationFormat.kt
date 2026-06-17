@@ -15,7 +15,7 @@ package eu.tintera.time.format
  * ```
  */
 class DurationFormat internal constructor(
-    val block: DurationFormatScope.() -> Unit = DurationFormatScope.defaultConfig
+    internal val block: DurationFormatScope.() -> Unit = DurationFormatScope.defaultConfig
 ) {
     companion object {
         /**

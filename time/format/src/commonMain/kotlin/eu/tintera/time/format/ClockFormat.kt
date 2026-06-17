@@ -14,7 +14,7 @@ package eu.tintera.time.format
  * @param block The configuration block applied to [ClockFormatScope].
  */
 class ClockFormat(
-    val block: ClockFormatScope.() -> Unit
+    internal val block: ClockFormatScope.() -> Unit
 ) {
     companion object {
         /**

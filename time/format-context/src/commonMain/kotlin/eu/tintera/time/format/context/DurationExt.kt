@@ -58,8 +58,10 @@ fun Duration.format(
  */
 context(locale: AppLocale)
 fun Duration.format(
-    block: DurationFormatScope.() -> Unit = DurationFormatScope.defaultConfig
-): String = format(locale, block)
+    block: context(AppLocale) DurationFormatScope.() -> Unit = { DurationFormatScope.defaultConfig.invoke(this) }
+): String = format(locale) {
+    block()
+}
 
 /**
  * Formats this [Duration] into a digital clock-style string representation.
@@ -115,6 +117,8 @@ fun Duration.formatDigital(
  */
 context(locale: AppLocale)
 fun Duration.formatDigital(
-    block: DurationDigitalFormatScope.() -> Unit = DurationDigitalFormatScope.defaultConfig
-): String = formatDigital(locale, block)
+    block: context(AppLocale) DurationDigitalFormatScope.() -> Unit = { DurationDigitalFormatScope.defaultConfig.invoke(this) }
+): String = formatDigital(locale) {
+    block()
+}
 

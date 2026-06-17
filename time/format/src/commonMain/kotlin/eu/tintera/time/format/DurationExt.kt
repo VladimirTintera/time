@@ -2,6 +2,7 @@ package eu.tintera.time.format
 
 import eu.tintera.locale.AppLocale
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
 import kotlin.time.Duration
 
 /**
@@ -129,7 +130,7 @@ fun Duration.formatDigital(
 private fun digitalFormat(
     duration: Duration,
     format: DurationDigitalFormat,
-    locale: AppLocale
+    locale: AppLocale,
 ): String {
 
     val scope = DurationDigitalFormatScope(duration, locale)
@@ -151,7 +152,7 @@ private fun digitalFormat(
             val time = LocalTime(hours, minutes, seconds, nanoseconds)
 
             add(
-                time.format(locale) {
+                time.format(locale, TimeZone.UTC) {
                     hour = scope.hour
                     minute = scope.minute
                     second = scope.second

@@ -3,6 +3,7 @@ package eu.tintera.time.format
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
 
 /**
  * Encapsulates a formatting configuration for time values.
@@ -47,7 +48,7 @@ class TimeFormat internal constructor(
  * @param block The configuration block applied to [TimeFormatScope].
  */
 abstract class BaseTimeFormat<T : Any> internal constructor(
-    val block: TimeFormatScope<T>.() -> Unit
+    internal val block: TimeFormatScope<T>.() -> Unit
 )
 
 
@@ -69,8 +70,9 @@ abstract class BaseTimeFormat<T : Any> internal constructor(
 @TimeDslMarker
 class TimeFormatScope<T : Any> internal constructor(
     override val value: T,
-    override val locale: AppLocale
-) : FormatScope<T> {
+    override val locale: AppLocale,
+    override val timeZone: TimeZone,
+) : TimeZonedFormatScope<T> {
 
     /** The format style for the hour component, or null if omitted. */
     var hour: HourFormat? = null

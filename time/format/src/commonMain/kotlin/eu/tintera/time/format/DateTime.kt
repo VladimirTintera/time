@@ -5,6 +5,7 @@ import eu.tintera.locale.languageTag
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
 
 internal data class FormatterKey(
     val skeleton: String,
@@ -16,6 +17,7 @@ internal expect val formatterCache: Cache<FormatterKey, DateTimeFormatter>
 internal fun platformDateTimeFormat(
     date: LocalDateTime,
     locale: AppLocale,
+    timeZone: TimeZone,
     format: DateTimeFormat,
     dateRequired: Boolean,
     timeRequired: Boolean,
@@ -25,7 +27,8 @@ internal fun platformDateTimeFormat(
         value = date,
         date = date.date,
         time = date.time,
-        locale = locale
+        locale = locale,
+        timeZone = timeZone,
     )
 
     format.block(dateTimeFormatScope)

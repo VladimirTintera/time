@@ -2,12 +2,14 @@ package eu.tintera.time.format
 
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
+import kotlinx.datetime.TimeZone
 
 @TimeDslMarker
 class DateFormatScope<T : Any> internal constructor(
     override val value: T,
-    override val locale: AppLocale
-) : FormatScope<T> {
+    override val locale: AppLocale,
+    override val timeZone: TimeZone,
+) : TimeZonedFormatScope<T> {
     /** The format style for the day of the week, or null if omitted. */
     var weekDay: WeekDayFormat? = null
 

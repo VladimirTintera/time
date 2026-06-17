@@ -55,6 +55,7 @@ fun DatePeriod.format(
  */
 context(locale: AppLocale)
 fun DatePeriod.formatCalendar(
-    block: DatePeriodFormatScope.() -> Unit = DatePeriodFormatScope.defaultConfig
-): String = formatCalendar(locale, block)
-
+    block: context(AppLocale) DatePeriodFormatScope.() -> Unit = { DatePeriodFormatScope.defaultConfig.invoke(this) }
+): String = formatCalendar(locale) {
+    block()
+}

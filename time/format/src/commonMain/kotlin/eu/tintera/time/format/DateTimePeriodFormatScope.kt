@@ -4,11 +4,12 @@ import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
 import eu.tintera.time.core.datePeriod
 import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.TimeZone
 
 @TimeDslMarker
 class DateTimePeriodFormatScope internal constructor(
     override val value: DateTimePeriod,
-    override val locale: AppLocale
+    override val locale: AppLocale,
 ) : FormatScope<DateTimePeriod> {
 
     /**

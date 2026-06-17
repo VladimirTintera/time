@@ -10,8 +10,8 @@ import kotlinx.datetime.TimeZone
 /**
  * Formats this [LocalDateTime] into a string representation using the specified format.
  *
- * This function is context-aware and automatically uses the implicit [AppLocale] context
- * to resolve formatting.
+ * This function is context-aware and automatically uses the implicit [AppLocale] and
+ * [TimeZone] contexts to resolve formatting.
  *
  * Example:
  * ```kotlin
@@ -21,7 +21,7 @@ import kotlinx.datetime.TimeZone
  *     time { short() }
  * }
  * val myLocale = localeForLanguageTag("en-US")
- * val formatted = with(myLocale) {
+ * val formatted = withRegionalContext(TimeZone.UTC, myLocale) {
  *     dateTime.format(format)
  * }
  * ```
@@ -29,22 +29,22 @@ import kotlinx.datetime.TimeZone
  * @param format The format to use for string conversion.
  * @return The formatted localized string.
  */
-context(locale: AppLocale)
+context(locale: AppLocale, timeZone: TimeZone)
 fun LocalDateTime.format(
     format: DateTimeFormat
-): String = format(format, locale)
+): String = format(format, locale, timeZone)
 
 /**
  * Formats this [LocalDateTime] into a string representation using a DSL-configured format.
  *
- * This function is context-aware and automatically uses the implicit [AppLocale] context
- * to resolve formatting.
+ * This function is context-aware and automatically uses the implicit [AppLocale] and
+ * [TimeZone] contexts to resolve formatting.
  *
  * Example:
  * ```kotlin
  * val dateTime = LocalDateTime(2024, 1, 1, 12, 30)
  * val myLocale = localeForLanguageTag("en-US")
- * val formatted = with(myLocale) {
+ * val formatted = withRegionalContext(TimeZone.UTC, myLocale) {
  *     dateTime.format {
  *         date { short() }
  *         time { short() }
@@ -55,10 +55,14 @@ fun LocalDateTime.format(
  * @param block The builder block to configure the date-time format.
  * @return The formatted localized string.
  */
-context(locale: AppLocale)
+context(locale: AppLocale, timeZone: TimeZone)
 fun LocalDateTime.format(
-    block: DateTimeFormatScope<LocalDateTime, LocalDate, LocalTime>.() -> Unit = DateTimeFormatScope.defaultConfig()
-): String = format(locale, block)
+    block: context(AppLocale, TimeZone) DateTimeFormatScope<LocalDateTime, LocalDate, LocalTime>.() -> Unit = {
+        DateTimeFormatScope.defaultConfig<LocalDateTime, LocalDate, LocalTime>().invoke(this)
+    }
+): String = format(locale, timeZone) {
+    block()
+}
 
 /**
  * Formats this [LocalDateTime] as a relative time string from another [LocalDateTime].
@@ -110,8 +114,12 @@ fun LocalDateTime.formatRelative(
 context(locale: AppLocale, timeZone: TimeZone)
 fun LocalDateTime.formatRelative(
     now: LocalDateTime,
-    block: RelativeDateTimeFormatScope.() -> Unit = RelativeDateTimeFormatScope.defaultConfig
-): String = formatRelative(now, timeZone, locale, block)
+    block: context(AppLocale, TimeZone) RelativeDateTimeFormatScope.() -> Unit = {
+        RelativeDateTimeFormatScope.defaultConfig(this)
+    }
+): String = formatRelative(now, timeZone, locale) {
+    block()
+}
 
 /**
  * Formats the interval between this [LocalDateTime] and another [LocalDateTime] as a string.
@@ -190,7 +198,10 @@ fun LocalDateTime.formatInterval(
     onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onDifferentDate: DifferentDateTimeCombiner = defaultDifferentDateTimeCombiner(),
-    block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
+    block: context(AppLocale, TimeZone) DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = {
+        DateTimeFormatScope.defaultConfig<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>()
+            .invoke(this)
+    }
 ): String = formatInterval(
     to = to,
     locale = locale,
@@ -199,7 +210,7 @@ fun LocalDateTime.formatInterval(
     onSameMonth = onSameMonth,
     onSameYear = onSameYear,
     onDifferentDate = onDifferentDate,
-    block = block
+    block = { block() }
 )
 
 /**
@@ -276,7 +287,10 @@ fun OpenEndRange<LocalDateTime>.format(
     onSameMonth: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onSameYear: DifferentDateCombiner = defaultDifferentDateCombiner(),
     onDifferentDate: DifferentDateTimeCombiner = defaultDifferentDateTimeCombiner(),
-    block: DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = DateTimeFormatScope.defaultConfig()
+    block: context(AppLocale, TimeZone) DateTimeFormatScope<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>.() -> Unit = {
+        DateTimeFormatScope.defaultConfig<OpenEndRange<LocalDateTime>, OpenEndRange<LocalDate>, OpenEndRange<LocalTime>>()
+            .invoke(this)
+    }
 ): String = format(
     locale = locale,
     timeZone = timeZone,
@@ -284,6 +298,6 @@ fun OpenEndRange<LocalDateTime>.format(
     onSameMonth = onSameMonth,
     onSameYear = onSameYear,
     onDifferentDate = onDifferentDate,
-    block = block
+    block = { block() }
 )
 

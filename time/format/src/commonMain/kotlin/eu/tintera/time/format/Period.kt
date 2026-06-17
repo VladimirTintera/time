@@ -2,6 +2,7 @@ package eu.tintera.time.format
 
 import eu.tintera.locale.AppLocale
 import kotlinx.datetime.DateTimePeriod
+import kotlinx.datetime.TimeZone
 
 internal fun platformPeriodFormat(
     period: DateTimePeriod,

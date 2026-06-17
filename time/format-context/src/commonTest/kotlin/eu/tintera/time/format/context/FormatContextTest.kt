@@ -1,6 +1,9 @@
 package eu.tintera.time.format.context
 
+import eu.tintera.locale.AppLocale
 import eu.tintera.locale.localeForLanguageTag
+import eu.tintera.time.core.context.toLocalDateTime
+import eu.tintera.time.format.DateFormatScope
 import eu.tintera.time.format.DateTimeIntervalFormat
 import eu.tintera.time.format.MonthFormat
 import eu.tintera.time.format.UnitVisibility
@@ -98,6 +101,23 @@ class FormatContextTest {
         }
     }
 
+    private val contextAwareBlock: context(AppLocale, TimeZone) DateFormatScope<LocalDate>.() -> Unit = {
+        // Inside this block, TimeZone is only present once in context, so we can use context-dependent toLocalDateTime()
+        val nowLdt = Instant.fromEpochMilliseconds(0).toLocalDateTime()
+        medium()
+    }
+
+    @Test
+    fun testContextAwareLambda() {
+        val date = LocalDate(2023, 5, 15)
+        with(locale) {
+            with(tz) {
+                val formatted = date.format(contextAwareBlock)
+                assertTrue(formatted.isNotEmpty())
+            }
+        }
+    }
+
     @Test
     fun testLocalFormats() {
         val date = LocalDate(2023, 5, 15)
@@ -105,18 +125,20 @@ class FormatContextTest {
         val time = LocalTime(14, 30, 0, 0)
 
         with(locale) {
-            // LocalDate format
-            assertTrue(date.format { medium() }.isNotEmpty())
-            assertTrue(date.formatMonthName(MonthFormat.Name.Full).isNotEmpty())
-            assertTrue(date.formatWeekDayName(WeekDayFormat.FullName).isNotEmpty())
+            with(tz) {
+                // LocalDate format
+                assertTrue(date.format { medium() }.isNotEmpty())
+                assertTrue(date.formatMonthName(MonthFormat.Name.Full).isNotEmpty())
+                assertTrue(date.formatWeekDayName(WeekDayFormat.FullName).isNotEmpty())
 
-            // LocalDateTime format
-            assertTrue(ldt.format {
-                date { medium() }
-            }.isNotEmpty())
+                // LocalDateTime format
+                assertTrue(ldt.format {
+                    date { medium() }
+                }.isNotEmpty())
 
-            // LocalTime format
-            assertTrue(time.format { short() }.isNotEmpty())
+                // LocalTime format
+                assertTrue(time.format { short() }.isNotEmpty())
+            }
         }
     }
 

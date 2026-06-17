@@ -119,15 +119,17 @@ class LocaleAndTimeZoneFormattingContextTest {
         val ldt = LocalDateTime(2023, 5, 15, 14, 30, 0, 0)
         for (locale in locales) {
             with(locale) {
-                val formatted = ldt.format {
-                    date { long() }
-                    time { short() }
-                }.clean()
-                
-                if (locale.languageTag.startsWith("cs")) {
-                    assertEquals("15.května2023v14:30", formatted)
-                } else {
-                    assertEquals("May15,2023at2:30PM", formatted)
+                with(TimeZone.UTC) {
+                    val formatted = ldt.format {
+                        date { long() }
+                        time { short() }
+                    }.clean()
+                    
+                    if (locale.languageTag.startsWith("cs")) {
+                        assertEquals("15.května2023v14:30", formatted)
+                    } else {
+                        assertEquals("May15,2023at2:30PM", formatted)
+                    }
                 }
             }
         }
@@ -163,14 +165,16 @@ class LocaleAndTimeZoneFormattingContextTest {
         val time = LocalTime(14, 30, 45, 0)
         for (locale in locales) {
             with(locale) {
-                val formatted = time.format {
-                    full()
-                }.clean()
-                
-                if (locale.languageTag.startsWith("cs")) {
-                    assertEquals("14:30:45", formatted)
-                } else {
-                    assertEquals("2:30:45PM", formatted)
+                with(TimeZone.UTC) {
+                    val formatted = time.format {
+                        full()
+                    }.clean()
+                    
+                    if (locale.languageTag.startsWith("cs")) {
+                        assertEquals("14:30:45", formatted)
+                    } else {
+                        assertEquals("2:30:45PM", formatted)
+                    }
                 }
             }
         }

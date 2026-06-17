@@ -2,12 +2,13 @@ package eu.tintera.time.format
 
 import eu.tintera.locale.AppLocale
 import eu.tintera.time.core.TimeDslMarker
+import kotlinx.datetime.TimeZone
 import kotlin.time.Duration
 
 @TimeDslMarker
 class DurationDigitalFormatScope internal constructor(
     override val value: Duration,
-    override val locale: AppLocale
+    override val locale: AppLocale,
 ) : FormatScope<Duration> {
     /** The style to format the days component. */
     var day: FormatStyle? = null

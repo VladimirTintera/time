@@ -40,5 +40,5 @@ class DateFormat internal constructor(
  * @property block The configuration DSL block.
  */
 abstract class BaseDateFormat<T : Any> internal constructor(
-    val block: DateFormatScope<T>.() -> Unit
+    internal val block: DateFormatScope<T>.() -> Unit
 )

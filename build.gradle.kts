@@ -36,6 +36,7 @@ nmcpAggregation {
         username.set(findPropertyOrLocal("mavenCentralUsername"))
         password.set(findPropertyOrLocal("mavenCentralPassword"))
         publishingType.set("AUTOMATIC")
+        publicationName.set("Release v${project.version}")
     }
 }
 
