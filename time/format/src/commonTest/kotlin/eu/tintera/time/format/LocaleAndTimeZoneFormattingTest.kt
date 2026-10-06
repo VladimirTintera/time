@@ -76,6 +76,85 @@ class LocaleAndTimeZoneFormattingTest {
     }
 
     @Test
+    fun testInstantRelativeFormattingSecondsBoundary() {
+        val now = instant
+        val target = instant + 35.seconds
+        for (locale in locales) {
+            for (zone in zones) {
+                val formatted = target.formatRelative(now, zone, locale) {
+                    minutes()
+                    seconds()
+                }.clean()
+                
+                if (locale.languageTag.startsWith("cs")) {
+                    assertEquals("za35sekund", formatted)
+                } else {
+                    assertEquals("in35seconds", formatted)
+                }
+            }
+        }
+    }
+
+    @Test
+    fun testInstantRelativeFormattingRoundingMode() {
+        val now = instant
+        
+        // Test case 1: 1 hour 45 minutes
+        val target1 = now + 1.hours + 45.minutes
+        for (locale in locales) {
+            for (zone in zones) {
+                // Truncate (default) -> 1 hour
+                val formattedTrunc = target1.formatRelative(now, zone, locale) {
+                    hours(min = 1, roundingMode = RelativeRoundingMode.Truncate)
+                }.clean()
+                if (locale.languageTag.startsWith("cs")) {
+                    assertEquals("za1hodinu", formattedTrunc)
+                } else {
+                    assertEquals("in1hour", formattedTrunc)
+                }
+
+                // Round -> 2 hours
+                val formattedRound = target1.formatRelative(now, zone, locale) {
+                    hours(min = 1, roundingMode = RelativeRoundingMode.Round)
+                }.clean()
+                if (locale.languageTag.startsWith("cs")) {
+                    assertEquals("za2hodiny", formattedRound)
+                } else {
+                    assertEquals("in2hours", formattedRound)
+                }
+            }
+        }
+
+        // Test case 2: 35 seconds (escalating to 1 minute)
+        val target2 = now + 35.seconds
+        for (locale in locales) {
+            for (zone in zones) {
+                // Truncate -> fallback to seconds (35 seconds)
+                val formattedTrunc = target2.formatRelative(now, zone, locale) {
+                    minutes(min = 1, roundingMode = RelativeRoundingMode.Truncate)
+                    seconds(min = 1)
+                }.clean()
+                if (locale.languageTag.startsWith("cs")) {
+                    assertEquals("za35sekund", formattedTrunc)
+                } else {
+                    assertEquals("in35seconds", formattedTrunc)
+                }
+
+                // Round -> round up to 1 minute
+                val formattedRound = target2.formatRelative(now, zone, locale) {
+                    minutes(min = 1, roundingMode = RelativeRoundingMode.Round)
+                    seconds(min = 1)
+                }.clean()
+                if (locale.languageTag.startsWith("cs")) {
+                    assertEquals("za1minutu", formattedRound)
+                } else {
+                    assertEquals("in1minute", formattedRound)
+                }
+            }
+        }
+    }
+
+    @Test
     fun testInstantIntervalFormatting() {
         val start = instant
         val end = instant + 2.hours

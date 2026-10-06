@@ -59,3 +59,22 @@ internal data class UnitThresholdImpl(
     override val min: Int = 1
 ) : UnitThreshold
 
+enum class RelativeRoundingMode {
+    Truncate,
+    Round
+}
+
+interface TimeThreshold : UnitThreshold {
+    val roundingMode: RelativeRoundingMode
+}
+
+internal data class TimeThresholdImpl(
+    override val min: Int = 1,
+    override val roundingMode: RelativeRoundingMode = RelativeRoundingMode.Truncate
+) : TimeThreshold
+
+fun TimeThreshold(
+    min: Int,
+    roundingMode: RelativeRoundingMode = RelativeRoundingMode.Truncate
+): TimeThreshold = TimeThresholdImpl(min = min, roundingMode = roundingMode)
+

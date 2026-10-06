@@ -53,3 +53,13 @@ dependencies {
     nmcpAggregation(projects.time.coreContext)
     nmcpAggregation(projects.time.formatContext)
 }
+
+// Maven Central nekontroluje kontrolní součty podpisových souborů, takže je do
+// nahrávaného archivu nepřidáváme - ušetří to ~2 soubory na každý publikovaný
+// artefakt (viz docs/maven_central_publishing_limits_plan.md).
+tasks.named<Zip>("nmcpZipAggregation") {
+    exclude("**/*.asc.md5")
+    exclude("**/*.asc.sha1")
+    exclude("**/*.asc.sha256")
+    exclude("**/*.asc.sha512")
+}

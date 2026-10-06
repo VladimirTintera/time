@@ -225,6 +225,29 @@ class FormattersAndExtensionsTest {
     }
 
     @Test
+    fun testDayOfWeekSampleDateFallsOnSameDay() {
+        for (day in DayOfWeek.entries) {
+            assertEquals(day, day.sampleDate().dayOfWeek)
+        }
+    }
+
+    @Test
+    fun testDayOfWeekFormatNameMatchesDay() {
+        val enUs = localeForLanguageTag("en-US")
+        val expectedFull = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+        val expectedShort = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+        for (day in DayOfWeek.entries) {
+            assertEquals(expectedFull[day.ordinal], day.formatName(enUs, WeekDayFormat.FullName))
+            assertEquals(expectedShort[day.ordinal], day.formatName(enUs, WeekDayFormat.ShortName))
+        }
+
+        val cs = localeForLanguageTag("cs")
+        assertEquals("pondělí", DayOfWeek.MONDAY.formatName(cs, WeekDayFormat.FullName))
+        assertEquals("po", DayOfWeek.MONDAY.formatName(cs, WeekDayFormat.ShortName))
+        assertEquals("čtvrtek", DayOfWeek.THURSDAY.formatName(cs, WeekDayFormat.FullName))
+    }
+
+    @Test
     fun testGetFirstDayOfWeek() {
         val firstDay = getFirstDayOfWeek(locale)
         assertNotNull(firstDay)

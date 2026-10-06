@@ -25,13 +25,13 @@ class RelativeDateTimeFormatScope internal constructor(
     var days: UnitThreshold? = null
 
     /** Threshold for formatting differences in hours. */
-    var hours: UnitThreshold? = null
+    var hours: TimeThreshold? = null
 
     /** Threshold for formatting differences in minutes. */
-    var minutes: UnitThreshold? = null
+    var minutes: TimeThreshold? = null
 
     /** Threshold for formatting differences in seconds. Defaults to null (disabled). */
-    var seconds: UnitThreshold? = null
+    var seconds: TimeThreshold? = null
 
     /**
      * Configures all main relative units (years, months, days, hours, minutes) with a default threshold of 1.
@@ -47,8 +47,8 @@ class RelativeDateTimeFormatScope internal constructor(
         years = UnitThreshold(1)
         months = UnitThreshold(1)
         days = UnitThreshold(1)
-        hours = UnitThreshold(1)
-        minutes = UnitThreshold(1)
+        hours = TimeThreshold(1)
+        minutes = TimeThreshold(1)
         seconds = null
     }
 
@@ -111,9 +111,10 @@ class RelativeDateTimeFormatScope internal constructor(
      * ```
      *
      * @param min The minimum number of hours, or null to disable relative hours.
+     * @param roundingMode The rounding mode to use when evaluating thresholds. Defaults to [RelativeRoundingMode.Truncate].
      */
-    fun hours(min: Int? = 1) {
-        hours = min?.let { UnitThresholdImpl(min) }
+    fun hours(min: Int? = 1, roundingMode: RelativeRoundingMode = RelativeRoundingMode.Truncate) {
+        hours = min?.let { TimeThresholdImpl(min, roundingMode) }
     }
 
     /**
@@ -127,9 +128,10 @@ class RelativeDateTimeFormatScope internal constructor(
      * ```
      *
      * @param min The minimum number of minutes, or null to disable relative minutes.
+     * @param roundingMode The rounding mode to use when evaluating thresholds. Defaults to [RelativeRoundingMode.Truncate].
      */
-    fun minutes(min: Int? = 1) {
-        minutes = min?.let { UnitThresholdImpl(min) }
+    fun minutes(min: Int? = 1, roundingMode: RelativeRoundingMode = RelativeRoundingMode.Truncate) {
+        minutes = min?.let { TimeThresholdImpl(min, roundingMode) }
     }
 
     /**
@@ -143,9 +145,10 @@ class RelativeDateTimeFormatScope internal constructor(
      * ```
      *
      * @param min The minimum number of seconds, or null to disable relative seconds.
+     * @param roundingMode The rounding mode to use when evaluating thresholds. Defaults to [RelativeRoundingMode.Truncate].
      */
-    fun seconds(min: Int? = 1) {
-        seconds = min?.let { UnitThresholdImpl(min) }
+    fun seconds(min: Int? = 1, roundingMode: RelativeRoundingMode = RelativeRoundingMode.Truncate) {
+        seconds = min?.let { TimeThresholdImpl(min, roundingMode) }
     }
 
 

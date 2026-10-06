@@ -11,7 +11,7 @@ A premium Kotlin Multiplatform library for elegant, type-safe, and locale-aware 
 
 This library is designed to be **lightweight** and performant across multiple platforms by leveraging native platform capabilities:
 - **Android**: Uses the system's native `android.icu` library.
-- **iOS / macOS / watchOS / tvOS**: Uses the native Foundation framework (`NSLocale`, `NSDateFormatter`, etc.).
+- **iOS / macOS**: Uses the native Foundation framework (`NSLocale`, `NSDateFormatter`, etc.).
 - **JS / Wasm**: Uses the standard JavaScript `Intl` API.
 - **JVM**: On the JVM, Java's standard library does not bundle native ICU/CLDR formatting resources in a reliable cross-platform way. Therefore, the JVM target includes a dependency on IBM's **ICU4J** (`com.ibm.icu:icu4j`) to guarantee correct, standard-compliant formatting.
 

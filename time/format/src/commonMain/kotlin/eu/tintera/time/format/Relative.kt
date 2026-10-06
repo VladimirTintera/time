@@ -98,17 +98,29 @@ internal fun computeRelativeUnit(
     val duration = target - now
 
     scope.hours?.let { threshold ->
-        val hours = duration.toDouble(DurationUnit.HOURS).roundToInt()
+        val rawHours = duration.toDouble(DurationUnit.HOURS)
+        val hours = when (threshold.roundingMode) {
+            RelativeRoundingMode.Truncate -> rawHours.toInt()
+            RelativeRoundingMode.Round -> rawHours.roundToInt()
+        }
         if (hours.absoluteValue >= threshold.min) return Measurable(MeasureUnit.HOURS, hours)
     }
 
     scope.minutes?.let { threshold ->
-        val minutes = duration.toDouble(DurationUnit.MINUTES).roundToInt()
+        val rawMinutes = duration.toDouble(DurationUnit.MINUTES)
+        val minutes = when (threshold.roundingMode) {
+            RelativeRoundingMode.Truncate -> rawMinutes.toInt()
+            RelativeRoundingMode.Round -> rawMinutes.roundToInt()
+        }
         if (minutes.absoluteValue >= threshold.min) return Measurable(MeasureUnit.MINUTES, minutes)
     }
 
     scope.seconds?.let { threshold ->
-        val seconds = duration.toDouble(DurationUnit.SECONDS).roundToInt()
+        val rawSeconds = duration.toDouble(DurationUnit.SECONDS)
+        val seconds = when (threshold.roundingMode) {
+            RelativeRoundingMode.Truncate -> rawSeconds.toInt()
+            RelativeRoundingMode.Round -> rawSeconds.roundToInt()
+        }
         if (seconds.absoluteValue >= threshold.min) return Measurable(MeasureUnit.SECONDS, seconds)
     }
 

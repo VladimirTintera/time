@@ -3,7 +3,6 @@ package eu.tintera
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.plugins.signing.SigningExtension
-import java.net.URI
 import java.util.Properties
 
 plugins {
@@ -29,23 +28,14 @@ fun findPropertyOrLocal(name: String): String? {
 
 configure<PublishingExtension> {
     publications.withType<MavenPublication> {
+        // Maven Central vyžaduje přítomnost javadoc JARu, ale nekontroluje jeho obsah.
+        // Publikujeme proto prázdný JAR - plná Dokka dokumentace se generuje do docs/
+        // a hostuje na GitHub Pages. Balení Dokka HTML sem by znamenalo desítky kopií
+        // celé dokumentace v jednom release (viz docs/maven_central_publishing_limits_plan.md).
         val javadocJar = tasks.register("${name}JavadocJar", Jar::class.java) {
-            description = ""
+            description = "Empty javadoc JAR required by Maven Central for publication '$name'."
             archiveClassifier.set("javadoc")
             archiveBaseName.set("${project.name}-${name}")
-            val dokkaHtmlTask = project.tasks.findByName("dokkaGenerateHtml")
-            if (dokkaHtmlTask != null) {
-                dependsOn(dokkaHtmlTask)
-                from(project.layout.buildDirectory.dir("dokka/html"))
-            } else {
-                val dummyFile = project.layout.buildDirectory.file("tmp/javadoc-dummy-${name}.txt")
-                doFirst {
-                    val file = dummyFile.get().asFile
-                    file.parentFile.mkdirs()
-                    file.writeText("Javadoc placeholder for ${project.name} - $name")
-                }
-                from(dummyFile)
-            }
         }
         artifact(javadocJar)
 
@@ -82,7 +72,8 @@ configure<PublishingExtension> {
     repositories {
         maven {
             name = "localRepo"
-            url = URI("file://${rootProject.rootDir.absolutePath}/build/local-repo")
+            // File.toURI() escapuje cestu korektně i na Windows (backslashe, písmeno disku).
+            url = rootProject.layout.buildDirectory.dir("local-repo").get().asFile.toURI()
         }
     }
 }

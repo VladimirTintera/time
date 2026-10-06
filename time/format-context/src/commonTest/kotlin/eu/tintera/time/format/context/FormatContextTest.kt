@@ -3,11 +3,7 @@ package eu.tintera.time.format.context
 import eu.tintera.locale.AppLocale
 import eu.tintera.locale.localeForLanguageTag
 import eu.tintera.time.core.context.toLocalDateTime
-import eu.tintera.time.format.DateFormatScope
-import eu.tintera.time.format.DateTimeIntervalFormat
-import eu.tintera.time.format.MonthFormat
-import eu.tintera.time.format.UnitVisibility
-import eu.tintera.time.format.WeekDayFormat
+import eu.tintera.time.format.*
 import kotlinx.datetime.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -195,6 +191,21 @@ class FormatContextTest {
                     time { short() }
                 })
                 assertEquals(formatted, formattedExplicit)
+            }
+        }
+    }
+
+    @Test
+    fun testContextAwareFormatConstruction() {
+        with(locale) {
+            with(tz) {
+                val contextAwareDateFormat = DateFormat {
+                    val nowLdt = Instant.fromEpochMilliseconds(0).toLocalDateTime()
+                    year = YearFormat.FourDigits
+                    month = MonthFormat.Name.Full
+                    day = DayFormat.Numeric
+                }
+                assertTrue(contextAwareDateFormat != null)
             }
         }
     }

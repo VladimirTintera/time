@@ -68,15 +68,19 @@ fun DayOfWeek.formatName(
     locale: AppLocale,
     format: WeekDayFormat = WeekDayFormat.FullName,
 ): String {
-    // January 1, 2026, was a Thursday (DayOfWeek.THURSDAY = 4).
-    // We calculate an offset from Thursday to the target day to hit the correct day of the week.
-    val safeDay = 10 + (this.isoDayNumber - 4)
-
-    val dummyDate = LocalDate(year = 2026, month = 1, day = safeDay)
-    return dummyDate.formatWeekDayName(
+    return sampleDate().formatWeekDayName(
         format = format,
         locale = locale
     )
+}
+
+/**
+ * Returns a date that falls on this [DayOfWeek], used as a formatting sample by [formatName].
+ */
+internal fun DayOfWeek.sampleDate(): LocalDate {
+    // January 5, 2026, is a Monday (DayOfWeek.MONDAY = 1).
+    // Adding the offset from Monday lands on the target day within the week of January 5–11.
+    return LocalDate(year = 2026, month = 1, day = 5 + (this.isoDayNumber - 1))
 }
 
 /**

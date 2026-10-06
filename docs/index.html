@@ -43,7 +43,7 @@
         </button>
         <div class="navigation-controls--break ui-kit_mobile-only"></div>
         <div class="library-version" id="library-version">
-1.0.3        </div>
+1.0.4        </div>
         <div class="navigation-controls">
             <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
                     type="button">Switch theme
@@ -89,7 +89,7 @@
           <p class="paragraph"><strong>Android</strong>: Uses the system's native <code class="lang-kotlin">android.icu</code> library.</p>
         </li>
         <li>
-          <p class="paragraph"><strong>iOS / macOS / watchOS / tvOS</strong>: Uses the native Foundation framework (<code class="lang-kotlin">NSLocale</code>, <code class="lang-kotlin">NSDateFormatter</code>, etc.).</p>
+          <p class="paragraph"><strong>iOS / macOS</strong>: Uses the native Foundation framework (<code class="lang-kotlin">NSLocale</code>, <code class="lang-kotlin">NSDateFormatter</code>, etc.).</p>
         </li>
         <li>
           <p class="paragraph"><strong>JS / Wasm</strong>: Uses the standard JavaScript <code class="lang-kotlin">Intl</code> API.</p>
@@ -134,29 +134,29 @@
           </thead>
           <tbody>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@464a79ac strong lang-kotlin"><strong>:locale</strong></code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@1afe8730 strong lang-kotlin"><strong>:locale</strong></code></td>
               <td>Native platform locale abstraction.</td>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">AppLocale</code> (JVM: <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">java.util.Locale</code>, Android: <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">android.icu.util.ULocale</code>, Apple: <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">NSLocale</code>, Web: <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">String</code>), <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">currentLocale</code>, <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">availableLocales()</code>, <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">localeForLanguageTag(tag)</code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">AppLocale</code> (JVM: <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">java.util.Locale</code>, Android: <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">android.icu.util.ULocale</code>, Apple: <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">NSLocale</code>, Web: <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">String</code>), <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">currentLocale</code>, <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">availableLocales()</code>, <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">localeForLanguageTag(tag)</code></td>
             </tr>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@464a79ac strong lang-kotlin"><strong>:time:core</strong></code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@1afe8730 strong lang-kotlin"><strong>:time:core</strong></code></td>
               <td>Calendar calculations and sequence utilities.</td>
-              <td>timezone-aware extensions, sequence generation (<code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">generateSequence</code>, <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">slice</code>), aligns (<code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">floorTo</code>, <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">ceilTo</code>), and the <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">modify {}</code> builder DSL.</td>
+              <td>timezone-aware extensions, sequence generation (<code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">generateSequence</code>, <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">slice</code>), aligns (<code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">floorTo</code>, <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">ceilTo</code>), and the <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">modify {}</code> builder DSL.</td>
             </tr>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@464a79ac strong lang-kotlin"><strong>:time:core-context</strong></code></td>
-              <td>Context-aware version of <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">:time:core</code> arithmetic.</td>
-              <td>Context-parameter functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">context(timeZone: TimeZone)</code>.</td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@1afe8730 strong lang-kotlin"><strong>:time:core-context</strong></code></td>
+              <td>Context-aware version of <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">:time:core</code> arithmetic.</td>
+              <td>Context-parameter functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">context(timeZone: TimeZone)</code>.</td>
             </tr>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@464a79ac strong lang-kotlin"><strong>:time:format</strong></code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@1afe8730 strong lang-kotlin"><strong>:time:format</strong></code></td>
               <td>Formatting engine and configuration DSLs.</td>
               <td>DSL formats for date/time, interval formatting, relative formatting, duration formatting, and period formatting.</td>
             </tr>
             <tr>
-              <td><code class="org.jetbrains.dokka.pages.commenttable@464a79ac strong lang-kotlin"><strong>:time:format-context</strong></code></td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@1afe8730 strong lang-kotlin"><strong>:time:format-context</strong></code></td>
               <td>Context-aware formatting wrappers.</td>
-              <td>Context-parameter formatting functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">context(locale: AppLocale)</code> or <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">context(locale: AppLocale, timeZone: TimeZone)</code>. Includes the <code class="org.jetbrains.dokka.pages.commenttable@464a79ac lang-kotlin">withRegionalContext</code> scope helper.</td>
+              <td>Context-parameter formatting functions resolved automatically via <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">context(locale: AppLocale)</code> or <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">context(locale: AppLocale, timeZone: TimeZone)</code>. Includes the <code class="org.jetbrains.dokka.pages.commenttable@1afe8730 lang-kotlin">withRegionalContext</code> scope helper.</td>
             </tr>
           </tbody>
         </table>
@@ -421,7 +421,7 @@
       <div class="table-row table-row_multimodule">
         <div class="main-subrow ">
           <div class="w-100"><span class="inline-flex">
-              <div><a href="time/core/index.html">core</a></div>
+              <div><a href="time\core/index.html">core</a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-387464810%2FMain%2F0"></span>
                 <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
               </span></span></div>
@@ -432,7 +432,7 @@
       <div class="table-row table-row_multimodule">
         <div class="main-subrow ">
           <div class="w-100"><span class="inline-flex">
-              <div><a href="time/core-context/index.html">core-context</a></div>
+              <div><a href="time\core-context/index.html">core-context</a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1227281908%2FMain%2F0"></span>
                 <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
               </span></span></div>
@@ -443,7 +443,7 @@
       <div class="table-row table-row_multimodule">
         <div class="main-subrow ">
           <div class="w-100"><span class="inline-flex">
-              <div><a href="time/format/index.html">format</a></div>
+              <div><a href="time\format/index.html">format</a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1924010814%2FMain%2F0"></span>
                 <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
               </span></span></div>
@@ -454,7 +454,7 @@
       <div class="table-row table-row_multimodule">
         <div class="main-subrow ">
           <div class="w-100"><span class="inline-flex">
-              <div><a href="time/format-context/index.html">format-context</a></div>
+              <div><a href="time\format-context/index.html">format-context</a></div>
 <span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1594556516%2FMain%2F0"></span>
                 <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
               </span></span></div>
