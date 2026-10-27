@@ -87,6 +87,10 @@ class RelativeDateTimeFormatScope internal constructor(
     /**
      * Configures the threshold for the days unit.
      *
+     * Days are the difference of calendar dates in the time zone (a time on 23 Oct seen on 26 Oct is 3 days ago,
+     * whatever the times of day), and they are used only once at least one full day has elapsed – below that the
+     * smaller units take over.
+     *
      * Example:
      * ```kotlin
      * val format = RelativeDateTimeFormat {

@@ -91,8 +91,12 @@ internal fun computeRelativeUnit(
     }
 
     scope.days?.let { threshold ->
-        val days = now.daysUntil(target, zone)
-        if (days.absoluteValue >= threshold.min) return Measurable(MeasureUnit.DAYS, days)
+        // Days are counted as the difference of calendar dates, not as elapsed 24-hour periods: "yesterday" and
+        // "2 days ago" name a calendar day, so 23 Oct 15:00 seen on 26 Oct 10:00 is "3 days ago", not "2 days ago".
+        // Under one full day of elapsed time the smaller units still take over, as before.
+        val elapsedDays = now.daysUntil(target, zone)
+        val days = now.toLocalDateTime(zone).date.daysUntil(target.toLocalDateTime(zone).date)
+        if (elapsedDays != 0 && days.absoluteValue >= threshold.min) return Measurable(MeasureUnit.DAYS, days)
     }
 
     val duration = target - now
